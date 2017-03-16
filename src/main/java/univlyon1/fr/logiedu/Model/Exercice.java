@@ -10,9 +10,9 @@ package univlyon1.fr.logiedu.Model;
  * @author dyavil
  */
 class Exercice {
-    protected Course correspondingCourse;
-    protected String name;
-    protected int difficulty;
+    private Course correspondingCourse;
+    private String name;
+    private int difficulty;
     
     public Exercice(String n, Course c){
         this.name = n;

@@ -1,16 +1,14 @@
 package univlyon1.fr.logiedu;
 
-import java.util.ArrayList;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import univlyon1.fr.logiedu.Model.LoadData;
-import univlyon1.fr.logiedu.Model.User;
+import univlyon1.fr.logiedu.Controller.MainController;
+import univlyon1.fr.logiedu.Model.App;
 import univlyon1.fr.logiedu.View.MainView;
-import univlyon1.fr.logiedu.View.UserPane;
 
 
 public class MainApp extends Application {
@@ -27,17 +25,9 @@ public class MainApp extends Application {
         stage.show();*/
         
         stage.setTitle("Logi Edu");
-        MainView v = new MainView(600, 600);
-        LoadData load = new LoadData();
-        ArrayList<User> l = load.loadUserList();
-        System.out.println(l.size());
-        for(User us : l){
-            UserPane usp = new UserPane(l.get(0).getUserName());
-            v.addUserPane(usp);
-        }
-        
-        v.displayUsersPane();
-        stage.setScene(v.getScene());
+        MainView view = new MainView(800, 600);
+        App model = new App();
+        MainController controller = new MainController(view, model, stage);
         stage.show();
     }
 

@@ -10,8 +10,8 @@ package univlyon1.fr.logiedu.Model;
  * @author dyavil
  */
 public class User {
-    protected int id;
-    protected String userName;
+    private int id;
+    private String userName;
     
     public User(String usn, int id){
         this.userName = usn;

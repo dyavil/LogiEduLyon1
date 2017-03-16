@@ -12,9 +12,10 @@ import java.util.ArrayList;
  * @author dyavil
  */
 public class Theme {
-    protected String name;
-    protected ArrayList<Theme> neededThemes;
-    protected ArrayList<Course> courseList;
+    private String name;
+    private ArrayList<Theme> neededThemes;
+    private ArrayList<Course> courseList;
+    private ArrayList<Exercice> exerciceList;
     
     public Theme(String n){
         this.name = n;
@@ -62,5 +63,19 @@ public class Theme {
      */
     public void setCourseList(ArrayList<Course> courseList) {
         this.courseList = courseList;
+    }
+
+    /**
+     * @return the exerciceList
+     */
+    public ArrayList<Exercice> getExerciceList() {
+        return exerciceList;
+    }
+
+    /**
+     * @param exerciceList the exerciceList to set
+     */
+    public void setExerciceList(ArrayList<Exercice> exerciceList) {
+        this.exerciceList = exerciceList;
     }
 }
