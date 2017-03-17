@@ -28,6 +28,7 @@ public class UserPane extends GridPane {
         userNameLabel.setPrefWidth(80);
         logButton.setAlignment(Pos.CENTER);
         userNameLabel.setAlignment(Pos.CENTER);
+        
         logButton.setId("green");
         this.add(userNameLabel, 0, 0);
         this.getRowConstraints().add(new RowConstraints(30));

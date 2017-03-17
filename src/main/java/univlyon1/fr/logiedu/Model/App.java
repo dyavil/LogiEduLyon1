@@ -15,11 +15,12 @@ public class App {
     private ArrayList<User> users;
     private LoadData data;
     private ArrayList<Theme> themes;
+    private User LoggedUser;
     
     public App(){
         this.data = new LoadData();
         this.users = this.data.loadUserList();
-        this.themes = new ArrayList<>();
+        this.themes = this.data.loadThemeList();
     }
 
     /**
@@ -29,7 +30,7 @@ public class App {
         return users;
     }
     
-    public User getUset(int id){
+    public User getUser(int id){
         for(User us : users){
             if(us.getId() == id) return us;
         }
@@ -78,5 +79,25 @@ public class App {
     public void setThemes(ArrayList<Theme> themes) {
         this.themes = themes;
     }
+
+    /**
+     * @return the LoggedUser
+     */
+    public User getLoggedUser() {
+        return LoggedUser;
+    }
+
+    /**
+     * @param LoggedUser the LoggedUser to set
+     */
+    public void setLoggedUser(User LoggedUser) {
+        this.LoggedUser = LoggedUser;
+    }
     
+    /**
+     * @param LoggedUser the LoggedUser to set
+     */
+    public void setLoggedUser(int id) {
+        this.LoggedUser = this.getUser(id);
+    }
 }

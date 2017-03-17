@@ -31,6 +31,8 @@ public class MainView extends GridPane implements Observer {
     private Menu fileMenu;
     private MenuItem addUser;
     private GridPane center;
+    private LoggedPane homePane;
+    private CoursesPane coursePane;
     private int width;
     private int height;
     private ArrayList<UserPane> usersPane;
@@ -39,6 +41,8 @@ public class MainView extends GridPane implements Observer {
         this.width = w;
         this.height = h;
         this.setPrefSize(w, h);
+        homePane = new LoggedPane("", this.width, this.height);
+        coursePane = new CoursesPane(this.width);
         root = new Group();
         Scene scene = new Scene(getRoot());
         scene.getStylesheets().add("/styles/Styles.css");
@@ -54,7 +58,6 @@ public class MainView extends GridPane implements Observer {
         this.add(head, 0, 0);
         this.add(center, 0, 2);
         this.getRowConstraints().add(new RowConstraints());
-        this.getRowConstraints().add(new RowConstraints(100));
     }
     
     public void addUserPane(UserPane usp){
@@ -73,6 +76,18 @@ public class MainView extends GridPane implements Observer {
             line++;
         }
         getCenter().getColumnConstraints().add(new ColumnConstraints(10));
+    }
+    
+    public void displayHomePane(String loggedUser){
+        getCenter().getChildren().clear();
+        getCenter().getColumnConstraints().clear();
+        this.center.add(this.homePane, 0, 0);
+    }
+    
+    public void displayCoursesPane(){
+        getCenter().getChildren().clear();
+        getCenter().getColumnConstraints().clear();
+        this.center.add(this.coursePane, 0, 0);
     }
 
     @Override
@@ -120,6 +135,20 @@ public class MainView extends GridPane implements Observer {
      */
     public GridPane getCenter() {
         return center;
+    }
+
+    /**
+     * @return the homePane
+     */
+    public LoggedPane getHomePane() {
+        return homePane;
+    }
+
+    /**
+     * @return the coursePane
+     */
+    public CoursesPane getCoursePane() {
+        return coursePane;
     }
     
 }

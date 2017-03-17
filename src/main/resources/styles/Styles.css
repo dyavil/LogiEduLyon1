@@ -20,3 +20,23 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.2) , 5, 0.0 , 0 , 1 );
     -fx-text-fill: #395306;
 }
+
+.bigg{
+    -fx-font-size: 15px;
+}
+
+.toggle-button {
+  -fx-graphic: "images/home.png";
+  -fx-background-color:#ffffff;
+  -fx-border-color: #ffffff;
+  -fx-background-radius: 50%, 50%;
+  -fx-border-radius: 50%, 50%;
+}
+
+.toggle-button:hover {
+  -fx-graphic: "images/home.png";
+  -fx-background-color:#ffffff;
+  -fx-border-color: #395306;
+  -fx-background-radius: 50%, 50%;
+  -fx-border-radius: 50%, 50%;
+}

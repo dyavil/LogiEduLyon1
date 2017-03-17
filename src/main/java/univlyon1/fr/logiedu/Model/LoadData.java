@@ -5,10 +5,14 @@
  */
 package univlyon1.fr.logiedu.Model;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -24,7 +28,9 @@ import org.json.simple.parser.ParseException;
 public class LoadData {
     
     private File configFile;
-    private JSONObject base;
+    private JSONObject baseConfig;
+    private JSONObject baseThemes;
+    private JSONArray themeList;
     private JSONArray userList;
     
     public LoadData(){
@@ -37,10 +43,10 @@ public class LoadData {
             if(!configFile.exists()){
                 out = new FileWriter(configFile);
                 configFile.createNewFile();
-                base = new JSONObject();
+                baseConfig = new JSONObject();
                 userList = new JSONArray();
-                base.put("users", userList);
-                out.write(base.toJSONString());
+                baseConfig.put("users", userList);
+                out.write(baseConfig.toJSONString());
                 out.flush();
                 out.close();
             }
@@ -48,14 +54,41 @@ public class LoadData {
                 JSONParser parser = new JSONParser();
                 in = new FileReader(configFile);
                 Object obj = parser.parse(in);
-                base = (JSONObject) obj;
-                userList = (JSONArray) base.get("users");
+                baseConfig = (JSONObject) obj;
+                userList = (JSONArray) baseConfig.get("users");
                 in.close();
             }
         } catch (IOException | ParseException ex) {
             Logger.getLogger(LoadData.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        initThemes();
+    }
+    
+    private void initThemes(){
+        try {
+            InputStream f = getClass().getResourceAsStream("/courses.json");
+            BufferedReader rd = new BufferedReader(new InputStreamReader(f));
+            String content = "";
+            String t;
+            while((t = rd.readLine()) != null) content += t;
+            JSONParser parser = new JSONParser();
+            baseThemes = (JSONObject) parser.parse(content);
+            themeList = (JSONArray) baseThemes.get("themes");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(LoadData.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(LoadData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public ArrayList<Theme> loadThemeList(){
+        ArrayList<Theme> resList = new ArrayList<>();
+        for (Iterator iterator = themeList.iterator(); iterator.hasNext();) {
+            JSONObject currentTheme = (JSONObject) iterator.next();
+            Theme th = new Theme((String) currentTheme.get("name"));
+            resList.add(th);
+        }
+        return resList;
     }
     
     public ArrayList<User> loadUserList(){
@@ -92,7 +125,7 @@ public class LoadData {
     private void write(){
         try {
             FileWriter out = new FileWriter(configFile);
-            out.write(base.toJSONString());
+            out.write(baseConfig.toJSONString());
             out.flush();
             out.close();
         } catch (IOException ex) {

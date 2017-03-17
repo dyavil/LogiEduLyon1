@@ -16,6 +16,7 @@ public class Theme {
     private ArrayList<Theme> neededThemes;
     private ArrayList<Course> courseList;
     private ArrayList<Exercice> exerciceList;
+    private Progress themeProgress;
     
     public Theme(String n){
         this.name = n;
