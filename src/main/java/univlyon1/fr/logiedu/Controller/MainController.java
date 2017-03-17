@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import univlyon1.fr.logiedu.Model.App;
 import univlyon1.fr.logiedu.Model.Theme;
@@ -41,7 +42,7 @@ public class MainController {
         
         this.refreshUsersPane();
         
-        this.view.getAddUser().setOnAction((ActionEvent e) -> {
+        this.view.getHead().getAddUser().setOnAction((ActionEvent e) -> {
                 TextInputDialog dialog = new TextInputDialog("pseudo");
                 dialog.setTitle("Pseudo : ");
                 dialog.setHeaderText("");
@@ -54,6 +55,7 @@ public class MainController {
                     this.refreshUsersPane();
                 }
             });
+        this.logoutHandler();
         
     }
     
@@ -69,6 +71,7 @@ public class MainController {
     
     private void loadHomePane(){
         this.view.displayHomePane(this.model.getLoggedUser().getUserName());
+        logoutHandler();
         this.view.getHomePane().getCoursesButton().setOnAction((ActionEvent e) -> {
                 this.loadCourseList();
             });
@@ -86,6 +89,17 @@ public class MainController {
                 this.loadHomePane();
             });
         this.view.displayCoursesPane();
+    }
+    
+    private void logoutHandler(){
+        this.view.getHead().getLogoutLabel().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                    view.displayUsersPane();
+                    model.setLoggedUser(null);
+            }
+
+        });
     }
 
     private void setSelectCourseEventHandler() {

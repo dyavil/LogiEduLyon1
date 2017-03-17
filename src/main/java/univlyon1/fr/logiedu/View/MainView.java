@@ -27,9 +27,7 @@ import javafx.scene.layout.RowConstraints;
 public class MainView extends GridPane implements Observer {
     
     private Group root;
-    private MenuBar head;
-    private Menu fileMenu;
-    private MenuItem addUser;
+    private MenuTop head;
     private GridPane center;
     private LoggedPane homePane;
     private CoursesPane coursePane;
@@ -46,11 +44,8 @@ public class MainView extends GridPane implements Observer {
         root = new Group();
         Scene scene = new Scene(getRoot());
         scene.getStylesheets().add("/styles/Styles.css");
-        head = new MenuBar();
-        fileMenu = new Menu("Fichier");
-        addUser = new MenuItem("Ajouter Utilisateur...");
-        fileMenu.getItems().add(addUser);
-        head.getMenus().add(fileMenu);
+        head = new MenuTop();
+        
         center = new GridPane();
         usersPane = new ArrayList<>();
         this.setFocusTraversable(true);
@@ -69,25 +64,33 @@ public class MainView extends GridPane implements Observer {
         int line = 1;
         getCenter().getChildren().clear();
         getCenter().getColumnConstraints().clear();
+        getCenter().getRowConstraints().clear();
+        getCenter().getRowConstraints().add(new RowConstraints(100));
         getCenter().getColumnConstraints().add(new ColumnConstraints(10));
         for(UserPane usp : getUsersPane()){
             getCenter().getColumnConstraints().add(new ColumnConstraints(((this.width-20)/this.usersPane.size())));
-            getCenter().add(usp, line, 0);
+            getCenter().add(usp, line, 1);
             line++;
         }
         getCenter().getColumnConstraints().add(new ColumnConstraints(10));
+        this.head.displayStartMenu();
     }
     
     public void displayHomePane(String loggedUser){
         getCenter().getChildren().clear();
         getCenter().getColumnConstraints().clear();
-        this.center.add(this.homePane, 0, 0);
+        getCenter().getRowConstraints().clear();
+        getCenter().getRowConstraints().add(new RowConstraints(100));
+        this.center.add(this.homePane, 0, 1);
+        this.head.displayLoggedMenu();
     }
     
     public void displayCoursesPane(){
         getCenter().getChildren().clear();
         getCenter().getColumnConstraints().clear();
+        getCenter().getRowConstraints().clear();
         this.center.add(this.coursePane, 0, 0);
+        this.head.displayLoggedMenu();
     }
 
     @Override
@@ -105,7 +108,7 @@ public class MainView extends GridPane implements Observer {
     /**
      * @return the head
      */
-    public MenuBar getHead() {
+    public MenuTop getHead() {
         return head;
     }
 
@@ -116,19 +119,6 @@ public class MainView extends GridPane implements Observer {
         return usersPane;
     }
 
-    /**
-     * @return the fileMenu
-     */
-    public Menu getFileMenu() {
-        return fileMenu;
-    }
-
-    /**
-     * @return the addUser
-     */
-    public MenuItem getAddUser() {
-        return addUser;
-    }
 
     /**
      * @return the center
