@@ -22,7 +22,20 @@ public class App {
         this.users = this.data.loadUserList();
         this.themes = this.data.loadThemeList();
     }
+    
+    public String getCourseContent(Course c){
+        return this.data.getCourseContent(c);
+    }
+    
+    public void loadProgress(){
+        if(this.LoggedUser != null){
+            this.data.loadUserProgress(LoggedUser, themes);
+        }
+    }
 
+    public void updateCourse(Course c){
+        this.data.saveCourseProgress(c, LoggedUser);
+    }
     /**
      * @return the users
      */
@@ -92,6 +105,7 @@ public class App {
      */
     public void setLoggedUser(User LoggedUser) {
         this.LoggedUser = LoggedUser;
+        this.loadProgress();
     }
     
     /**
@@ -99,5 +113,6 @@ public class App {
      */
     public void setLoggedUser(int id) {
         this.LoggedUser = this.getUser(id);
+        this.loadProgress();
     }
 }

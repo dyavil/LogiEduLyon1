@@ -15,11 +15,13 @@ public class Progress {
     private int state;
     private String comment;
     private ArrayList<String> correspondingNames;
+    private ArrayList<String> correspondingCSS;
     
     public Progress(){
         this.state = 0;
         this.comment = "";
         this.correspondingNames = new ArrayList<>();
+        this.correspondingCSS = new ArrayList<>();
     }
     
     public void addProgressStep(String step){
@@ -79,6 +81,20 @@ public class Progress {
      */
     public void setCorrespondingNames(ArrayList<String> correspondingNames) {
         this.correspondingNames = correspondingNames;
+    }
+
+    /**
+     * @return the correspondingCSS
+     */
+    public ArrayList<String> getCorrespondingCSS() {
+        return correspondingCSS;
+    }
+
+    /**
+     * @param correspondingCSS the correspondingCSS to set
+     */
+    public void setCorrespondingCSS(ArrayList<String> correspondingCSS) {
+        this.correspondingCSS = correspondingCSS;
     }
     
 }

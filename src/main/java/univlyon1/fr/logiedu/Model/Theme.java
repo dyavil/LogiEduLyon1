@@ -12,16 +12,32 @@ import java.util.ArrayList;
  * @author dyavil
  */
 public class Theme {
+    private int id;
     private String name;
     private ArrayList<Theme> neededThemes;
     private ArrayList<Course> courseList;
     private ArrayList<Exercice> exerciceList;
     private Progress themeProgress;
     
-    public Theme(String n){
+    public Theme(String n, int i){
+        this.id = i;
         this.name = n;
         this.courseList = new ArrayList();
         this.neededThemes = new ArrayList();
+        this.themeProgress = null;
+    }
+    
+    public Theme(String n, int i, Progress p){
+        this.id = i;
+        this.name = n;
+        this.courseList = new ArrayList();
+        this.neededThemes = new ArrayList();
+        this.themeProgress = p;
+    }
+    
+    
+    public void addCourse(Course c){
+        this.courseList.add(c);
     }
 
     /**
@@ -78,5 +94,33 @@ public class Theme {
      */
     public void setExerciceList(ArrayList<Exercice> exerciceList) {
         this.exerciceList = exerciceList;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the themeProgress
+     */
+    public Progress getThemeProgress() {
+        return themeProgress;
+    }
+
+    /**
+     * @param themeProgress the themeProgress to set
+     */
+    public void setThemeProgress(Progress themeProgress) {
+        this.themeProgress = themeProgress;
     }
 }

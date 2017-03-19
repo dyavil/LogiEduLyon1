@@ -83,12 +83,24 @@ public class LoadData {
     
     public ArrayList<Theme> loadThemeList(){
         ArrayList<Theme> resList = new ArrayList<>();
+        int i = 0;
         for (Iterator iterator = themeList.iterator(); iterator.hasNext();) {
             JSONObject currentTheme = (JSONObject) iterator.next();
-            Theme th = new Theme((String) currentTheme.get("name"));
+            JSONArray courses = (JSONArray) currentTheme.get("courses");
+            Theme th = new Theme((String) currentTheme.get("name"), i);
+            int j = 0;
+            for (Iterator it2 = courses.iterator(); it2.hasNext();) {
+                th.addCourse(new Course((String) ((JSONObject) it2.next()).get("title"), th, j));
+                j++;
+            }
             resList.add(th);
+            i++;
         }
         return resList;
+    }
+    
+    public String getCourseContent(Course c){
+        return (String) ((JSONObject)(((JSONArray)(((JSONObject)(themeList.get(c.getReferingTheme().getId()))).get("courses"))).get(c.getId()))).get("content");
     }
     
     public ArrayList<User> loadUserList(){
@@ -107,8 +119,106 @@ public class LoadData {
         userObj.put("id", userList.size());
         us.setId(userList.size());
         userObj.put("usn", us.getUserName());
+        userObj.put("progress", new JSONArray());
         userList.add(userObj);
+        this.initThemeProgress(userObj);
         write();
+    }
+    
+    public void loadUserProgress(User us, ArrayList<Theme> ths){
+        for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
+            JSONObject currentUser = (JSONObject) iterator.next();
+            Number id = (Number) currentUser.get("id");
+            User u = new User((String)currentUser.get("usn"), id.intValue());
+            if(us.getId() == u.getId()){
+                for(Theme th : ths){
+                    JSONObject jsonTheme = this.getThemeProgress(currentUser, th);
+                    JSONArray jsonCourses = (JSONArray) jsonTheme.get("coursesProgress");
+                    this.loadCoursesProgress(jsonCourses, th);
+                }
+            }
+        }
+    }
+    
+    private void initThemeProgress(JSONObject jsonUser){
+        int i = 0;
+        JSONArray jsonProgress = (JSONArray) jsonUser.get("progress");
+        for (Iterator iterator = themeList.iterator(); iterator.hasNext();) {
+            JSONObject currentTheme = (JSONObject) iterator.next();
+            JSONObject jsonP = new JSONObject();
+            jsonP.put("themeid", i);
+            jsonP.put("progressState", 0);
+            jsonP.put("coursesProgress", new JSONArray());
+            this.initCoursesProgress((JSONArray) jsonP.get("coursesProgress"), (JSONArray) currentTheme.get("courses"));
+            jsonProgress.add(jsonP);
+            i++;
+        }
+    }
+    
+    private void initCoursesProgress(JSONArray jsonToSet, JSONArray jsonCourses){
+        int i =0;
+        for (Iterator iterator = jsonCourses.iterator(); iterator.hasNext();) {
+            JSONObject next = (JSONObject) iterator.next();
+            JSONObject newCourse = new JSONObject();
+            JSONObject newCourseProgress = new JSONObject();
+            newCourse.put("idCourse", i);
+            newCourseProgress.put("progressState", 0);
+            newCourseProgress.put("progressComment", "");
+            newCourse.put("courseProgress", newCourseProgress);
+            jsonToSet.add(newCourse);
+            i++;
+        }
+    }
+    
+    private void loadCoursesProgress(JSONArray courses, Theme refTheme){
+        for (Iterator iterator = courses.iterator(); iterator.hasNext();){
+            JSONObject currentCourse = (JSONObject) iterator.next();
+            Number id = (Number) currentCourse.get("idCourse");
+            for(Course c : refTheme.getCourseList()){
+                if(id.intValue() == c.getId()){
+                    JSONObject jsonProgress = (JSONObject) currentCourse.get("courseProgress");
+                    Number state = (Number) jsonProgress.get("progressState");
+                    String progressComment = (String) jsonProgress.get("progressComment");
+                    c.setCourseProgress(new ThreeStepProgress(state.intValue(), progressComment));
+                }
+            }
+        }
+    }
+    
+    
+    public void saveCourseProgress(Course co, User us){
+        for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
+            JSONObject currentUser = (JSONObject) iterator.next();
+            Number id = (Number) currentUser.get("id");
+            User u = new User((String)currentUser.get("usn"), id.intValue());
+            if(us.getId() == u.getId()){
+                for(Object prog : ((JSONArray) currentUser.get("progress")).toArray()){
+                    JSONObject pr = (JSONObject) prog;
+                    Number idth = (Number) pr.get("themeid");
+                    if(idth.intValue() == co.getReferingTheme().getId()) {
+                        JSONArray courses = (JSONArray) pr.get("coursesProgress");
+                        for (Iterator iterator2 = courses.iterator(); iterator2.hasNext();){
+                            JSONObject currentCourse = (JSONObject) iterator2.next();
+                            Number idco = (Number) currentCourse.get("idCourse");
+                                if(idco.intValue() == co.getId()){
+                                    JSONObject coProg = (JSONObject) currentCourse.get("courseProgress");
+                                    coProg.replace("progressState", co.getCourseProgress().getState());
+                                    write();
+                                }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private JSONObject getThemeProgress(JSONObject user, Theme th){
+        for(Object prog : ((JSONArray) user.get("progress")).toArray()){
+            JSONObject pr = (JSONObject) prog;
+            Number id = (Number) pr.get("themeid");
+            if(id.intValue() == th.getId()) return pr;
+        }
+        return null;
     }
     
     public void updateUser(User us){

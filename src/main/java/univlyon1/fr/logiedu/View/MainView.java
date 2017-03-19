@@ -92,6 +92,14 @@ public class MainView extends GridPane implements Observer {
         this.center.add(this.coursePane, 0, 0);
         this.head.displayLoggedMenu();
     }
+    
+    public void displayCourseView(CourseView cv){
+        getCenter().getChildren().clear();
+        getCenter().getColumnConstraints().clear();
+        getCenter().getRowConstraints().clear();
+        this.center.add(cv, 0, 0);
+        this.head.displayLoggedMenu();
+    }
 
     @Override
     public void update(Observable o, Object arg) {

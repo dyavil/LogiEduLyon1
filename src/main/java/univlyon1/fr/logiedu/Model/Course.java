@@ -11,15 +11,27 @@ import java.util.ArrayList;
  *
  * @author dyavil
  */
-class Course {
-    protected String title;
-    protected Theme referingTheme;
-    protected ArrayList<Exercice> exercices;
+public class Course {
+    private int id;
+    private String title;
+    private Theme referingTheme;
+    private ArrayList<Exercice> exercices;
+    private Progress courseProgress;
     
-    public Course(String t, Theme th){
+    public Course(String t, Theme th, int d){
         this.title = t;
+        this.id = d;
         this.referingTheme = th;
         this.exercices = new ArrayList();
+        this.courseProgress = null;
+    }
+    
+    public Course(String t, Theme th, int d, Progress p){
+        this.title = t;
+        this.id = d;
+        this.referingTheme = th;
+        this.exercices = new ArrayList();
+        this.courseProgress = p;
     }
 
     /**
@@ -62,5 +74,33 @@ class Course {
      */
     public void setExercices(ArrayList<Exercice> exercices) {
         this.exercices = exercices;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the courseProgress
+     */
+    public Progress getCourseProgress() {
+        return courseProgress;
+    }
+
+    /**
+     * @param courseProgress the courseProgress to set
+     */
+    public void setCourseProgress(Progress courseProgress) {
+        this.courseProgress = courseProgress;
     }
 }
