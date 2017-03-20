@@ -127,3 +127,26 @@
     -fx-text-fill: black;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
+
+.exercice-grid-elem{
+    -fx-background-color: #90dd13;
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-margin:10;
+    -fx-padding:10;
+    -fx-alignement:center;
+   -fx-font-family: "Helvetica"
+}
+.exercice-grid-elem:hover{
+    -fx-background-color: #90d026
+}
+
+.green {
+    -fx-background-color:
+        linear-gradient(#f0ff35, #a9ff00),
+        radial-gradient(center 50% -40%, radius 200%, #b8ee36 45%, #80c800 50%);
+    -fx-background-radius: 6, 5;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+    -fx-text-fill: #395306;
+}

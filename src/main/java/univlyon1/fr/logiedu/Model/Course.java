@@ -43,6 +43,10 @@ public class Course {
     public void addSlide(Slide s){
         this.slides.add(s);
     }
+    
+    public void addExercice(Exercice ex){
+        this.exercices.add(ex);
+    }
 
     /**
      * @return the title

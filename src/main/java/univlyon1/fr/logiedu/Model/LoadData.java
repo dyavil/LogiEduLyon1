@@ -91,7 +91,9 @@ public class LoadData {
             int j = 0;
             for (Iterator it2 = courses.iterator(); it2.hasNext();) {
                 JSONObject obj = (JSONObject) it2.next();
-                th.addCourse(new Course((String) obj.get("title"), th, j, (String) obj.get("imagePath")));
+                Course nco = new Course((String) obj.get("title"), th, j, (String) obj.get("imagePath"));
+                th.addCourse(nco);
+                this.loadExercices(nco, obj);
                 j++;
             }
             resList.add(th);
@@ -127,6 +129,18 @@ public class LoadData {
             resList.add(u);
         }
         return resList;
+    }
+    
+    private void loadExercices(Course co, JSONObject course){
+        ArrayList<Exercice> resList = new ArrayList<>();
+        JSONArray exercices = (JSONArray) course.get("exercices");
+        int i = 0;
+        for (Iterator iterator1 = exercices.iterator(); iterator1.hasNext();) {
+            JSONObject ex = (JSONObject) iterator1.next();
+            Exercice temp = new Exercice((String) ex.get("title"), (String)ex.get("content"), co, i);
+            co.addExercice(temp);
+            i++;
+        }
     }
     
     public void saveNewUser(User us){

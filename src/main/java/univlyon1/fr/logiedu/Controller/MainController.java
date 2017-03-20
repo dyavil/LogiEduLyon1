@@ -19,10 +19,14 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import univlyon1.fr.logiedu.Model.App;
 import univlyon1.fr.logiedu.Model.Course;
+import univlyon1.fr.logiedu.Model.Exercice;
 import univlyon1.fr.logiedu.Model.Theme;
 import univlyon1.fr.logiedu.Model.User;
 import univlyon1.fr.logiedu.View.CourseListItem;
 import univlyon1.fr.logiedu.View.CourseView;
+import univlyon1.fr.logiedu.View.ExerciceGridView;
+import univlyon1.fr.logiedu.View.ExerciceListItem;
+import univlyon1.fr.logiedu.View.ExerciceView;
 import univlyon1.fr.logiedu.View.MainView;
 import univlyon1.fr.logiedu.View.UserPane;
 
@@ -78,8 +82,10 @@ public class MainController {
         this.view.displayHomePane(this.model.getLoggedUser().getUserName());
         logoutHandler();
         this.view.getHomePane().getCoursesButton().setOnAction((ActionEvent e) -> {
-                this.loadCourseList();
-                
+                this.loadCourseList();  
+            });
+        this.view.getHomePane().getExercicesButton().setOnAction((ActionEvent e) -> {
+                this.loadExerciceList();
             });
     }
     
@@ -95,6 +101,30 @@ public class MainController {
                     setGraphic(null);
                 } else {
                     CourseListItem it = (CourseListItem) item;
+                    //setText(""); // appropriate text for item
+                    Label lab = it.getLab();
+                    lab.getStyleClass().add(it.getCss());
+                    setGraphic(lab);
+                }
+            }
+        };
+                
+            return cell ;
+        });
+    }
+    
+    private void exerciceColorList(){
+        this.view.getExercicePane().getExercicesList().setCellFactory(tv -> {
+        TreeCell<HBox> cell = new TreeCell<HBox>() {
+            @Override
+            public void updateItem(HBox item, boolean empty) {
+                super.updateItem(item, empty);
+                setDisclosureNode(null);
+
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    ExerciceListItem it = (ExerciceListItem) item;
                     //setText(""); // appropriate text for item
                     Label lab = it.getLab();
                     lab.getStyleClass().add(it.getCss());
@@ -142,6 +172,39 @@ public class MainController {
 
         });
     }
+    
+    private void loadExerciceList() {
+        this.view.getExercicePane().getExercicesList().getRoot().getChildren().clear();
+        for(Theme th : this.model.getThemes()){
+            ExerciceListItem tbox = new ExerciceListItem(th.getName(), "no-change");
+            
+            TreeItem<HBox> themBranch = new TreeItem<>(tbox);
+            themBranch.getChildren().clear();
+            for(Course co : th.getCourseList()){
+                ExerciceListItem box = new ExerciceListItem(co.getTitle(), co.getCourseProgress().getCorrespondingCSS().get(co.getCourseProgress().getState()), true, th.getId(), co.getId());
+                TreeItem<HBox> coItem = new TreeItem<>(box);
+                themBranch.getChildren().add(coItem);
+                for(Exercice exo : co.getExercices()){
+                    ExerciceListItem exBox = new ExerciceListItem(exo.getName(), "no-change", true, th.getId(), co.getId(), exo.getId());
+                    TreeItem<HBox> exItem = new TreeItem<>(exBox);
+                    coItem.getChildren().add(exItem);
+                }
+                
+            }
+            themBranch.setExpanded(true);
+            this.view.getExercicePane().getExercicesList().getRoot().getChildren().add(themBranch);
+        }
+        
+        this.view.getExercicePane().getExercicesList().getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        this.exerciceColorList();
+        this.setSelectExerciceEventHandler();
+        this.view.getExercicePane().getHomeButton().setOnAction((ActionEvent e) -> {
+                this.loadHomePane();
+            });
+        this.view.getExercicePane().getExercicesList().getRoot().setExpanded(true);
+        this.view.displayExercicesPane();
+    }
+
 
     private void setSelectCourseEventHandler() {
         view.getCoursePane().hidegoButton();
@@ -177,16 +240,121 @@ public class MainController {
 
         });
     }
+
+    private void setSelectExerciceEventHandler() {
+        //view.getCoursePane().hidegoButton();
+        this.view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem();
+        this.view.getExercicePane().getExercicesList().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                
+                if(view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().getValue() instanceof ExerciceListItem){
+                    ExerciceListItem it = (ExerciceListItem) view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().getValue();
+                    if(it.getIsExercice()){
+                        
+                        //view.getCoursePane().showgoButton();
+                        /*view.getExercicePane().getGoButton().setOnAction((ActionEvent e) -> {
+                            System.out.println("selec th " + it.getThemeId() + ", course : "+ it.getCourseId());
+                            Course currCo = model.getThemes().get(it.getThemeId()).getCourseList().get(it.getCourseId());
+                            setCourseViewEvents(currCo, 0);
+                            
+                        });*/
+                        if(event.getButton().equals(MouseButton.PRIMARY)){
+                            if(event.getClickCount() == 2) {
+                                System.out.println("selec th " + it.getThemeId() + ", course : "+ it.getCourseId());
+                                Course currCo = model.getThemes().get(it.getThemeId()).getCourseList().get(it.getCourseId());
+                                setExerciceViewEvents(currCo.getExercices().get(it.getExerciceId()));
+                            }
+                            
+                        }
+                    
+                    }
+                    else if(it.getIsCourse()){
+                        if(event.getButton().equals(MouseButton.PRIMARY)){
+                            if(event.getClickCount() == 1) {
+                                if(!view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().isExpanded())
+                                view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().setExpanded(true);
+                                else view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().setExpanded(false);
+                            }
+                            if(event.getClickCount() == 2) {
+                                System.out.println("selec th " + it.getThemeId() + ", course : "+ it.getCourseId());
+                                Course currCo = model.getThemes().get(it.getThemeId()).getCourseList().get(it.getCourseId());
+                                setExerciceGridViewEvents(currCo);
+                            }
+                            
+                        }
+                    }
+                   // else view.getCoursePane().hidegoButton();
+                }
+            }
+
+        });
+    }
     
+    private void setExerciceGridViewEvents(Course co) {
+        ExerciceGridView egv = new ExerciceGridView(view.getTWidth());
+        for(Exercice ex : co.getExercices()) {
+            ExerciceGridView.ExerciceGridSample exGrid = egv.addExerciceElem(ex.getName(), ex.getContent());
+            exGrid.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(event.getClickCount() == 2) setExerciceViewEvents(ex);
+            }
+            });
+        }
+        egv.displayExerciceGrid(view.getTWidth());
+        view.displayExerciceGridView(egv);
+        egv.getHomeButton().setOnAction((ActionEvent e1) -> {
+            loadHomePane();
+        });
+        egv.getBackButton().setOnAction((ActionEvent e2) -> {
+            loadExerciceList();
+        });
+        egv.getCourseButton().setOnAction((ActionEvent e3) -> {
+            setCourseViewEvents(co, 0);
+        });
+    }
+    
+    private void setExerciceViewEvents(Exercice ex) {
+        ExerciceView exv = new ExerciceView(ex.getCorrespondingCourse().getTitle(), ex.getName(), ex.getContent(), (int) view.getTWidth());
+        view.displayExerciceView(exv);
+        
+        if(ex.getId() < ex.getCorrespondingCourse().getExercices().size()-1) {
+            exv.showNextButton();
+            exv.getNextExercice().setOnAction((ActionEvent e) -> {
+                Exercice nextEx = ex.getCorrespondingCourse().getExercices().get(ex.getId()+1);
+                setExerciceViewEvents(nextEx);
+            });
+        }
+        else exv.hideNextButton();
+        if((ex.getId() < ex.getCorrespondingCourse().getExercices().size()) && (ex.getId() > 0)) {
+            exv.showPrevButton();
+            exv.getPrevExercice().setOnAction((ActionEvent e) -> {
+                Exercice prevEx = ex.getCorrespondingCourse().getExercices().get(ex.getId()-1);
+                setExerciceViewEvents(prevEx);
+            });
+        }
+        else exv.hidePrevButton();
+        
+        exv.getHomeButton().setOnAction((ActionEvent e1) -> {
+            loadHomePane();
+        });
+        exv.getBackButton().setOnAction((ActionEvent e2) -> {
+            loadExerciceList();
+        });
+        exv.getCourseButton().setOnAction((ActionEvent e3) -> {
+            setCourseViewEvents(ex.getCorrespondingCourse(), 0);
+        });
+    }
     
     private void setCourseViewEvents(Course co, int sl){
         
         CourseView cv;
         if(sl == 0)model.loadCourseContent(co);
         if(!"".equals(co.getSlides().get(sl).getImagePath())) {
-            cv = new CourseView(co.getTitle(), co.getSlides().get(sl).getContent(), (int) view.getWidth(), co.getSlides().get(sl).getImagePath());
+            cv = new CourseView(co.getReferingTheme().getName(), co.getTitle(), co.getSlides().get(sl).getContent(), (int) view.getTWidth(), co.getSlides().get(sl).getImagePath());
         }
-        else cv = new CourseView(co.getTitle(), co.getSlides().get(sl).getContent(), (int) view.getWidth());
+        else cv = new CourseView(co.getReferingTheme().getName(), co.getTitle(), co.getSlides().get(sl).getContent(), (int) view.getTWidth());
             if(co.getCourseProgress().getState() < co.getCourseProgress().getCorrespondingCSS().size()-2){
                 co.getCourseProgress().nextStep();
                 model.updateCourse(co);
@@ -231,6 +399,9 @@ public class MainController {
             });
             cv.getBackToList().setOnAction((ActionEvent e2) -> {
                 loadCourseList();
+            });
+            cv.getExercices().setOnAction((ActionEvent e3) -> {
+                setExerciceGridViewEvents(co);
             });
    }
     

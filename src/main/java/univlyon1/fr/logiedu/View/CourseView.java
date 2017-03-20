@@ -24,6 +24,7 @@ public class CourseView extends GridPane {
     private GridPane bottomPaneTop;
     private GridPane bottomPaneBottom;
     private GridPane middlePane;
+    private Label themeName;
     private Label courseName;
     private Label courseContent;
     private Button homeButton;
@@ -32,13 +33,14 @@ public class CourseView extends GridPane {
     private Button nextSlide;
     private Button prevCourse;
     private Button prevSlide;
+    private Button exercices;
     private Boolean nextShowned;
     private Boolean prevShowned;
     private Boolean nextSlideShowned;
     private Boolean prevSlideShowned;
     private ImageView image;
     
-    public CourseView(String name, String content, int parentWidth){
+    public CourseView(String theme, String name, String content, int parentWidth){
         this.topPane = new GridPane();
         this.middlePane = new GridPane();
         this.image = null;
@@ -46,6 +48,7 @@ public class CourseView extends GridPane {
         this.bottomPaneTop = new GridPane();
         this.bottomPaneBottom = new GridPane();
         this.courseName = new Label(name);
+        this.themeName = new Label(theme);
         this.courseName.getStyleClass().add("course-label");
         this.courseContent = new Label(content);
         this.courseContent.getStyleClass().add("course-content");
@@ -56,6 +59,7 @@ public class CourseView extends GridPane {
         this.nextSlide = new Button("Suivant");
         this.prevCourse = new Button("Cours precedent");
         this.prevSlide = new Button("Precedent");
+        this.exercices = new Button("Exercices");
         this.homeButton.getStyleClass().add("toggle-button");
         this.nextCourse.getStyleClass().add("dark-blue");
         this.prevCourse.getStyleClass().add("dark-blue");
@@ -75,15 +79,27 @@ public class CourseView extends GridPane {
         ColumnConstraints topCol2 = new ColumnConstraints((parentWidth-80)/2);
         topCol1.setHalignment(HPos.LEFT);
         topCol2.setHalignment(HPos.RIGHT);
-        this.topPane.getColumnConstraints().add(topCol1);
-        this.bottomPaneTop.getColumnConstraints().add(topCol1);
+        
+        ColumnConstraints topCol13 = new ColumnConstraints((parentWidth-80)/3);
+        ColumnConstraints topCol23 = new ColumnConstraints((parentWidth-80)/3);
+        ColumnConstraints topCol33 = new ColumnConstraints((parentWidth-80)/3);
+        topCol13.setHalignment(HPos.LEFT);
+        topCol23.setHalignment(HPos.CENTER);
+        topCol33.setHalignment(HPos.RIGHT);
+        
+        this.topPane.getColumnConstraints().add(topCol13);
+        this.bottomPaneTop.getColumnConstraints().add(topCol13);
         this.bottomPaneBottom.getColumnConstraints().add(topCol1);
-        this.topPane.getColumnConstraints().add(topCol2);
-        this.bottomPaneTop.getColumnConstraints().add(topCol2);
+        this.topPane.getColumnConstraints().add(topCol23);
+        this.topPane.getColumnConstraints().add(topCol33);
+        this.bottomPaneTop.getColumnConstraints().add(topCol23);
+        this.bottomPaneTop.getColumnConstraints().add(topCol33);
         this.bottomPaneBottom.getColumnConstraints().add(topCol2);
         this.topPane.add(this.backToList, 0, 0);
-        this.topPane.add(this.homeButton, 1, 0);
+        this.topPane.add(this.themeName, 1, 0);
+        this.topPane.add(this.homeButton, 2, 0);
         this.middlePane.add(this.courseContent, 0, 0);
+        this.bottomPaneTop.add(this.exercices, 1, 0);
         this.bottomPane.getRowConstraints().add(new RowConstraints(40));
         this.bottomPane.getRowConstraints().add(new RowConstraints(10));
         this.bottomPane.add(this.bottomPaneTop, 0, 2);
@@ -98,8 +114,8 @@ public class CourseView extends GridPane {
         this.add(this.bottomPane, 1, 4);
     }
     
-    public CourseView(String name, String content, int parentWidth, String imPath){
-        this(name, content, parentWidth);
+    public CourseView(String th, String name, String content, int parentWidth, String imPath){
+        this(th, name, content, parentWidth);
         this.middlePane.getChildren().clear();
         this.image = new ImageView(imPath);
         this.image.setFitHeight(300);
@@ -114,7 +130,7 @@ public class CourseView extends GridPane {
 
     public void showNextButton(){
         if(!this.getNextShowned()) {
-            this.bottomPaneTop.add(this.nextCourse, 1, 0);
+            this.bottomPaneTop.add(this.nextCourse, 2, 0);
             this.setNextShowned((Boolean) true);
         }
     }
@@ -345,5 +361,19 @@ public class CourseView extends GridPane {
      */
     public ImageView getImage() {
         return image;
+    }
+
+    /**
+     * @return the themeName
+     */
+    public Label getThemeName() {
+        return themeName;
+    }
+
+    /**
+     * @return the exercices
+     */
+    public Button getExercices() {
+        return exercices;
     }
 }

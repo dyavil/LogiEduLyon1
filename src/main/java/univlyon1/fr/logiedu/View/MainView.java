@@ -31,6 +31,7 @@ public class MainView extends GridPane implements Observer {
     private GridPane center;
     private LoggedPane homePane;
     private CoursesPane coursePane;
+    private ExercicesPane exercicePane;
     private int width;
     private int height;
     private ArrayList<UserPane> usersPane;
@@ -39,8 +40,11 @@ public class MainView extends GridPane implements Observer {
         this.width = w;
         this.height = h;
         this.setPrefSize(w, h);
-        homePane = new LoggedPane("", this.width, this.height);
-        coursePane = new CoursesPane(this.width);
+        this.setWidth(w);
+        this.setHeight(h);
+        homePane = new LoggedPane("", this.getTWidth(), this.getTHeight());
+        coursePane = new CoursesPane(this.getTWidth());
+        exercicePane = new ExercicesPane(this.getTWidth());
         root = new Group();
         Scene scene = new Scene(getRoot());
         scene.getStylesheets().add("/styles/Styles.css");
@@ -68,7 +72,7 @@ public class MainView extends GridPane implements Observer {
         getCenter().getRowConstraints().add(new RowConstraints(100));
         getCenter().getColumnConstraints().add(new ColumnConstraints(10));
         for(UserPane usp : getUsersPane()){
-            getCenter().getColumnConstraints().add(new ColumnConstraints(((this.width-20)/this.usersPane.size())));
+            getCenter().getColumnConstraints().add(new ColumnConstraints(((this.getWidth()-20)/this.usersPane.size())));
             getCenter().add(usp, line, 1);
             line++;
         }
@@ -93,11 +97,34 @@ public class MainView extends GridPane implements Observer {
         this.head.displayLoggedMenu();
     }
     
+    public void displayExercicesPane(){
+        getCenter().getChildren().clear();
+        getCenter().getColumnConstraints().clear();
+        getCenter().getRowConstraints().clear();
+        this.center.add(this.exercicePane, 0, 0);
+        this.head.displayLoggedMenu();
+    }
+    
     public void displayCourseView(CourseView cv){
         getCenter().getChildren().clear();
         getCenter().getColumnConstraints().clear();
         getCenter().getRowConstraints().clear();
         this.center.add(cv, 0, 0);
+        this.head.displayLoggedMenu();
+    }
+    public void displayExerciceView(ExerciceView exv){
+        getCenter().getChildren().clear();
+        getCenter().getColumnConstraints().clear();
+        getCenter().getRowConstraints().clear();
+        this.center.add(exv, 0, 0);
+        this.head.displayLoggedMenu();
+    }
+    
+    public void displayExerciceGridView(ExerciceGridView exv){
+        getCenter().getChildren().clear();
+        getCenter().getColumnConstraints().clear();
+        getCenter().getRowConstraints().clear();
+        this.center.add(exv, 0, 0);
         this.head.displayLoggedMenu();
     }
 
@@ -147,6 +174,27 @@ public class MainView extends GridPane implements Observer {
      */
     public CoursesPane getCoursePane() {
         return coursePane;
+    }
+
+    /**
+     * @return the exercicePane
+     */
+    public ExercicesPane getExercicePane() {
+        return exercicePane;
+    }
+
+    /**
+     * @return the width
+     */
+    public int getTWidth() {
+        return width;
+    }
+
+    /**
+     * @return the height
+     */
+    public int getTHeight() {
+        return height;
     }
     
 }

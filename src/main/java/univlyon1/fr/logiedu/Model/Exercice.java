@@ -5,19 +5,27 @@
  */
 package univlyon1.fr.logiedu.Model;
 
+import univlyon1.fr.logiedu.Model.GameModel.Game;
+
 /**
  *
  * @author dyavil
  */
-class Exercice {
+public class Exercice {
+    private int id;
     private Course correspondingCourse;
     private String name;
+    private String content;
     private int difficulty;
+    private Game game;
+    private Progress progress;
     
-    public Exercice(String n, Course c){
+    public Exercice(String n, String content, Course c, int id){
         this.name = n;
         this.correspondingCourse = c;
         this.difficulty = 0;
+        this.id = id;
+        this.content = content;
     }
 
     /**
@@ -60,5 +68,26 @@ class Exercice {
      */
     public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @return the content
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * @return the game
+     */
+    public Game getGame() {
+        return game;
     }
 }
