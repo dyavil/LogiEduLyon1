@@ -95,7 +95,7 @@ public class MainController {
                     setGraphic(null);
                 } else {
                     CourseListItem it = (CourseListItem) item;
-                    //setText("colorList"); // appropriate text for item
+                    //setText(""); // appropriate text for item
                     Label lab = it.getLab();
                     lab.getStyleClass().add(it.getCss());
                     setGraphic(lab);
@@ -158,14 +158,14 @@ public class MainController {
                         view.getCoursePane().getGoButton().setOnAction((ActionEvent e) -> {
                             System.out.println("selec th " + it.getThemeId() + ", course : "+ it.getCourseId());
                             Course currCo = model.getThemes().get(it.getThemeId()).getCourseList().get(it.getCourseId());
-                            setCourseViewEvents(currCo);
+                            setCourseViewEvents(currCo, 0);
                             
                         });
                         if(event.getButton().equals(MouseButton.PRIMARY)){
                             if(event.getClickCount() == 2) {
                                 System.out.println("selec th " + it.getThemeId() + ", course : "+ it.getCourseId());
                                 Course currCo = model.getThemes().get(it.getThemeId()).getCourseList().get(it.getCourseId());
-                                setCourseViewEvents(currCo);
+                                setCourseViewEvents(currCo, 0);
                             }
                             
                         }
@@ -179,8 +179,14 @@ public class MainController {
     }
     
     
-    private void setCourseViewEvents(Course co){
-        CourseView cv = new CourseView(co.getTitle(), model.getCourseContent(co), (int) view.getWidth());
+    private void setCourseViewEvents(Course co, int sl){
+        
+        CourseView cv;
+        if(sl == 0)model.loadCourseContent(co);
+        if(!"".equals(co.getSlides().get(sl).getImagePath())) {
+            cv = new CourseView(co.getTitle(), co.getSlides().get(sl).getContent(), (int) view.getWidth(), co.getSlides().get(sl).getImagePath());
+        }
+        else cv = new CourseView(co.getTitle(), co.getSlides().get(sl).getContent(), (int) view.getWidth());
             if(co.getCourseProgress().getState() < co.getCourseProgress().getCorrespondingCSS().size()-2){
                 co.getCourseProgress().nextStep();
                 model.updateCourse(co);
@@ -191,7 +197,7 @@ public class MainController {
                 cv.showNextButton();
                 cv.getNextCourse().setOnAction((ActionEvent e) -> {
                     Course nextCo = co.getReferingTheme().getCourseList().get(co.getId()+1);
-                    setCourseViewEvents(nextCo);
+                    setCourseViewEvents(nextCo, 0);
                 });
             }
             else cv.hideNextButton();
@@ -200,10 +206,26 @@ public class MainController {
                 cv.showPrevButton();
                 cv.getPrevCourse().setOnAction((ActionEvent e) -> {
                     Course prevCo = co.getReferingTheme().getCourseList().get(co.getId()-1);
-                    setCourseViewEvents(prevCo);
+                    setCourseViewEvents(prevCo, 0);
                 });
             }
             else cv.hidePrevButton();
+            
+            if(sl < co.getSlides().size()-1) {
+                cv.showNextSlideButton();
+                cv.getNextSlide().setOnAction((ActionEvent e) -> {
+                    setCourseViewEvents(co, sl+1);
+                });
+            }
+            else cv.hideNextSlideButton();
+            if((sl <  co.getSlides().size()) && (sl > 0)) {
+                cv.showPrevSlideButton();
+                cv.getPrevSlide().setOnAction((ActionEvent e) -> {
+                    setCourseViewEvents(co, sl-1);
+                });
+            }
+            else cv.hidePrevSlideButton();
+            
             cv.getHomeButton().setOnAction((ActionEvent e1) -> {
                 loadHomePane();
             });

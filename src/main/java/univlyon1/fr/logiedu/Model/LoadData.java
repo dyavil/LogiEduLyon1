@@ -90,7 +90,8 @@ public class LoadData {
             Theme th = new Theme((String) currentTheme.get("name"), i);
             int j = 0;
             for (Iterator it2 = courses.iterator(); it2.hasNext();) {
-                th.addCourse(new Course((String) ((JSONObject) it2.next()).get("title"), th, j));
+                JSONObject obj = (JSONObject) it2.next();
+                th.addCourse(new Course((String) obj.get("title"), th, j, (String) obj.get("imagePath")));
                 j++;
             }
             resList.add(th);
@@ -101,6 +102,20 @@ public class LoadData {
     
     public String getCourseContent(Course c){
         return (String) ((JSONObject)(((JSONArray)(((JSONObject)(themeList.get(c.getReferingTheme().getId()))).get("courses"))).get(c.getId()))).get("content");
+    }
+    
+    public ArrayList<Slide> getCourseSlides(Course c){
+        ArrayList<Slide> res = new ArrayList<>();
+        JSONObject jsoncourse = ((JSONObject)(((JSONArray)(((JSONObject)(themeList.get(c.getReferingTheme().getId()))).get("courses"))).get(c.getId())));
+        JSONArray jsonSlides = (JSONArray) jsoncourse.get("slides");
+        int i = 0;
+        for (Iterator iterator = jsonSlides.iterator(); iterator.hasNext();) {
+            JSONObject next = (JSONObject) iterator.next();
+            Slide temp = new Slide(i, c, (String) next.get("content"), (String) next.get("imagePath"));
+            res.add(temp);
+            i++;
+        }
+        return res; 
     }
     
     public ArrayList<User> loadUserList(){

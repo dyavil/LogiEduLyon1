@@ -9,7 +9,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -21,18 +21,30 @@ import javafx.scene.layout.RowConstraints;
 public class CourseView extends GridPane {
     private GridPane topPane;
     private GridPane bottomPane;
+    private GridPane bottomPaneTop;
+    private GridPane bottomPaneBottom;
+    private GridPane middlePane;
     private Label courseName;
     private Label courseContent;
     private Button homeButton;
     private Button backToList;
     private Button nextCourse;
+    private Button nextSlide;
     private Button prevCourse;
+    private Button prevSlide;
     private Boolean nextShowned;
     private Boolean prevShowned;
+    private Boolean nextSlideShowned;
+    private Boolean prevSlideShowned;
+    private ImageView image;
     
     public CourseView(String name, String content, int parentWidth){
         this.topPane = new GridPane();
+        this.middlePane = new GridPane();
+        this.image = null;
         this.bottomPane = new GridPane();
+        this.bottomPaneTop = new GridPane();
+        this.bottomPaneBottom = new GridPane();
         this.courseName = new Label(name);
         this.courseName.getStyleClass().add("course-label");
         this.courseContent = new Label(content);
@@ -41,10 +53,14 @@ public class CourseView extends GridPane {
         this.homeButton = new Button();
         this.backToList = new Button("Liste de cours");
         this.nextCourse = new Button("Cours suivant");
+        this.nextSlide = new Button("Suivant");
         this.prevCourse = new Button("Cours precedent");
+        this.prevSlide = new Button("Precedent");
         this.homeButton.getStyleClass().add("toggle-button");
         this.nextCourse.getStyleClass().add("dark-blue");
         this.prevCourse.getStyleClass().add("dark-blue");
+        this.nextSlide.getStyleClass().add("bevel-grey");
+        this.prevSlide.getStyleClass().add("bevel-grey");
         this.homeButton.setAlignment(Pos.BASELINE_RIGHT);
         this.getRowConstraints().add(new RowConstraints(20));
         this.getRowConstraints().add(new RowConstraints(60));
@@ -60,45 +76,98 @@ public class CourseView extends GridPane {
         topCol1.setHalignment(HPos.LEFT);
         topCol2.setHalignment(HPos.RIGHT);
         this.topPane.getColumnConstraints().add(topCol1);
-        this.bottomPane.getColumnConstraints().add(topCol1);
+        this.bottomPaneTop.getColumnConstraints().add(topCol1);
+        this.bottomPaneBottom.getColumnConstraints().add(topCol1);
         this.topPane.getColumnConstraints().add(topCol2);
-        this.bottomPane.getColumnConstraints().add(topCol2);
+        this.bottomPaneTop.getColumnConstraints().add(topCol2);
+        this.bottomPaneBottom.getColumnConstraints().add(topCol2);
         this.topPane.add(this.backToList, 0, 0);
         this.topPane.add(this.homeButton, 1, 0);
+        this.middlePane.add(this.courseContent, 0, 0);
+        this.bottomPane.getRowConstraints().add(new RowConstraints(40));
+        this.bottomPane.getRowConstraints().add(new RowConstraints(10));
+        this.bottomPane.add(this.bottomPaneTop, 0, 2);
+        this.bottomPane.add(this.bottomPaneBottom, 0, 0);
         this.nextShowned = false;
         this.prevShowned = false;
+        this.nextSlideShowned = false;
+        this.prevSlideShowned = false;
         this.add(this.topPane, 1, 1);
         this.add(this.courseName, 1, 2);
-        this.add(this.courseContent, 1, 3);
+        this.add(this.middlePane, 1, 3);
         this.add(this.bottomPane, 1, 4);
+    }
+    
+    public CourseView(String name, String content, int parentWidth, String imPath){
+        this(name, content, parentWidth);
+        this.middlePane.getChildren().clear();
+        this.image = new ImageView(imPath);
+        this.image.setFitHeight(300);
+        this.image.setPreserveRatio(true);
+        ColumnConstraints topCol1 = new ColumnConstraints((parentWidth-80)/2+10);
+        ColumnConstraints topCol2 = new ColumnConstraints((parentWidth-80)/2-10);
+        this.middlePane.getColumnConstraints().add(topCol1);
+        this.middlePane.getColumnConstraints().add(topCol2);
+        this.middlePane.add(this.image, 0, 0);
+        this.middlePane.add(this.courseContent, 1, 0);
     }
 
     public void showNextButton(){
-        if(!this.nextShowned) {
-            this.getBottomPane().add(this.nextCourse, 1, 0);
-            this.nextShowned = true;
+        if(!this.getNextShowned()) {
+            this.bottomPaneTop.add(this.nextCourse, 1, 0);
+            this.setNextShowned((Boolean) true);
         }
     }
     
     public void hideNextButton(){
-        if(nextShowned){
-            this.getBottomPane().getChildren().remove(this.nextCourse);
-            this.nextShowned = false;
+        if(getNextShowned()){
+            this.bottomPaneTop.getChildren().remove(this.nextCourse);
+            this.setNextShowned((Boolean) false);
         }
         
     }
     
     public void showPrevButton(){
-        if(!this.prevShowned) {
-            this.getBottomPane().add(this.getPrevCourse(), 0, 0);
-            this.prevShowned = true;
+        if(!this.getPrevShowned()) {
+            this.bottomPaneTop.add(this.getPrevCourse(), 0, 0);
+            this.setPrevShowned((Boolean) true);
         }
     }
     
     public void hidePrevButton(){
-        if(prevShowned){
-            this.getBottomPane().getChildren().remove(this.getPrevCourse());
-            this.prevShowned = false;
+        if(getPrevShowned()){
+            this.bottomPaneTop.getChildren().remove(this.getPrevCourse());
+            this.setPrevShowned((Boolean) false);
+        }
+        
+    }
+    
+    public void showNextSlideButton(){
+        if(!this.getNextSlideShowned()) {
+            this.bottomPaneBottom.add(this.getNextSlide(), 1, 0);
+            this.nextSlideShowned = true;
+        }
+    }
+    
+    public void hideNextSlideButton(){
+        if(getNextSlideShowned()){
+            this.bottomPaneBottom.getChildren().remove(this.getNextSlide());
+            this.nextSlideShowned = false;
+        }
+        
+    }
+    
+    public void showPrevSlideButton(){
+        if(!this.getPrevSlideShowned()) {
+            this.bottomPaneBottom.add(this.getPrevSlide(), 0, 0);
+            this.prevSlideShowned = true;
+        }
+    }
+    
+    public void hidePrevSlideButton(){
+        if(getPrevSlideShowned()){
+            this.bottomPaneBottom.getChildren().remove(this.getPrevSlide());
+            this.prevSlideShowned = false;
         }
         
     }
@@ -184,14 +253,14 @@ public class CourseView extends GridPane {
      * @return the nextShowned
      */
     public Boolean getIsLast() {
-        return nextShowned;
+        return getNextShowned();
     }
 
     /**
      * @param isLast the nextShowned to set
      */
     public void setIsLast(Boolean isLast) {
-        this.nextShowned = isLast;
+        this.setNextShowned(isLast);
     }
 
     /**
@@ -206,5 +275,75 @@ public class CourseView extends GridPane {
      */
     public Button getPrevCourse() {
         return prevCourse;
+    }
+
+    /**
+     * @return the middlePane
+     */
+    public GridPane getMiddlePane() {
+        return middlePane;
+    }
+
+    /**
+     * @return the nextSlide
+     */
+    public Button getNextSlide() {
+        return nextSlide;
+    }
+
+    /**
+     * @return the prevSlide
+     */
+    public Button getPrevSlide() {
+        return prevSlide;
+    }
+
+    /**
+     * @return the nextShowned
+     */
+    public Boolean getNextShowned() {
+        return nextShowned;
+    }
+
+    /**
+     * @param nextShowned the nextShowned to set
+     */
+    public void setNextShowned(Boolean nextShowned) {
+        this.nextShowned = nextShowned;
+    }
+
+    /**
+     * @return the prevShowned
+     */
+    public Boolean getPrevShowned() {
+        return prevShowned;
+    }
+
+    /**
+     * @param prevShowned the prevShowned to set
+     */
+    public void setPrevShowned(Boolean prevShowned) {
+        this.prevShowned = prevShowned;
+    }
+
+    /**
+     * @return the nextSlideShowned
+     */
+    public Boolean getNextSlideShowned() {
+        return nextSlideShowned;
+    }
+
+    /**
+     * @return the prevSlideShowned
+     */
+    public Boolean getPrevSlideShowned() {
+        return prevSlideShowned;
+    }
+
+    /**
+     * @return the image
+     */
+    public ImageView getImage() {
+        return image;
     }
 }

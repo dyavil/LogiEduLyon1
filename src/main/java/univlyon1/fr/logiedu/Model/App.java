@@ -27,6 +27,10 @@ public class App {
         return this.data.getCourseContent(c);
     }
     
+    public void loadCourseContent(Course c){
+        c.setSlides(data.getCourseSlides(c));
+    }
+    
     public void loadProgress(){
         if(this.LoggedUser != null){
             this.data.loadUserProgress(LoggedUser, themes);
@@ -36,6 +40,7 @@ public class App {
     public void updateCourse(Course c){
         this.data.saveCourseProgress(c, LoggedUser);
     }
+    
     /**
      * @return the users
      */

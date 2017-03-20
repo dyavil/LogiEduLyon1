@@ -14,8 +14,10 @@ import java.util.ArrayList;
 public class Course {
     private int id;
     private String title;
+    private String imagePath;
     private Theme referingTheme;
     private ArrayList<Exercice> exercices;
+    private ArrayList<Slide> slides;
     private Progress courseProgress;
     
     public Course(String t, Theme th, int d){
@@ -23,15 +25,23 @@ public class Course {
         this.id = d;
         this.referingTheme = th;
         this.exercices = new ArrayList();
+        this.slides = new ArrayList<>();
         this.courseProgress = null;
+        this.imagePath = null;
     }
     
     public Course(String t, Theme th, int d, Progress p){
-        this.title = t;
-        this.id = d;
-        this.referingTheme = th;
-        this.exercices = new ArrayList();
+        this(t, th, d);
         this.courseProgress = p;
+    }
+    
+    public Course(String t, Theme th, int d, String imp){
+        this(t, th, d);
+        this.imagePath = imp;
+    }
+    
+    public void addSlide(Slide s){
+        this.slides.add(s);
     }
 
     /**
@@ -102,5 +112,33 @@ public class Course {
      */
     public void setCourseProgress(Progress courseProgress) {
         this.courseProgress = courseProgress;
+    }
+
+    /**
+     * @return the imagePath
+     */
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    /**
+     * @param imagePath the imagePath to set
+     */
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    /**
+     * @return the slides
+     */
+    public ArrayList<Slide> getSlides() {
+        return slides;
+    }
+
+    /**
+     * @param slides the slides to set
+     */
+    public void setSlides(ArrayList<Slide> slides) {
+        this.slides = slides;
     }
 }
