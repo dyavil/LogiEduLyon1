@@ -20,19 +20,26 @@ public class Exercice {
     private Game game;
     private Progress progress;
     
-    public Exercice(String n, String content, Course c, int id){
+    public Exercice(String n, String content, Course c, int id, int diff){
         this.name = n;
         this.correspondingCourse = c;
         this.difficulty = 0;
         this.id = id;
         this.content = content;
+        this.difficulty = diff;
+        this.progress = null;
+    }
+    
+    public Exercice(String n, String content, Course c, int id, int diff, Progress prog){
+        this(n, content, c, id, diff);
+        this.progress = prog;
     }
 
     /**
      * @return the correspondingCourse
      */
     public Course getCorrespondingCourse() {
-        return correspondingCourse;
+        return correspondingCourse; 
     }
 
     /**
@@ -89,5 +96,19 @@ public class Exercice {
      */
     public Game getGame() {
         return game;
+    }
+
+    /**
+     * @return the progress
+     */
+    public Progress getProgress() {
+        return progress;
+    }
+
+    /**
+     * @param progress the progress to set
+     */
+    public void setProgress(Progress progress) {
+        this.progress = progress;
     }
 }

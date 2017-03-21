@@ -137,7 +137,8 @@ public class LoadData {
         int i = 0;
         for (Iterator iterator1 = exercices.iterator(); iterator1.hasNext();) {
             JSONObject ex = (JSONObject) iterator1.next();
-            Exercice temp = new Exercice((String) ex.get("title"), (String)ex.get("content"), co, i);
+            Number diff = (Number) ex.get("difficulty");
+            Exercice temp = new Exercice((String) ex.get("title"), (String)ex.get("content"), co, i, diff.intValue());
             co.addExercice(temp);
             i++;
         }
@@ -194,7 +195,24 @@ public class LoadData {
             newCourseProgress.put("progressState", 0);
             newCourseProgress.put("progressComment", "");
             newCourse.put("courseProgress", newCourseProgress);
+            newCourse.put("exercicesProgress", new JSONArray());
+            initExercicesProgress((JSONArray) newCourse.get("exercicesProgress"), (JSONArray) next.get("exercices"));
             jsonToSet.add(newCourse);
+            i++;
+        }
+    }
+    
+    private void initExercicesProgress(JSONArray jsonToSet, JSONArray jsonExercices){
+        int i = 0;
+        for (Iterator iterator = jsonExercices.iterator(); iterator.hasNext();) {
+            JSONObject exo = (JSONObject) iterator.next();
+            JSONObject exoProg = new JSONObject();
+            JSONObject newExoProgress = new JSONObject();
+            exoProg.put("idExercice", i);
+            newExoProgress.put("progressState", 0);
+            newExoProgress.put("progressComment", "");
+            exoProg.put("exerciceProgress", newExoProgress);
+            jsonToSet.add(exoProg);
             i++;
         }
     }
@@ -209,6 +227,23 @@ public class LoadData {
                     Number state = (Number) jsonProgress.get("progressState");
                     String progressComment = (String) jsonProgress.get("progressComment");
                     c.setCourseProgress(new ThreeStepProgress(state.intValue(), progressComment));
+                    loadExercicesProgress((JSONArray) currentCourse.get("exercicesProgress"), c);
+                }
+            }
+        }
+    }
+    
+    
+    private void loadExercicesProgress(JSONArray exercices, Course refCo){
+        for (Iterator iterator = exercices.iterator(); iterator.hasNext();) {
+            JSONObject currentExercice = (JSONObject) iterator.next();
+            Number id = (Number) currentExercice.get("idExercice");
+            for(Exercice e : refCo.getExercices()){
+                if(e.getId() == id.intValue()){
+                    JSONObject exerciceProg = (JSONObject) currentExercice.get("exerciceProgress");
+                    Number state = (Number) exerciceProg.get("progressState");
+                    String progressComment = (String) exerciceProg.get("progressComment");
+                    e.setProgress(new ThreeStepProgress(state.intValue(), progressComment));
                 }
             }
         }
