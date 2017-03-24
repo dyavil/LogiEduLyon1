@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.JSONArray;
@@ -296,6 +298,18 @@ public class LoadData {
         }
     }
     
+    public void decypher(String in){
+        try {
+            Map<String,String> bbMap = new HashMap<String , String>();
+            String dir = System.getProperty("user.home")+"/LogiEdu";
+            runProcess("javac "+dir+"/HelloWorld.java");
+            runProcess("java -cp "+dir+" HelloWorld");
+        } catch (Exception ex) {
+            Logger.getLogger(LoadData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
     private void write(){
         try {
             FileWriter out = new FileWriter(configFile);
@@ -306,5 +320,22 @@ public class LoadData {
             Logger.getLogger(LoadData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    private static void printLines(String name, InputStream ins) throws Exception {
+    String line = null;
+    BufferedReader in = new BufferedReader(
+        new InputStreamReader(ins));
+    while ((line = in.readLine()) != null) {
+        System.out.println(name + " " + line);
+    }
+  }
+    
+    private static void runProcess(String command) throws Exception {
+    Process pro = Runtime.getRuntime().exec(command);
+    printLines(command + " stdout:", pro.getInputStream());
+    printLines(command + " stderr:", pro.getErrorStream());
+    pro.waitFor();
+    System.out.println(command + " exitValue() " + pro.exitValue());
+  }
     
 }

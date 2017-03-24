@@ -1,5 +1,8 @@
 package univlyon1.fr.logiedu;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -30,6 +33,8 @@ public class MainApp extends Application {
         MainController controller = new MainController(view, model, stage);
         stage.show();
     }
+    
+    
 
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
