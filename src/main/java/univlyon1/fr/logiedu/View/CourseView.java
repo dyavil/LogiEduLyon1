@@ -1,7 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Quintard LivaÃ¯
+ * Project for Logiciel Educatif
+ * UniversitÃ© lyon 1
  */
 package univlyon1.fr.logiedu.View;
 
@@ -13,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.text.TextFlow;
+import javafx.scene.web.WebView;
 
 /**
  *
@@ -24,6 +26,7 @@ public class CourseView extends GridPane {
     private GridPane bottomPaneTop;
     private GridPane bottomPaneBottom;
     private GridPane middlePane;
+    private TextFlow flowText;
     private Label themeName;
     private Label courseName;
     private Label courseContent;
@@ -40,7 +43,7 @@ public class CourseView extends GridPane {
     private Boolean prevSlideShowned;
     private ImageView image;
     
-    public CourseView(String theme, String name, String content, int parentWidth){
+    public CourseView(String theme, String name, TextFlow content, int parentWidth){
         this.topPane = new GridPane();
         this.middlePane = new GridPane();
         this.image = null;
@@ -50,9 +53,12 @@ public class CourseView extends GridPane {
         this.courseName = new Label(name);
         this.themeName = new Label(theme);
         this.courseName.getStyleClass().add("course-label");
-        this.courseContent = new Label(content);
+        this.courseContent = new Label(content.getAccessibleText());
         this.courseContent.getStyleClass().add("course-content");
         this.courseContent.setWrapText(true);
+        this.flowText = content;
+        //WebView w = new WebView();
+        //w.getEngine().loadContent("<html>hello, world</html>", "text/html");
         this.homeButton = new Button();
         this.backToList = new Button("Liste de cours");
         this.nextCourse = new Button("Cours suivant");
@@ -98,7 +104,7 @@ public class CourseView extends GridPane {
         this.topPane.add(this.backToList, 0, 0);
         this.topPane.add(this.themeName, 1, 0);
         this.topPane.add(this.homeButton, 2, 0);
-        this.middlePane.add(this.courseContent, 0, 0);
+        this.middlePane.add(this.flowText, 0, 0);
         this.bottomPaneTop.add(this.exercices, 1, 0);
         this.bottomPane.getRowConstraints().add(new RowConstraints(40));
         this.bottomPane.getRowConstraints().add(new RowConstraints(10));
@@ -114,7 +120,7 @@ public class CourseView extends GridPane {
         this.add(this.bottomPane, 1, 4);
     }
     
-    public CourseView(String th, String name, String content, int parentWidth, String imPath){
+    public CourseView(String th, String name, TextFlow content, int parentWidth, String imPath){
         this(th, name, content, parentWidth);
         this.middlePane.getChildren().clear();
         this.image = new ImageView(imPath);
@@ -126,6 +132,30 @@ public class CourseView extends GridPane {
         this.middlePane.getColumnConstraints().add(topCol2);
         this.middlePane.add(this.image, 0, 0);
         this.middlePane.add(this.courseContent, 1, 0);
+    }
+    
+    public void switchToNextTheme(){
+        this.nextCourse.getStyleClass().clear();
+        this.nextCourse.getStyleClass().add("dark-blue-th");
+        this.nextCourse.setText("Sujet suivant");
+    }
+    
+    public void switchToNextCours(){
+        this.nextCourse.getStyleClass().clear();
+        this.nextCourse.getStyleClass().add("dark-blue");
+        this.nextCourse.setText("Cours suivant");
+    }
+    
+    public void switchToPrevTheme(){
+        this.prevCourse.getStyleClass().clear();
+        this.prevCourse.getStyleClass().add("dark-blue-th");
+        this.prevCourse.setText("Sujet precedent");
+    }
+    
+    public void switchToPrevCours(){
+        this.prevCourse.getStyleClass().clear();
+        this.prevCourse.getStyleClass().add("dark-blue");
+        this.prevCourse.setText("Cours precedent");
     }
 
     public void showNextButton(){

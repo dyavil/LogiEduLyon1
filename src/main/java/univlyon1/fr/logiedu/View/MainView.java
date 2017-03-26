@@ -1,21 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Quintard LivaÃ¯
+ * Project for Logiciel Educatif
+ * UniversitÃ© lyon 1
  */
 package univlyon1.fr.logiedu.View;
 
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -28,13 +26,17 @@ public class MainView extends GridPane implements Observer {
     
     private Group root;
     private MenuTop head;
+    private GridPane headPane;
     private GridPane center;
+    private GridPane bottomPane;
+    private Button addButton;
     private LoggedPane homePane;
     private CoursesPane coursePane;
     private ExercicesPane exercicePane;
     private int width;
     private int height;
     private ArrayList<UserPane> usersPane;
+    private Label nameLabel;
     
     public MainView(int w, int h){
         this.width = w;
@@ -49,14 +51,31 @@ public class MainView extends GridPane implements Observer {
         Scene scene = new Scene(getRoot());
         scene.getStylesheets().add("/styles/Styles.css");
         head = new MenuTop();
-        
+        this.nameLabel = new Label("");
+        this.nameLabel.getStyleClass().add("top-name-label");
         center = new GridPane();
+        headPane = new GridPane();
+        bottomPane = new GridPane();
+        addButton = new Button();
+        addButton.getStyleClass().add("plus-button");
+        ColumnConstraints colCo = new ColumnConstraints(this.width);
+        colCo.setHalignment(HPos.CENTER);
+        headPane.getColumnConstraints().add(colCo);
         usersPane = new ArrayList<>();
         this.setFocusTraversable(true);
         root.getChildren().add(this);
-        this.add(head, 0, 0);
+        this.headPane.add(head, 0, 0);
+        this.headPane.add(nameLabel, 0, 1);
+        this.add(headPane, 0, 0);
         this.add(center, 0, 2);
+        this.add(bottomPane, 0, 3);
         this.getRowConstraints().add(new RowConstraints());
+        
+        bottomPane.getColumnConstraints().add(new ColumnConstraints(10));
+        bottomPane.getRowConstraints().add(new RowConstraints(40));
+        ColumnConstraints col = new ColumnConstraints((this.getWidth()-20));
+        col.setHalignment(HPos.CENTER);
+        bottomPane.getColumnConstraints().add(col);
     }
     
     public void addUserPane(UserPane usp){
@@ -65,67 +84,65 @@ public class MainView extends GridPane implements Observer {
     }
     
     public void displayUsersPane(){
-        int line = 1;
-        getCenter().getChildren().clear();
-        getCenter().getColumnConstraints().clear();
-        getCenter().getRowConstraints().clear();
+        int col = 1;
+        clearPanes();
         getCenter().getRowConstraints().add(new RowConstraints(100));
         getCenter().getColumnConstraints().add(new ColumnConstraints(10));
         for(UserPane usp : getUsersPane()){
-            getCenter().getColumnConstraints().add(new ColumnConstraints(((this.getWidth()-20)/this.usersPane.size())));
-            getCenter().add(usp, line, 1);
-            line++;
+            getCenter().getColumnConstraints().add(new ColumnConstraints(((this.getWidth()-20)/(this.usersPane.size()))));
+            getCenter().add(usp, col, 1);
+            col++;
         }
+        
+        
+        bottomPane.add(getAddButton(), 1, 1);
         getCenter().getColumnConstraints().add(new ColumnConstraints(10));
+        this.getNameLabel().setText("");
         this.head.displayStartMenu();
     }
     
     public void displayHomePane(String loggedUser){
-        getCenter().getChildren().clear();
-        getCenter().getColumnConstraints().clear();
-        getCenter().getRowConstraints().clear();
+        clearPanes();
         getCenter().getRowConstraints().add(new RowConstraints(100));
         this.center.add(this.homePane, 0, 1);
+        this.getNameLabel().setText(loggedUser);
         this.head.displayLoggedMenu();
     }
     
     public void displayCoursesPane(){
-        getCenter().getChildren().clear();
-        getCenter().getColumnConstraints().clear();
-        getCenter().getRowConstraints().clear();
+        clearPanes();
         this.center.add(this.coursePane, 0, 0);
         this.head.displayLoggedMenu();
     }
     
     public void displayExercicesPane(){
-        getCenter().getChildren().clear();
-        getCenter().getColumnConstraints().clear();
-        getCenter().getRowConstraints().clear();
+        clearPanes();
         this.center.add(this.exercicePane, 0, 0);
         this.head.displayLoggedMenu();
     }
     
     public void displayCourseView(CourseView cv){
-        getCenter().getChildren().clear();
-        getCenter().getColumnConstraints().clear();
-        getCenter().getRowConstraints().clear();
+        clearPanes();
         this.center.add(cv, 0, 0);
         this.head.displayLoggedMenu();
     }
     public void displayExerciceView(ExerciceView exv){
-        getCenter().getChildren().clear();
-        getCenter().getColumnConstraints().clear();
-        getCenter().getRowConstraints().clear();
+        clearPanes();
         this.center.add(exv, 0, 0);
         this.head.displayLoggedMenu();
     }
     
     public void displayExerciceGridView(ExerciceGridView exv){
-        getCenter().getChildren().clear();
-        getCenter().getColumnConstraints().clear();
-        getCenter().getRowConstraints().clear();
+        clearPanes();
         this.center.add(exv, 0, 0);
         this.head.displayLoggedMenu();
+    }
+    
+    private void clearPanes(){
+        getCenter().getChildren().clear();
+        bottomPane.getChildren().clear();
+        getCenter().getColumnConstraints().clear();
+        getCenter().getRowConstraints().clear();
     }
 
     @Override
@@ -195,6 +212,20 @@ public class MainView extends GridPane implements Observer {
      */
     public int getTHeight() {
         return height;
+    }
+
+    /**
+     * @return the addButton
+     */
+    public Button getAddButton() {
+        return addButton;
+    }
+
+    /**
+     * @return the nameLabel
+     */
+    public Label getNameLabel() {
+        return nameLabel;
     }
     
 }

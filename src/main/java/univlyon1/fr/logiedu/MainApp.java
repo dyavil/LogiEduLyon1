@@ -1,12 +1,12 @@
+/* 
+ * Quintard LivaÃ¯
+ * Project for Logiciel Educatif
+ * UniversitÃ© lyon 1
+ */
 package univlyon1.fr.logiedu;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import univlyon1.fr.logiedu.Controller.MainController;
@@ -18,14 +18,6 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        /*Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
-        
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add("/styles/Styles.css");
-        
-        stage.setTitle("JavaFX and Maven");
-        stage.setScene(scene);
-        stage.show();*/
         
         stage.setTitle("Logi Edu");
         MainView view = new MainView(800, 600);

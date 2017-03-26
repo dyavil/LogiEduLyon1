@@ -1,7 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Quintard LivaÃ¯
+ * Project for Logiciel Educatif
+ * UniversitÃ© lyon 1
  */
 package univlyon1.fr.logiedu.Controller;
 
@@ -16,6 +16,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import univlyon1.fr.logiedu.Model.App;
 import univlyon1.fr.logiedu.Model.Course;
@@ -52,7 +54,14 @@ public class MainController {
         this.refreshUsersPane();
         
         this.view.getHead().getAddUser().setOnAction((ActionEvent e) -> {
-                TextInputDialog dialog = new TextInputDialog("pseudo");
+                addUserAction();
+            });
+        this.logoutHandler();
+        
+    }
+    
+    private void addUserAction(){
+        TextInputDialog dialog = new TextInputDialog("pseudo");
                 dialog.setTitle("Pseudo : ");
                 dialog.setHeaderText("");
                 Optional<String> result = dialog.showAndWait();
@@ -63,9 +72,6 @@ public class MainController {
                     this.view.displayUsersPane();
                     this.refreshUsersPane();
                 }
-            });
-        this.logoutHandler();
-        
     }
     
     
@@ -75,6 +81,9 @@ public class MainController {
                 this.model.setLoggedUser(usp.getID());
                 this.loadHomePane();
             });
+        });
+        this.view.getAddButton().setOnAction((ActionEvent e) -> {
+            addUserAction();
         });
     }
     
@@ -140,7 +149,7 @@ public class MainController {
     private void loadCourseList() {
         this.view.getCoursePane().getCoursesList().getRoot().getChildren().clear();
         for(Theme th : this.model.getThemes()){
-            CourseListItem tbox = new CourseListItem(th.getName(), "no-change");
+            CourseListItem tbox = new CourseListItem(th.getName(), "no-change", true, th.getId());
             
             TreeItem<HBox> themBranch = new TreeItem<>(tbox);
             themBranch.getChildren().clear();
@@ -234,6 +243,17 @@ public class MainController {
                         }
                     
                     }
+                    else if(it.getIsTheme()){
+                        if(event.getButton().equals(MouseButton.PRIMARY)){
+                            if(!view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().isExpanded()) view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().setExpanded(true);
+                            else view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().setExpanded(false);
+                            if(event.getClickCount() == 2) {
+                                Course currCo = model.getThemes().get(it.getThemeId()).getCourseList().get(0);
+                                setCourseViewEvents(currCo, 0);
+                            }
+                            
+                        }
+                    }
                     else view.getCoursePane().hidegoButton();
                 }
             }
@@ -318,7 +338,8 @@ public class MainController {
     private void setExerciceViewEvents(Exercice ex) {
         ExerciceView exv = new ExerciceView(ex.getCorrespondingCourse().getTitle(), ex.getName(), ex.getContent(), (int) view.getTWidth());
         view.displayExerciceView(exv);
-        
+        ex.CompileCode();
+        ex.ExecuteCode();
         if(ex.getId() < ex.getCorrespondingCourse().getExercices().size()-1) {
             exv.showNextButton();
             exv.getNextExercice().setOnAction((ActionEvent e) -> {
@@ -352,9 +373,9 @@ public class MainController {
         CourseView cv;
         if(sl == 0)model.loadCourseContent(co);
         if(!"".equals(co.getSlides().get(sl).getImagePath())) {
-            cv = new CourseView(co.getReferingTheme().getName(), co.getTitle(), co.getSlides().get(sl).getContent(), (int) view.getTWidth(), co.getSlides().get(sl).getImagePath());
+            cv = new CourseView(co.getReferingTheme().getName(), co.getTitle(), applyStyle(co.getSlides().get(sl).getContent()), (int) view.getTWidth(), co.getSlides().get(sl).getImagePath());
         }
-        else cv = new CourseView(co.getReferingTheme().getName(), co.getTitle(), co.getSlides().get(sl).getContent(), (int) view.getTWidth());
+        else cv = new CourseView(co.getReferingTheme().getName(), co.getTitle(), applyStyle(co.getSlides().get(sl).getContent()), (int) view.getTWidth());
             if(co.getCourseProgress().getState() < co.getCourseProgress().getCorrespondingCSS().size()-2){
                 co.getCourseProgress().nextStep();
                 model.updateCourse(co);
@@ -362,22 +383,40 @@ public class MainController {
             
             view.displayCourseView(cv);
             if(co.getId() < co.getReferingTheme().getCourseList().size()-1) {
+                cv.switchToNextCours();
                 cv.showNextButton();
                 cv.getNextCourse().setOnAction((ActionEvent e) -> {
                     Course nextCo = co.getReferingTheme().getCourseList().get(co.getId()+1);
                     setCourseViewEvents(nextCo, 0);
                 });
             }
-            else cv.hideNextButton();
+            else {
+                if(co.getReferingTheme().getId() < this.model.getThemes().size()-1){
+                    cv.switchToNextTheme();
+                    cv.showNextButton();
+                    cv.getNextCourse().setOnAction((ActionEvent e) -> {
+                        Course nextCo = this.model.getThemes().get(co.getReferingTheme().getId()+1).getCourseList().get(0);
+                        setCourseViewEvents(nextCo, 0);
+                });
+                }else cv.hideNextButton();
+            }
             if((co.getId() < co.getReferingTheme().getCourseList().size()) && (co.getId() > 0)) {
-                System.out.println(co.getId());
                 cv.showPrevButton();
                 cv.getPrevCourse().setOnAction((ActionEvent e) -> {
                     Course prevCo = co.getReferingTheme().getCourseList().get(co.getId()-1);
                     setCourseViewEvents(prevCo, 0);
                 });
             }
-            else cv.hidePrevButton();
+            else {
+                if(co.getReferingTheme().getId() < this.model.getThemes().size() && co.getReferingTheme().getId() > 0){
+                    cv.switchToPrevTheme();
+                    cv.showPrevButton();
+                    cv.getPrevCourse().setOnAction((ActionEvent e) -> {
+                        Course PrevCo = this.model.getThemes().get(co.getReferingTheme().getId()-1).getCourseList().get(this.model.getThemes().get(co.getReferingTheme().getId()-1).getCourseList().size()-1);
+                        setCourseViewEvents(PrevCo, 0);
+                });
+                }else cv.hidePrevButton();
+            }
             
             if(sl < co.getSlides().size()-1) {
                 cv.showNextSlideButton();
@@ -404,6 +443,30 @@ public class MainController {
                 setExerciceGridViewEvents(co);
             });
    }
+    
+    
+    private TextFlow applyStyle(String in){
+        TextFlow res = new TextFlow();
+        String[] spl = in.split("£");
+        for(String one : spl){
+            String[] temp = one.split("§");
+            if(temp.length == 2){
+                Text t1 = new Text(temp[1]);
+                t1.getStyleClass().add("course-content");
+                if(temp[0].contains("color-")){
+                    t1.setStyle("-fx-fill:"+temp[0].split("color-")[1]+";");
+                }
+                else t1.getStyleClass().add(temp[0]);
+                res.getChildren().add(t1);
+            }
+            else{
+                Text t1 = new Text(temp[0]);
+                t1.getStyleClass().add("course-content");
+                res.getChildren().add(t1);
+            }
+        }
+        return res;
+    }
     
     
 }

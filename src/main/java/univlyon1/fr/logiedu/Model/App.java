@@ -1,14 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Quintard LivaÃ¯
+ * Project for Logiciel Educatif
+ * UniversitÃ© lyon 1
  */
 package univlyon1.fr.logiedu.Model;
 
 import java.util.ArrayList;
 
 /**
- *
+ * Class which represent the model
  * @author dyavil
  */
 public class App {
@@ -17,26 +17,49 @@ public class App {
     private ArrayList<Theme> themes;
     private User LoggedUser;
     
+    
+    /**
+     * Basic constructor
+     * Init attributes
+     */
     public App(){
         this.data = new LoadData();
         this.users = this.data.loadUserList();
         this.themes = this.data.loadThemeList();
     }
     
+    
+    
+    /**
+     * Get the content of a course as a string
+     * @param c course searched
+     * @return content as String
+     */
     public String getCourseContent(Course c){
         return this.data.getCourseContent(c);
     }
     
+    /**
+     * Load the content (slides) of a specific course
+     * @param c course to be loaded
+     */
     public void loadCourseContent(Course c){
         c.setSlides(data.getCourseSlides(c));
     }
     
+    /**
+     * If a user is logged, load it's progress
+     */
     public void loadProgress(){
         if(this.LoggedUser != null){
             this.data.loadUserProgress(LoggedUser, themes);
         }
     }
 
+    /**
+     * Persist the course data
+     * @param c course to be saved
+     */
     public void updateCourse(Course c){
         this.data.saveCourseProgress(c, LoggedUser);
     }
@@ -48,6 +71,11 @@ public class App {
         return users;
     }
     
+    /**
+     * Get the User with the corresponding id
+     * @param id id of the looked user
+     * @return searched user (null if not found)
+     */
     public User getUser(int id){
         for(User us : users){
             if(us.getId() == id) return us;
@@ -62,7 +90,11 @@ public class App {
         this.users = users;
     }
     
-    
+    /**
+     * Add a new user to th model
+     * @param ps username of the user to be added
+     * @return the created User
+     */
     public User addUser(String ps){
         User us = new User(ps);
         this.data.saveNewUser(us);
@@ -114,7 +146,7 @@ public class App {
     }
     
     /**
-     * @param LoggedUser the LoggedUser to set
+     * @param id of the user to be set
      */
     public void setLoggedUser(int id) {
         this.LoggedUser = this.getUser(id);

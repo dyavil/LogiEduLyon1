@@ -1,7 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Quintard LivaÃ¯
+ * Project for Logiciel Educatif
+ * UniversitÃ© lyon 1
  */
 package univlyon1.fr.logiedu.Model;
 
@@ -13,6 +13,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,26 +25,50 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import univlyon1.fr.logiedu.Utility.UnzipUtility;
+
 /**
- *
+ * Class which handle courses and config json files
+ * Transform raw data into class objects
  * @author dyavil
  */
 public class LoadData {
     
     private File configFile;
     private JSONObject baseConfig;
+    
+    //static content
     private JSONObject baseThemes;
     private JSONArray themeList;
+    
+    //progress content
     private JSONArray userList;
     
+    private Map<String, String> decypherMap;
+    
+    /**
+     * Constructor,
+     * Set up the files on first launch
+     * Load them otherwise
+     */
     public LoadData(){
         FileReader in;
         FileWriter out;
+        initMap();
         try {
             File configDir = new File(System.getProperty("user.home")+"/LogiEdu");
             configFile = new File(System.getProperty("user.home")+"/LogiEdu/config.json");
             if(!configDir.exists()) configDir.mkdirs();
             if(!configFile.exists()){
+                
+                InputStream f = getClass().getResourceAsStream("/exo.zip");
+                File tempFile = new File(System.getProperty("user.home")+"/LogiEdu/exo.zip");
+                Files.copy(f, tempFile.toPath(), REPLACE_EXISTING);
+                UnzipUtility util = new UnzipUtility();
+                util.unzip(System.getProperty("user.home")+"/LogiEdu/exo.zip", System.getProperty("user.home")+"/LogiEdu/ExercicesSources");
+                
+
                 out = new FileWriter(configFile);
                 configFile.createNewFile();
                 baseConfig = new JSONObject();
@@ -51,6 +77,7 @@ public class LoadData {
                 out.write(baseConfig.toJSONString());
                 out.flush();
                 out.close();
+                
             }
             else{
                 JSONParser parser = new JSONParser();
@@ -64,8 +91,45 @@ public class LoadData {
             Logger.getLogger(LoadData.class.getName()).log(Level.SEVERE, null, ex);
         }
         initThemes();
+        //initExerciceFolder();
     }
     
+    
+    private void initExerciceFolder(){
+        File configDir = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources");
+        if(!configDir.exists()) {
+            configDir.mkdirs();
+            int i = 0;
+            for (Iterator iterator = themeList.iterator(); iterator.hasNext();) {
+                JSONObject currentTheme = (JSONObject) iterator.next();
+                File thDir = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"+i);
+                thDir.mkdir();
+                int j = 0;
+                JSONArray courses = (JSONArray) currentTheme.get("courses");
+                for (Iterator iterator1 = courses.iterator(); iterator1.hasNext();) {
+                    JSONObject currentCourse = (JSONObject) iterator1.next();
+                    File thCo = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"+i+"/"+j);
+                    thCo.mkdir();
+                    JSONArray exercices = (JSONArray) currentCourse.get("exercices");
+                    int k = 0;
+                    for (Iterator iterator2 = exercices.iterator(); iterator2.hasNext();) {
+                        JSONObject ex = (JSONObject) iterator2.next();
+                        File thEx = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"+i+"/"+j+"/"+k);
+                        Number nmand = (Number) ex.get("sourceFiles");
+                        if(nmand.intValue() > 0) thEx.mkdir();                       
+                        k++;
+                    }
+                    j++;
+                }
+                i++;
+            }
+        }
+    }
+    
+    /**
+     * Method whic load the themes content
+     * in a JSONObject which will be dealt with after
+     */
     private void initThemes(){
         try {
             InputStream f = getClass().getResourceAsStream("/courses.json");
@@ -83,6 +147,11 @@ public class LoadData {
         }
     }
     
+    /**
+     * Transform the JSONArray containing the theme list
+     * into a Theme class list
+     * @return the list oh themes
+     */
     public ArrayList<Theme> loadThemeList(){
         ArrayList<Theme> resList = new ArrayList<>();
         int i = 0;
@@ -104,10 +173,46 @@ public class LoadData {
         return resList;
     }
     
+    /**
+     * Extract exercices information from the json
+     * and update the course object accordingly
+     * @param co course to be updated
+     * @param course source jsonobject
+     */
+    private void loadExercices(Course co, JSONObject course){
+        JSONArray exercices = (JSONArray) course.get("exercices");
+        int i = 0;
+        for (Iterator iterator1 = exercices.iterator(); iterator1.hasNext();) {
+            JSONObject ex = (JSONObject) iterator1.next();
+            Number diff = (Number) ex.get("difficulty");
+            Number nmand = (Number) ex.get("mandatory");
+            Boolean mand = false;
+            if(nmand.intValue() > 0) mand = true;
+            Number nsrc = (Number) ex.get("sourceFiles");
+            Boolean src = false;
+            if(nsrc.intValue() > 0) src = true;
+            Exercice temp = new Exercice((String) ex.get("title"), (String)ex.get("content"), co, i, diff.intValue(), mand, src);
+            co.addExercice(temp);
+            i++;
+        }
+    }
+    
+    
+    /**
+     * Get the content of a course as a String
+     * @param c course searched
+     * @return course content
+     */
     public String getCourseContent(Course c){
         return (String) ((JSONObject)(((JSONArray)(((JSONObject)(themeList.get(c.getReferingTheme().getId()))).get("courses"))).get(c.getId()))).get("content");
     }
     
+    /**
+     * Extract a course content of the JSON
+     * as a list of Slides
+     * @param c course searched
+     * @return the list of slides
+     */
     public ArrayList<Slide> getCourseSlides(Course c){
         ArrayList<Slide> res = new ArrayList<>();
         JSONObject jsoncourse = ((JSONObject)(((JSONArray)(((JSONObject)(themeList.get(c.getReferingTheme().getId()))).get("courses"))).get(c.getId())));
@@ -115,13 +220,19 @@ public class LoadData {
         int i = 0;
         for (Iterator iterator = jsonSlides.iterator(); iterator.hasNext();) {
             JSONObject next = (JSONObject) iterator.next();
-            Slide temp = new Slide(i, c, (String) next.get("content"), (String) next.get("imagePath"));
+            String decyph = decypher((String) next.get("content"));
+            Slide temp = new Slide(i, c, decyph, (String) next.get("imagePath"));
             res.add(temp);
             i++;
         }
         return res; 
     }
     
+    /**
+     * Transform the JSONArray containing the user list
+     * into a User class list
+     * @return 
+     */
     public ArrayList<User> loadUserList(){
         ArrayList<User> resList = new ArrayList<>();
         for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
@@ -133,19 +244,11 @@ public class LoadData {
         return resList;
     }
     
-    private void loadExercices(Course co, JSONObject course){
-        ArrayList<Exercice> resList = new ArrayList<>();
-        JSONArray exercices = (JSONArray) course.get("exercices");
-        int i = 0;
-        for (Iterator iterator1 = exercices.iterator(); iterator1.hasNext();) {
-            JSONObject ex = (JSONObject) iterator1.next();
-            Number diff = (Number) ex.get("difficulty");
-            Exercice temp = new Exercice((String) ex.get("title"), (String)ex.get("content"), co, i, diff.intValue());
-            co.addExercice(temp);
-            i++;
-        }
-    }
-    
+    /**
+     * Store the data concerning a new User
+     * into the json file
+     * @param us User to be added
+     */
     public void saveNewUser(User us){
         JSONObject userObj = new JSONObject();
         userObj.put("id", userList.size());
@@ -157,6 +260,12 @@ public class LoadData {
         write();
     }
     
+    /**
+     * Extract the progress info from the json file
+     * regarding a specific user
+     * @param us user searched
+     * @param ths list to be updated with the user data
+     */
     public void loadUserProgress(User us, ArrayList<Theme> ths){
         for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
             JSONObject currentUser = (JSONObject) iterator.next();
@@ -172,86 +281,14 @@ public class LoadData {
         }
     }
     
-    private void initThemeProgress(JSONObject jsonUser){
-        int i = 0;
-        JSONArray jsonProgress = (JSONArray) jsonUser.get("progress");
-        for (Iterator iterator = themeList.iterator(); iterator.hasNext();) {
-            JSONObject currentTheme = (JSONObject) iterator.next();
-            JSONObject jsonP = new JSONObject();
-            jsonP.put("themeid", i);
-            jsonP.put("progressState", 0);
-            jsonP.put("coursesProgress", new JSONArray());
-            this.initCoursesProgress((JSONArray) jsonP.get("coursesProgress"), (JSONArray) currentTheme.get("courses"));
-            jsonProgress.add(jsonP);
-            i++;
-        }
-    }
-    
-    private void initCoursesProgress(JSONArray jsonToSet, JSONArray jsonCourses){
-        int i =0;
-        for (Iterator iterator = jsonCourses.iterator(); iterator.hasNext();) {
-            JSONObject next = (JSONObject) iterator.next();
-            JSONObject newCourse = new JSONObject();
-            JSONObject newCourseProgress = new JSONObject();
-            newCourse.put("idCourse", i);
-            newCourseProgress.put("progressState", 0);
-            newCourseProgress.put("progressComment", "");
-            newCourse.put("courseProgress", newCourseProgress);
-            newCourse.put("exercicesProgress", new JSONArray());
-            initExercicesProgress((JSONArray) newCourse.get("exercicesProgress"), (JSONArray) next.get("exercices"));
-            jsonToSet.add(newCourse);
-            i++;
-        }
-    }
-    
-    private void initExercicesProgress(JSONArray jsonToSet, JSONArray jsonExercices){
-        int i = 0;
-        for (Iterator iterator = jsonExercices.iterator(); iterator.hasNext();) {
-            JSONObject exo = (JSONObject) iterator.next();
-            JSONObject exoProg = new JSONObject();
-            JSONObject newExoProgress = new JSONObject();
-            exoProg.put("idExercice", i);
-            newExoProgress.put("progressState", 0);
-            newExoProgress.put("progressComment", "");
-            exoProg.put("exerciceProgress", newExoProgress);
-            jsonToSet.add(exoProg);
-            i++;
-        }
-    }
-    
-    private void loadCoursesProgress(JSONArray courses, Theme refTheme){
-        for (Iterator iterator = courses.iterator(); iterator.hasNext();){
-            JSONObject currentCourse = (JSONObject) iterator.next();
-            Number id = (Number) currentCourse.get("idCourse");
-            for(Course c : refTheme.getCourseList()){
-                if(id.intValue() == c.getId()){
-                    JSONObject jsonProgress = (JSONObject) currentCourse.get("courseProgress");
-                    Number state = (Number) jsonProgress.get("progressState");
-                    String progressComment = (String) jsonProgress.get("progressComment");
-                    c.setCourseProgress(new ThreeStepProgress(state.intValue(), progressComment));
-                    loadExercicesProgress((JSONArray) currentCourse.get("exercicesProgress"), c);
-                }
-            }
-        }
-    }
     
     
-    private void loadExercicesProgress(JSONArray exercices, Course refCo){
-        for (Iterator iterator = exercices.iterator(); iterator.hasNext();) {
-            JSONObject currentExercice = (JSONObject) iterator.next();
-            Number id = (Number) currentExercice.get("idExercice");
-            for(Exercice e : refCo.getExercices()){
-                if(e.getId() == id.intValue()){
-                    JSONObject exerciceProg = (JSONObject) currentExercice.get("exerciceProgress");
-                    Number state = (Number) exerciceProg.get("progressState");
-                    String progressComment = (String) exerciceProg.get("progressComment");
-                    e.setProgress(new ThreeStepProgress(state.intValue(), progressComment));
-                }
-            }
-        }
-    }
-    
-    
+    /**
+     * Store the data concerning a specific course progress
+     * and a specific user
+     * @param co course concerned
+     * @param us user concerned
+     */
     public void saveCourseProgress(Course co, User us){
         for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
             JSONObject currentUser = (JSONObject) iterator.next();
@@ -278,6 +315,124 @@ public class LoadData {
         }
     }
     
+    
+    /**
+     * init the theme part of a user to be
+     * written in a json
+     * @param jsonUser jsonobject to be updated
+     */
+    private void initThemeProgress(JSONObject jsonUser){
+        int i = 0;
+        JSONArray jsonProgress = (JSONArray) jsonUser.get("progress");
+        for (Iterator iterator = themeList.iterator(); iterator.hasNext();) {
+            JSONObject currentTheme = (JSONObject) iterator.next();
+            JSONObject jsonP = new JSONObject();
+            jsonP.put("themeid", i);
+            jsonP.put("progressState", 0);
+            jsonP.put("coursesProgress", new JSONArray());
+            this.initCoursesProgress((JSONArray) jsonP.get("coursesProgress"), (JSONArray) currentTheme.get("courses"));
+            jsonProgress.add(jsonP);
+            i++;
+        }
+    }
+    
+    /**
+     * init the courses part of a user to be
+     * written in a json
+     * @param jsonToSet
+     * @param jsonCourses 
+     */
+    private void initCoursesProgress(JSONArray jsonToSet, JSONArray jsonCourses){
+        int i =0;
+        for (Iterator iterator = jsonCourses.iterator(); iterator.hasNext();) {
+            JSONObject next = (JSONObject) iterator.next();
+            JSONObject newCourse = new JSONObject();
+            JSONObject newCourseProgress = new JSONObject();
+            newCourse.put("idCourse", i);
+            newCourseProgress.put("progressState", 0);
+            newCourseProgress.put("progressComment", "");
+            newCourse.put("courseProgress", newCourseProgress);
+            newCourse.put("exercicesProgress", new JSONArray());
+            initExercicesProgress((JSONArray) newCourse.get("exercicesProgress"), (JSONArray) next.get("exercices"));
+            jsonToSet.add(newCourse);
+            i++;
+        }
+    }
+    
+    /**
+     * init the exercices part of a user to be
+     * written in a json
+     * @param jsonToSet
+     * @param jsonExercices 
+     */
+    private void initExercicesProgress(JSONArray jsonToSet, JSONArray jsonExercices){
+        int i = 0;
+        for (Iterator iterator = jsonExercices.iterator(); iterator.hasNext();) {
+            JSONObject exo = (JSONObject) iterator.next();
+            JSONObject exoProg = new JSONObject();
+            JSONObject newExoProgress = new JSONObject();
+            exoProg.put("idExercice", i);
+            newExoProgress.put("progressState", 0);
+            newExoProgress.put("progressComment", "");
+            exoProg.put("exerciceProgress", newExoProgress);
+            jsonToSet.add(exoProg);
+            i++;
+        }
+    }
+    
+    
+    
+    
+    /**
+     * Extract courses progress information from the json
+     * and update the course object accordingly
+     * @param courses
+     * @param refTheme 
+     */
+    private void loadCoursesProgress(JSONArray courses, Theme refTheme){
+        for (Iterator iterator = courses.iterator(); iterator.hasNext();){
+            JSONObject currentCourse = (JSONObject) iterator.next();
+            Number id = (Number) currentCourse.get("idCourse");
+            for(Course c : refTheme.getCourseList()){
+                if(id.intValue() == c.getId()){
+                    JSONObject jsonProgress = (JSONObject) currentCourse.get("courseProgress");
+                    Number state = (Number) jsonProgress.get("progressState");
+                    String progressComment = (String) jsonProgress.get("progressComment");
+                    c.setCourseProgress(new FourStepProgress(state.intValue(), progressComment));
+                    loadExercicesProgress((JSONArray) currentCourse.get("exercicesProgress"), c);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Extract exercices progress information from the json
+     * and update the course object accordingly
+     * @param exercices
+     * @param refCo 
+     */
+    private void loadExercicesProgress(JSONArray exercices, Course refCo){
+        for (Iterator iterator = exercices.iterator(); iterator.hasNext();) {
+            JSONObject currentExercice = (JSONObject) iterator.next();
+            Number id = (Number) currentExercice.get("idExercice");
+            for(Exercice e : refCo.getExercices()){
+                if(e.getId() == id.intValue()){
+                    JSONObject exerciceProg = (JSONObject) currentExercice.get("exerciceProgress");
+                    Number state = (Number) exerciceProg.get("progressState");
+                    String progressComment = (String) exerciceProg.get("progressComment");
+                    e.setProgress(new FourStepProgress(state.intValue(), progressComment));
+                }
+            }
+        }
+    }
+    
+    /**
+     * Extract the progress info from the json file
+     * regarding a specific user and theme
+     * @param user searched
+     * @param th theme searched
+     * @return corresponding JsonObject
+     */
     private JSONObject getThemeProgress(JSONObject user, Theme th){
         for(Object prog : ((JSONArray) user.get("progress")).toArray()){
             JSONObject pr = (JSONObject) prog;
@@ -287,29 +442,40 @@ public class LoadData {
         return null;
     }
     
-    public void updateUser(User us){
-        for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
-            JSONObject currentUser = (JSONObject) iterator.next();
-            Number id = (Number) currentUser.get("id");
-            User u = new User((String)currentUser.get("usn"), id.intValue());
-            if(us.getId() == u.getId()){
-                //update
-            }
-        }
+    private void initMap(){
+        decypherMap = new HashMap<>();
+        decypherMap.put("\\[b\\](.+?)\\[/b\\]", "£bold§$1£");
+        decypherMap.put("\\[i\\](.+?)\\[/i\\]", "£italic§$1£");
+        decypherMap.put("\\[u\\](.+?)\\[/u\\]", "£underline§$1£");
+        decypherMap.put("\\[h1\\](.+?)\\[/h1\\]", "£header1§$1£");
+        decypherMap.put("\\[h2\\](.+?)\\[/h2\\]", "£header2§$1£");
+        decypherMap.put("\\[h3\\](.+?)\\[/h3\\]", "£header3§$1£");
+        decypherMap.put("\\[h4\\](.+?)\\[/h4\\]", "£header4§$1£");
+        decypherMap.put("\\[h5\\](.+?)\\[/h5\\]", "£header5§$1£");
+        decypherMap.put("\\[h6\\](.+?)\\[/h6\\]", "£header6§$1£");
+        decypherMap.put("\\[quote\\](.+?)\\[/quote\\]", "£quote§$1£");
+        decypherMap.put("\\[p\\](.+?)\\[/p\\]", "£parg§$1£");
+        decypherMap.put("\\[p=(.+?),(.+?)\\](.+?)\\[/p\\]", "£parg2§$3£");
+        decypherMap.put("\\[color=(.+?)\\](.+?)\\[/color\\]", "£color-$1§$2£");
+        decypherMap.put("\\[size=(.+?)\\](.+?)\\[/size\\]", "<span style='font-size:$1;'>$2</span>");
+        decypherMap.put("\\[email\\](.+?)\\[/email\\]", "<a href='mailto:$1'>$1</a>");
+        decypherMap.put("\\[email=(.+?)\\](.+?)\\[/email\\]", "<a href='mailto:$1'>$2</a>");
+        decypherMap.put("\\[url\\](.+?)\\[/url\\]", "<a href='$1'>$1</a>");
+        decypherMap.put("\\[url=(.+?)\\](.+?)\\[/url\\]", "<a href='$1'>$2</a>");
     }
     
-    public void decypher(String in){
-        try {
-            Map<String,String> bbMap = new HashMap<String , String>();
-            String dir = System.getProperty("user.home")+"/LogiEdu";
-            runProcess("javac "+dir+"/HelloWorld.java");
-            runProcess("java -cp "+dir+" HelloWorld");
-        } catch (Exception ex) {
-            Logger.getLogger(LoadData.class.getName()).log(Level.SEVERE, null, ex);
+    private String decypher(String in){
+        String res = in;
+        for (Map.Entry entry: decypherMap.entrySet()) {
+            res = res.replaceAll(entry.getKey().toString(), entry.getValue().toString());
         }
+        return res;
     }
     
     
+    /**
+     * Write the modifications into the json
+     */
     private void write(){
         try {
             FileWriter out = new FileWriter(configFile);
@@ -320,22 +486,5 @@ public class LoadData {
             Logger.getLogger(LoadData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private static void printLines(String name, InputStream ins) throws Exception {
-    String line = null;
-    BufferedReader in = new BufferedReader(
-        new InputStreamReader(ins));
-    while ((line = in.readLine()) != null) {
-        System.out.println(name + " " + line);
-    }
-  }
-    
-    private static void runProcess(String command) throws Exception {
-    Process pro = Runtime.getRuntime().exec(command);
-    printLines(command + " stdout:", pro.getInputStream());
-    printLines(command + " stderr:", pro.getErrorStream());
-    pro.waitFor();
-    System.out.println(command + " exitValue() " + pro.exitValue());
-  }
-    
+
 }

@@ -1,0 +1,9 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Quintard LivaI
+${licensePrefix}Project for Logiciel Educatif
+${licensePrefix}Universite lyon 1
+<#if licenseLast??>
+${licenseLast}
+</#if>

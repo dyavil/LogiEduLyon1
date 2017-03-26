@@ -1,7 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Quintard LivaÃ¯
+ * Project for Logiciel Educatif
+ * UniversitÃ© lyon 1
  */
 package univlyon1.fr.logiedu.View;
 
@@ -16,6 +16,7 @@ public class CourseListItem extends HBox {
     private Label lab;
     private String css;
     private Boolean isCourse;
+    private Boolean isTheme;
     private int themeId;
     private int courseId;
 
@@ -23,15 +24,23 @@ public class CourseListItem extends HBox {
         this.lab = new Label(cours);
         this.css = "";
         this.isCourse = false;
+        this.isTheme = false;
     }
     public CourseListItem(String cours, String css) {
         this.lab = new Label(cours);
         this.css = css;
         this.isCourse = false;
+        this.isTheme = false;
     }
+    
+    public CourseListItem(String cours, String css, boolean isTh, int thId){
+        this(cours, css);
+        this.isTheme = isTh;
+        this.themeId = thId;
+    }
+    
     public CourseListItem(String cours, String css, boolean isco, int thId, int coId) {
-        this.lab = new Label(cours);
-        this.css = css;
+        this(cours, css);
         this.isCourse = isco;
         this.themeId=thId;
         this.courseId = coId;
@@ -91,6 +100,13 @@ public class CourseListItem extends HBox {
      */
     public int getCourseId() {
         return courseId;
+    }
+
+    /**
+     * @return the isTheme
+     */
+    public Boolean getIsTheme() {
+        return isTheme;
     }
     
 }

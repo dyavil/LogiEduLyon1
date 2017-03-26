@@ -8,7 +8,7 @@
           "content": " ipsum",
           "slides": [
             {
-              "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet lacus eget tellus porta blandit suscipit non purus. Cras non hendrerit mi. Nulla dapibus consequat urna non feugiat. Vestibulum a finibus urna. Suspendisse mollis risus in nisl vehicula dignissim. Vestibulum vitae tristique ipsum. Integer viverra faucibus dapibus. Maecenas accumsan auctor ligula eget volutpat. Nunc vitae neque blandit, vestibulum mi a, sagittis orci. Fusce nibh nisi, lobortis at mi nec, sollicitudin consectetur lorem. Ut fringilla mi nec velit hendrerit, vitae blandit odio vestibulum. Mauris volutpat facilisis arcu id fermentum.",
+              "content": "[b]Lorem ipsum[/b] [u]dolor sit amet[/u], [h3]consectetur[/h3] [color=#ff0000]adipiscing[/color] elit. Mauris sit amet lacus eget tellus porta blandit suscipit non purus. Cras non hendrerit mi. Nulla dapibus consequat urna non feugiat. Vestibulum a finibus urna. Suspendisse mollis risus in nisl vehicula dignissim. Vestibulum vitae tristique ipsum. Integer viverra faucibus dapibus. Maecenas accumsan auctor ligula eget volutpat. Nunc vitae neque blandit, vestibulum mi a, sagittis orci. Fusce nibh nisi, lobortis at mi nec, sollicitudin consectetur lorem. Ut fringilla mi nec velit hendrerit, vitae blandit odio vestibulum. Mauris volutpat facilisis arcu id fermentum.",
               "imagePath": ""
             },
             {
@@ -25,12 +25,16 @@
             {
               "title": "exo 1",
               "content": "Integer quis consequat dolor. Nam mollis fermentum eleifend. Donec et fringilla lectus. Ut sodales dui nec turpis ultricies sodales. Morbi at ipsum magna. Duis dui diam, vehicula at fermentum vitae, gravida vitae ex. Donec iaculis accumsan est in pharetra. Mauris bibendum in metus consequat pellentesque. Ut suscipit magna id leo vestibulum, ut vulputate nisl maximus. Fusce diam est, imperdiet ac risus nec, pellentesque pulvinar est. Etiam est lorem, faucibus a ante et, vehicula ultricies quam. Quisque quam augue, placerat sed lacinia quis, rutrum eu ligula.",
-              "difficulty": 0
+              "difficulty": 0,
+              "mandatory":1,
+              "sourceFiles":1
             },
             {
               "title": "exo 2",
               "content": "content exo 2",
-              "difficulty": 0
+              "difficulty": 0,
+              "mandatory":1,
+              "sourceFiles":0
             }
           ]
         },
@@ -48,12 +52,16 @@
             {
               "title": "exo 1",
               "content": "content exo 1",
-              "difficulty": 0
+              "difficulty": 0,
+              "mandatory":1,
+              "sourceFiles":1
             },
             {
               "title": "exo 2",
               "content": "content exo 2",
-              "difficulty": 0
+              "difficulty": 0,
+              "mandatory":0,
+              "sourceFiles":0
             }
           ]
         }
@@ -76,12 +84,16 @@
             {
               "title": "exo 1",
               "content": "Integer quis consequat dolor. Nam mollis fermentum eleifend. Donec et fringilla lectus. Ut sodales dui nec turpis ultricies sodales. Morbi at ipsum magna. Duis dui diam, vehicula at fermentum vitae, gravida vitae ex. Donec iaculis accumsan est in pharetra. Mauris bibendum in metus consequat pellentesque. Ut suscipit magna id leo vestibulum, ut vulputate nisl maximus. Fusce diam est, imperdiet ac risus nec, pellentesque pulvinar est. Etiam est lorem, faucibus a ante et, vehicula ultricies quam. Quisque quam augue, placerat sed lacinia quis, rutrum eu ligula.",
-              "difficulty": 0
+              "difficulty": 0,
+              "mandatory":1,
+              "sourceFiles":1
             },
             {
               "title": "exo 2",
               "content": "content exo 2",
-              "difficulty": 0
+              "difficulty": 0,
+              "mandatory":0,
+              "sourceFiles":1
             }
           ]
         },
@@ -99,12 +111,16 @@
             {
               "title": "exo 1",
               "content": "content exo 1",
-              "difficulty": 0
+              "difficulty": 0,
+              "mandatory":0,
+              "sourceFiles":0
             },
             {
               "title": "exo 2",
               "content": "content exo 2",
-              "difficulty": 0
+              "difficulty": 0,
+              "mandatory":0,
+              "sourceFiles":0
             }
           ]
         }
