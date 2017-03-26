@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -36,6 +37,8 @@ public class MainView extends GridPane implements Observer {
     private int width;
     private int height;
     private ArrayList<UserPane> usersPane;
+    private ChoiceBox otherUsersList;
+    private Button otherUsersListLog;
     private Label nameLabel;
     
     public MainView(int w, int h){
@@ -58,10 +61,17 @@ public class MainView extends GridPane implements Observer {
         bottomPane = new GridPane();
         addButton = new Button();
         addButton.getStyleClass().add("plus-button");
+        otherUsersListLog = new Button("Go !");
+        otherUsersListLog.setId("green");
+        otherUsersListLog.setPrefWidth(80);
+        otherUsersListLog.setAlignment(Pos.CENTER);
         ColumnConstraints colCo = new ColumnConstraints(this.width);
         colCo.setHalignment(HPos.CENTER);
         headPane.getColumnConstraints().add(colCo);
         usersPane = new ArrayList<>();
+        otherUsersList = new ChoiceBox();
+        otherUsersList.getStyleClass().add("older-user");
+        otherUsersList.setPrefWidth(80);
         this.setFocusTraversable(true);
         root.getChildren().add(this);
         this.headPane.add(head, 0, 0);
@@ -83,15 +93,26 @@ public class MainView extends GridPane implements Observer {
         getUsersPane().add(usp);
     }
     
-    public void displayUsersPane(){
+    public void displayUsersPane(Boolean more){
         int col = 1;
         clearPanes();
         getCenter().getRowConstraints().add(new RowConstraints(100));
         getCenter().getColumnConstraints().add(new ColumnConstraints(10));
+        int size = this.usersPane.size();
+        if(more) size++;
         for(UserPane usp : getUsersPane()){
-            getCenter().getColumnConstraints().add(new ColumnConstraints(((this.getWidth()-20)/(this.usersPane.size()))));
+            getCenter().getColumnConstraints().add(new ColumnConstraints(((this.getWidth()-20)/size)));
             getCenter().add(usp, col, 1);
             col++;
+        }
+        if(more){
+            GridPane oldUs = new GridPane();
+            oldUs.add(this.otherUsersList, 1, 0);
+            oldUs.getRowConstraints().add(new RowConstraints(30));
+            oldUs.getColumnConstraints().add(new ColumnConstraints(20));
+            oldUs.add(this.getOtherUsersListLog(), 1, 1);
+            getCenter().getColumnConstraints().add(new ColumnConstraints(((this.getWidth()-20)/size)));
+            getCenter().add(oldUs, col, 1);
         }
         
         
@@ -226,6 +247,20 @@ public class MainView extends GridPane implements Observer {
      */
     public Label getNameLabel() {
         return nameLabel;
+    }
+
+    /**
+     * @return the otherUsersList
+     */
+    public ChoiceBox getOtherUsersList() {
+        return otherUsersList;
+    }
+
+    /**
+     * @return the otherUsersListLog
+     */
+    public Button getOtherUsersListLog() {
+        return otherUsersListLog;
     }
     
 }

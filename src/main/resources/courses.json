@@ -8,11 +8,11 @@
           "content": " ipsum",
           "slides": [
             {
-              "content": "[b]Lorem ipsum[/b] [u]dolor sit amet[/u], [h3]consectetur[/h3] [color=#ff0000]adipiscing[/color] elit. Mauris sit amet lacus eget tellus porta blandit suscipit non purus. Cras non hendrerit mi. Nulla dapibus consequat urna non feugiat. Vestibulum a finibus urna. Suspendisse mollis risus in nisl vehicula dignissim. Vestibulum vitae tristique ipsum. Integer viverra faucibus dapibus. Maecenas accumsan auctor ligula eget volutpat. Nunc vitae neque blandit, vestibulum mi a, sagittis orci. Fusce nibh nisi, lobortis at mi nec, sollicitudin consectetur lorem. Ut fringilla mi nec velit hendrerit, vitae blandit odio vestibulum. Mauris volutpat facilisis arcu id fermentum.",
+              "content": "<div><b>Lorem ipsum</b> <u>dolor sit amet</u>, <div style='color:red;'>adipiscing</div> elit. Mauris sit amet lacus eget tellus porta blandit suscipit non purus. Cras non hendrerit mi. Nulla dapibus consequat urna non feugiat. Vestibulum a finibus urna. Suspendisse mollis risus in nisl vehicula dignissim. Vestibulum vitae tristique ipsum. Integer viverra faucibus dapibus. Maecenas accumsan auctor ligula eget volutpat. Nunc vitae neque blandit, vestibulum mi a, sagittis orci. Fusce nibh nisi, lobortis at mi nec, sollicitudin consectetur lorem. Ut fringilla mi nec velit hendrerit, vitae blandit odio vestibulum. Mauris volutpat facilisis arcu id fermentum.</div>",
               "imagePath": ""
             },
             {
-              "content": "Sed vehicula malesuada ex in pharetra. Maecenas tincidunt diam vitae sodales tempor. Donec non ante eget ipsum varius luctus. Duis sit amet eros ac est luctus blandit. Phasellus metus nisl, euismod et nisi quis, dapibus molestie nulla. Praesent tempus felis maximus massa ornare auctor. Aliquam erat volutpat. Quisque mattis eleifend mi vel placerat.",
+              "content": "<div><div style='color:red;'>Curabitur rhoncus, libero at laoreet ultricies, felis urna scelerisque felis, quis accumsan lorem tellus ut nisi. In tempus nisl leo, eget maximus enim facilisis ac. Donec ligula quam, dictum at urna eu, semper mollis enim. Morbi sed libero sed est mollis rhoncus nec vel dui. Quisque aliquet est euismod enim ullamcorper, id fermentum urna hendrerit.</div>Cras a mauris varius nulla suscipit ultricies ut ut arcu. Suspendisse sodales auctor purus non dapibus. Sed eu eros risus. Nam id lorem pellentesque, auctor mi vitae, tincidunt lacus. Ut non volutpat velit, non auctor urna. Sed vitae risus id lectus blandit aliquam vitae nec urna. Donec ut est ligula.</div>",
               "imagePath": "/images/java.png"
             },
             {

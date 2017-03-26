@@ -17,21 +17,25 @@ import java.io.OutputStream;
 public class ExecUtility {
 
     
-    private static void printLines(String name, InputStream ins, OutputStream stdOut) throws Exception {
+    private static Boolean printLines(String name, InputStream ins, OutputStream stdOut) throws Exception {
         String line = null;
+        boolean ret = true;
         BufferedReader in = new BufferedReader(
             new InputStreamReader(ins));
         while ((line = in.readLine()) != null) {
             stdOut.write(line.getBytes());
             System.out.println(name + " " + line);
+            ret = false;
         }
+        return ret;
   }
     
-    public static void runProcess(String command, OutputStream errOut, OutputStream stdOut) throws Exception {
+    public static Boolean runProcess(String command, OutputStream errOut, OutputStream stdOut) throws Exception {
         Process pro = Runtime.getRuntime().exec(command);
         printLines(command + " stdout:", pro.getInputStream(), stdOut);
-        printLines(command + " stderr:", pro.getErrorStream(), errOut);
+        Boolean ret = printLines(command + " stderr:", pro.getErrorStream(), errOut);
         pro.waitFor();
         System.out.println(command + " exitValue() " + pro.exitValue());
+        return ret;
   }
 }

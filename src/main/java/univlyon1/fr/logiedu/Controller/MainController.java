@@ -5,7 +5,10 @@
  */
 package univlyon1.fr.logiedu.Controller;
 
+import java.util.Collections;
 import java.util.Optional;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
@@ -16,8 +19,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import univlyon1.fr.logiedu.Model.App;
 import univlyon1.fr.logiedu.Model.Course;
@@ -29,6 +30,7 @@ import univlyon1.fr.logiedu.View.CourseView;
 import univlyon1.fr.logiedu.View.ExerciceGridView;
 import univlyon1.fr.logiedu.View.ExerciceListItem;
 import univlyon1.fr.logiedu.View.ExerciceView;
+import univlyon1.fr.logiedu.View.ExerciceWithSourcesView;
 import univlyon1.fr.logiedu.View.MainView;
 import univlyon1.fr.logiedu.View.UserPane;
 
@@ -45,10 +47,14 @@ public class MainController {
         this.model = m;
         this.view = v;
         this.stage = s;
-        for(User us : this.model.getUsers()){
-            this.view.addUserPane(new UserPane(us.getUserName(), us.getId()));
+        Collections.sort(this.model.getUsers());
+        for(int i = 0; i < 4; i++){
+            if(i < this.model.getUsers().size()){
+                User us = this.model.getUsers().get(i);
+                this.view.addUserPane(new UserPane(us.getUserName(), us.getId()));
+            }
         }
-        this.view.displayUsersPane();
+        this.view.displayUsersPane(checkMore());
         this.stage.setScene(this.view.getScene());
         
         this.refreshUsersPane();
@@ -60,20 +66,59 @@ public class MainController {
         
     }
     
+    private Boolean checkMore(){
+        if(this.model.getUsers().size()>4){
+            this.view.getOtherUsersList().getItems().clear();
+            this.view.getOtherUsersList().getItems().add("autre...");
+            this.view.getOtherUsersList().getSelectionModel().selectFirst();
+            for (int i = 4; i < this.model.getUsers().size(); i++) {
+                this.view.getOtherUsersList().getItems().add(this.model.getUsers().get(i));
+            }
+            this.view.getOtherUsersList().getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                    if(((Integer) number2) < 0) System.out.println("deal");
+                    else if(view.getOtherUsersList().getItems().get((Integer) number2).equals("autre...")){
+                        System.out.println("no select");
+                    }
+                    else {
+                        User usp = (User)view.getOtherUsersList().getItems().get((Integer) number2);
+                        view.getOtherUsersListLog().setOnAction((ActionEvent e) -> {
+                        model.setLoggedUser(usp.getId());
+                        loadHomePane();
+                    });
+                    }
+
+                }
+              });
+            return true;
+        }else return false;
+    }
+    
     private void addUserAction(){
         TextInputDialog dialog = new TextInputDialog("pseudo");
                 dialog.setTitle("Pseudo : ");
                 dialog.setHeaderText("");
                 Optional<String> result = dialog.showAndWait();
                 if (result.isPresent()){
-                    User us = this.model.addUser(result.get());
-                    System.out.println("Pseudo: " + result.get());
-                    this.view.addUserPane(new UserPane(us.getUserName(), us.getId()));
-                    this.view.displayUsersPane();
+                    this.model.addUser(result.get());
+                    updateUserPane();
+                    Boolean more =checkMore();
+                    this.view.displayUsersPane(more);
                     this.refreshUsersPane();
                 }
     }
     
+    private void updateUserPane(){
+        Collections.sort(this.model.getUsers());
+        this.view.getUsersPane().clear();
+        for(int i = 0; i < 4; i++){
+            if(i < this.model.getUsers().size()){
+                User us = this.model.getUsers().get(i);
+                this.view.addUserPane(new UserPane(us.getUserName(), us.getId()));
+            }
+        }
+    }
     
     private void refreshUsersPane(){
         this.view.getUsersPane().stream().forEach((usp) -> {
@@ -175,7 +220,7 @@ public class MainController {
         this.view.getHead().getLogoutLabel().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                    view.displayUsersPane();
+                    view.displayUsersPane(checkMore());
                     model.setLoggedUser(null);
             }
 
@@ -336,10 +381,11 @@ public class MainController {
     }
     
     private void setExerciceViewEvents(Exercice ex) {
-        ExerciceView exv = new ExerciceView(ex.getCorrespondingCourse().getTitle(), ex.getName(), ex.getContent(), (int) view.getTWidth());
+        ExerciceView exv;
+        if(!ex.getGotSources()) exv = new ExerciceView(ex.getCorrespondingCourse().getTitle(), ex.getName(), ex.getContent(), (int) view.getTWidth());
+        else exv = new ExerciceWithSourcesView(ex.getCorrespondingCourse().getTitle(), ex.getName(), ex.getContent(), (int) view.getTWidth(), ex.getSourceContent());
         view.displayExerciceView(exv);
-        ex.CompileCode();
-        ex.ExecuteCode();
+        
         if(ex.getId() < ex.getCorrespondingCourse().getExercices().size()-1) {
             exv.showNextButton();
             exv.getNextExercice().setOnAction((ActionEvent e) -> {
@@ -366,6 +412,19 @@ public class MainController {
         exv.getCourseButton().setOnAction((ActionEvent e3) -> {
             setCourseViewEvents(ex.getCorrespondingCourse(), 0);
         });
+        if(ex.getGotSources()){
+            ((ExerciceWithSourcesView)exv).getRunButton().setOnAction((ActionEvent e4) -> {
+            ex.writeToFile(((ExerciceWithSourcesView)exv).getSourceContent().getText());
+            if(ex.CompileCode()) {
+                ex.ExecuteCode();
+                ((ExerciceWithSourcesView)exv).getStdOutput().setText(ex.gotStdExecutionRes());
+                ((ExerciceWithSourcesView)exv).getErrOutput().setText(ex.gotErrExecutionRes());
+            }else{
+                ((ExerciceWithSourcesView)exv).getErrOutput().setText(ex.gotErrExecutionRes());
+            }
+            
+        });
+        }
     }
     
     private void setCourseViewEvents(Course co, int sl){
@@ -373,9 +432,9 @@ public class MainController {
         CourseView cv;
         if(sl == 0)model.loadCourseContent(co);
         if(!"".equals(co.getSlides().get(sl).getImagePath())) {
-            cv = new CourseView(co.getReferingTheme().getName(), co.getTitle(), applyStyle(co.getSlides().get(sl).getContent()), (int) view.getTWidth(), co.getSlides().get(sl).getImagePath());
+            cv = new CourseView(co.getReferingTheme().getName(), co.getTitle(), co.getSlides().get(sl).getContent(), (int) view.getTWidth(), co.getSlides().get(sl).getImagePath());
         }
-        else cv = new CourseView(co.getReferingTheme().getName(), co.getTitle(), applyStyle(co.getSlides().get(sl).getContent()), (int) view.getTWidth());
+        else cv = new CourseView(co.getReferingTheme().getName(), co.getTitle(), co.getSlides().get(sl).getContent(), (int) view.getTWidth());
             if(co.getCourseProgress().getState() < co.getCourseProgress().getCorrespondingCSS().size()-2){
                 co.getCourseProgress().nextStep();
                 model.updateCourse(co);
@@ -444,29 +503,6 @@ public class MainController {
             });
    }
     
-    
-    private TextFlow applyStyle(String in){
-        TextFlow res = new TextFlow();
-        String[] spl = in.split("£");
-        for(String one : spl){
-            String[] temp = one.split("§");
-            if(temp.length == 2){
-                Text t1 = new Text(temp[1]);
-                t1.getStyleClass().add("course-content");
-                if(temp[0].contains("color-")){
-                    t1.setStyle("-fx-fill:"+temp[0].split("color-")[1]+";");
-                }
-                else t1.getStyleClass().add(temp[0]);
-                res.getChildren().add(t1);
-            }
-            else{
-                Text t1 = new Text(temp[0]);
-                t1.getStyleClass().add("course-content");
-                res.getChildren().add(t1);
-            }
-        }
-        return res;
-    }
     
     
 }

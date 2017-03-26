@@ -15,10 +15,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.JSONArray;
@@ -45,8 +46,6 @@ public class LoadData {
     //progress content
     private JSONArray userList;
     
-    private Map<String, String> decypherMap;
-    
     /**
      * Constructor,
      * Set up the files on first launch
@@ -55,7 +54,6 @@ public class LoadData {
     public LoadData(){
         FileReader in;
         FileWriter out;
-        initMap();
         try {
             File configDir = new File(System.getProperty("user.home")+"/LogiEdu");
             configFile = new File(System.getProperty("user.home")+"/LogiEdu/config.json");
@@ -220,8 +218,7 @@ public class LoadData {
         int i = 0;
         for (Iterator iterator = jsonSlides.iterator(); iterator.hasNext();) {
             JSONObject next = (JSONObject) iterator.next();
-            String decyph = decypher((String) next.get("content"));
-            Slide temp = new Slide(i, c, decyph, (String) next.get("imagePath"));
+            Slide temp = new Slide(i, c, (String) next.get("content"), (String) next.get("imagePath"));
             res.add(temp);
             i++;
         }
@@ -238,7 +235,9 @@ public class LoadData {
         for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
             JSONObject currentUser = (JSONObject) iterator.next();
             Number id = (Number) currentUser.get("id");
-            User u = new User((String)currentUser.get("usn"), id.intValue());
+            String date = (String) currentUser.get("lastlogged");
+            Date trueDate = new Date(date);
+            User u = new User((String)currentUser.get("usn"), id.intValue(), trueDate);
             resList.add(u);
         }
         return resList;
@@ -254,6 +253,10 @@ public class LoadData {
         userObj.put("id", userList.size());
         us.setId(userList.size());
         userObj.put("usn", us.getUserName());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        us.setLastLog(date);
+        userObj.put("lastlogged", dateFormat.format(date));
         userObj.put("progress", new JSONArray());
         userList.add(userObj);
         this.initThemeProgress(userObj);
@@ -270,7 +273,9 @@ public class LoadData {
         for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
             JSONObject currentUser = (JSONObject) iterator.next();
             Number id = (Number) currentUser.get("id");
-            User u = new User((String)currentUser.get("usn"), id.intValue());
+            String date = (String) currentUser.get("lastlogged");
+            Date trueDate = new Date(date);
+            User u = new User((String)currentUser.get("usn"), id.intValue(), trueDate);
             if(us.getId() == u.getId()){
                 for(Theme th : ths){
                     JSONObject jsonTheme = this.getThemeProgress(currentUser, th);
@@ -293,7 +298,9 @@ public class LoadData {
         for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
             JSONObject currentUser = (JSONObject) iterator.next();
             Number id = (Number) currentUser.get("id");
-            User u = new User((String)currentUser.get("usn"), id.intValue());
+            String date = (String) currentUser.get("lastlogged");
+            Date trueDate = new Date(date);
+            User u = new User((String)currentUser.get("usn"), id.intValue(), trueDate);
             if(us.getId() == u.getId()){
                 for(Object prog : ((JSONArray) currentUser.get("progress")).toArray()){
                     JSONObject pr = (JSONObject) prog;
@@ -441,36 +448,7 @@ public class LoadData {
         }
         return null;
     }
-    
-    private void initMap(){
-        decypherMap = new HashMap<>();
-        decypherMap.put("\\[b\\](.+?)\\[/b\\]", "£bold§$1£");
-        decypherMap.put("\\[i\\](.+?)\\[/i\\]", "£italic§$1£");
-        decypherMap.put("\\[u\\](.+?)\\[/u\\]", "£underline§$1£");
-        decypherMap.put("\\[h1\\](.+?)\\[/h1\\]", "£header1§$1£");
-        decypherMap.put("\\[h2\\](.+?)\\[/h2\\]", "£header2§$1£");
-        decypherMap.put("\\[h3\\](.+?)\\[/h3\\]", "£header3§$1£");
-        decypherMap.put("\\[h4\\](.+?)\\[/h4\\]", "£header4§$1£");
-        decypherMap.put("\\[h5\\](.+?)\\[/h5\\]", "£header5§$1£");
-        decypherMap.put("\\[h6\\](.+?)\\[/h6\\]", "£header6§$1£");
-        decypherMap.put("\\[quote\\](.+?)\\[/quote\\]", "£quote§$1£");
-        decypherMap.put("\\[p\\](.+?)\\[/p\\]", "£parg§$1£");
-        decypherMap.put("\\[p=(.+?),(.+?)\\](.+?)\\[/p\\]", "£parg2§$3£");
-        decypherMap.put("\\[color=(.+?)\\](.+?)\\[/color\\]", "£color-$1§$2£");
-        decypherMap.put("\\[size=(.+?)\\](.+?)\\[/size\\]", "<span style='font-size:$1;'>$2</span>");
-        decypherMap.put("\\[email\\](.+?)\\[/email\\]", "<a href='mailto:$1'>$1</a>");
-        decypherMap.put("\\[email=(.+?)\\](.+?)\\[/email\\]", "<a href='mailto:$1'>$2</a>");
-        decypherMap.put("\\[url\\](.+?)\\[/url\\]", "<a href='$1'>$1</a>");
-        decypherMap.put("\\[url=(.+?)\\](.+?)\\[/url\\]", "<a href='$1'>$2</a>");
-    }
-    
-    private String decypher(String in){
-        String res = in;
-        for (Map.Entry entry: decypherMap.entrySet()) {
-            res = res.replaceAll(entry.getKey().toString(), entry.getValue().toString());
-        }
-        return res;
-    }
+
     
     
     /**

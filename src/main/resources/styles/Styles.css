@@ -218,3 +218,35 @@
 .header6{
     -fx-font-size: 18px;
 }
+
+.errPane{
+    -fx-background-color:#000000;
+    -fx-text-fill:#ff0000;
+    -fx-padding:10px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+}
+
+.stdPane{
+    -fx-background-color:#000000;
+    -fx-text-fill:#fcfcfc;
+    -fx-padding:10px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+}
+
+.exercice-content{
+    -fx-font-size: 12px;
+    -fx-font-family: "Helvetica";
+    -fx-padding:5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}
+
+.older-user{
+    
+}

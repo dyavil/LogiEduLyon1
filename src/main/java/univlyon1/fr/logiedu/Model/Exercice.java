@@ -6,9 +6,12 @@
 package univlyon1.fr.logiedu.Model;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import univlyon1.fr.logiedu.Model.GameModel.Game;
@@ -46,36 +49,114 @@ public class Exercice {
         this.progress = prog;
     }
     
-    public void CompileCode(){
-       
+    public String getSourceContent(){
         if(this.gotSources){
             try {
+                String content = new Scanner(new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
+                        +this.correspondingCourse.getReferingTheme().getId()+"/"
+                        +this.correspondingCourse.getId()+"/"+this.getId()+"/Main.java")).useDelimiter("\\Z").next();
+                return content;
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Exercice.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        return null;
+    }
+    
+    public Boolean CompileCode(){
+       
+        if(this.getGotSources()){
+            try {
+                File stdFile = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
+                       +this.correspondingCourse.getReferingTheme().getId()+"/"
+                       +this.correspondingCourse.getId()+"/"+this.getId()+"/stdC.txt");
+                stdFile.createNewFile();
+                OutputStream out = new FileOutputStream(stdFile);
                 File errFile = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
                        +this.correspondingCourse.getReferingTheme().getId()+"/"
                        +this.correspondingCourse.getId()+"/"+this.getId()+"/errC.txt");
                 errFile.createNewFile();
-                OutputStream out = new FileOutputStream(errFile);
-                ExecUtility.runProcess("javac "+System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
+                OutputStream errout = new FileOutputStream(errFile);
+                Boolean res = ExecUtility.runProcess("javac "+System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
                         +this.correspondingCourse.getReferingTheme().getId()+"/"
-                        +this.correspondingCourse.getId()+"/"+this.getId()+"/Main.java", out, out);
+                        +this.correspondingCourse.getId()+"/"+this.getId()+"/Main.java", errout, out);
+                return res;
             } catch (Exception ex) {
                 Logger.getLogger(Exercice.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        }
+        return false;
     }
     public void ExecuteCode(){
-        if(this.gotSources){
+        if(this.getGotSources()){
             try {
+                File stdFile = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
+                       +this.correspondingCourse.getReferingTheme().getId()+"/"
+                       +this.correspondingCourse.getId()+"/"+this.getId()+"/stdC.txt");
+                stdFile.createNewFile();
+                OutputStream out = new FileOutputStream(stdFile);
                 File errFile = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
                        +this.correspondingCourse.getReferingTheme().getId()+"/"
                        +this.correspondingCourse.getId()+"/"+this.getId()+"/errC.txt");
                 errFile.createNewFile();
-                OutputStream out = new FileOutputStream(errFile);
+                OutputStream errout = new FileOutputStream(errFile);
                 ExecUtility.runProcess("java -cp "+System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
                         +this.correspondingCourse.getReferingTheme().getId()+"/"
-                        +this.correspondingCourse.getId()+"/"+this.getId()+" Main", out, out);
+                        +this.correspondingCourse.getId()+"/"+this.getId()+" Main", errout, out);
             } catch (Exception ex) {
                 Logger.getLogger(Exercice.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public String gotStdExecutionRes(){
+        if(this.getGotSources()){
+            try {
+                String content = new Scanner(new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
+                        +this.correspondingCourse.getReferingTheme().getId()+"/"
+                        +this.correspondingCourse.getId()+"/"+this.getId()+"/stdC.txt")).useDelimiter("\\Z").next();
+                return content;
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Exercice.class.getName()).log(Level.WARNING, null, ex);
+                return "no output";
+            }
+        }
+        return null;
+    }
+    
+    public String gotErrExecutionRes(){
+        if(this.getGotSources()){
+            try {
+                String content = new Scanner(new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
+                        +this.correspondingCourse.getReferingTheme().getId()+"/"
+                        +this.correspondingCourse.getId()+"/"+this.getId()+"/errC.txt")).useDelimiter("\\Z").next();
+                return content;
+            } catch (Exception ex) {
+                Logger.getLogger(Exercice.class.getName()).log(Level.WARNING, null, ex);
+                return "no error";
+            }
+        }
+        return null;
+    }
+    
+    public void writeToFile(String content){
+        if(this.getGotSources()){
+            FileWriter fw = null;
+            try {
+                File srcFile = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
+                        +this.correspondingCourse.getReferingTheme().getId()+"/"
+                        +this.correspondingCourse.getId()+"/"+this.getId()+"/Main.java");
+                fw = new FileWriter(srcFile);
+                fw.write(content);
+            } catch (IOException ex) {
+                Logger.getLogger(Exercice.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    fw.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(Exercice.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
@@ -162,5 +243,12 @@ public class Exercice {
      */
     public Boolean getMandatory() {
         return mandatory;
+    }
+
+    /**
+     * @return the gotSources
+     */
+    public Boolean getGotSources() {
+        return gotSources;
     }
 }
