@@ -184,7 +184,7 @@ public class ExerciceWithSourcesView extends ExerciceView {
         if (org.w3c.dom.html.HTMLElement.class.isAssignableFrom(object.getClass())) {
             org.w3c.dom.html.HTMLElement it = (org.w3c.dom.html.HTMLElement) object;
             System.out.println("Id is " + it.getId() + it.getTextContent().replaceAll("(    )+", "\n"));
-            sourceContent.setText(it.getTextContent().replaceAll("(    )+", "\n"));
+            sourceContent.setText(it.getTextContent().replaceAll("(    )+", "\n    "));
         }
     }
 }
