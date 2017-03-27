@@ -28,6 +28,9 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 import org.apache.commons.io.IOUtils;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.html.HTMLElement;
 
 /**
  *
@@ -78,26 +81,11 @@ public class ExerciceWithSourcesView extends ExerciceView {
             public void changed(ObservableValue ov, State oldState, State newState) {
                 if (newState == Worker.State.SUCCEEDED) {
                     getSourceContentWV().getEngine().executeScript(getJS()+"\n" +
-                    "ace.require(\"ace/ext/language_tools\");var editor = ace.edit(\"code\");editor.setTheme(\"ace/theme/merbivore\");editor.getSession().setMode(\"ace/mode/java\");var cod = editor.getValue();"+"$(function () {\n" +
-"    $('*').click(function (event) {\n" +
-"        event.preventDefault();\n" +
-"        event.stopPropagation();\n" +
-"        clickController.printId(this);\n" +
-"    });\n" +
-"});");
+                    "ace.require(\"ace/ext/language_tools\");var editor = ace.edit(\"code\");editor.setTheme(\"ace/theme/merbivore\");editor.getSession().setMode(\"ace/mode/java\");var cod = editor.getValue();");
                         }
                     }
                 });
-            this.sourceContentWV.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
-              @Override
-              public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
-                  if (newState == State.SUCCEEDED) {
-                      JSObject window = (JSObject) sourceContentWV.getEngine().executeScript("window");
-                      window.setMember("clickController", new WebController());
-                    }
-                }
-            }
-          );
+
         this.runButton = new Button("Run");
         ColumnConstraints midCol = new ColumnConstraints((parentWidth-80)/2);
         this.codePane.getColumnConstraints().add(midCol);
@@ -135,6 +123,23 @@ public class ExerciceWithSourcesView extends ExerciceView {
             Logger.getLogger(ExerciceWithSourcesView.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    
+    public String getModifiedSource(){
+        String res = this.sourceContent.getText();
+        NodeList  n = sourceContentWV.getEngine().getDocument().getElementById("code").getChildNodes();
+            for(int i = 0; i < n.getLength(); i++){
+                Node no = n.item(i).getAttributes().getNamedItem("class");
+                if(no != null){
+                    if(no.getNodeValue().contains("ace_scroller")){
+                        System.out.println("scroller found");
+                        res = n.item(i).getTextContent().replaceAll("(    )+", "\n    ");
+                    }
+                    System.out.println(no.getNodeValue());
+                }
+            }
+            return res;
     }
 
     /**
@@ -178,15 +183,6 @@ public class ExerciceWithSourcesView extends ExerciceView {
     public WebView getSourceContentWV() {
         return sourceContentWV;
     }
-    
-    public class WebController {
-    public void printId(Object object) {
-        if (org.w3c.dom.html.HTMLElement.class.isAssignableFrom(object.getClass())) {
-            org.w3c.dom.html.HTMLElement it = (org.w3c.dom.html.HTMLElement) object;
-            System.out.println("Id is " + it.getId() + it.getTextContent().replaceAll("(    )+", "\n"));
-            sourceContent.setText(it.getTextContent().replaceAll("(    )+", "\n    "));
-        }
-    }
-}
+
     
 }

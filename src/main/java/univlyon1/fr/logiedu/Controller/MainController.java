@@ -414,7 +414,7 @@ public class MainController {
         });
         if(ex.getGotSources()){
             ((ExerciceWithSourcesView)exv).getRunButton().setOnAction((ActionEvent e4) -> {
-            ex.writeToFile(((ExerciceWithSourcesView)exv).getSourceContent().getText());
+            ex.writeToFile(((ExerciceWithSourcesView)exv).getModifiedSource());
             if(ex.CompileCode()) {
                 ex.ExecuteCode();
                 ((ExerciceWithSourcesView)exv).getStdOutput().setText(ex.gotStdExecutionRes());
