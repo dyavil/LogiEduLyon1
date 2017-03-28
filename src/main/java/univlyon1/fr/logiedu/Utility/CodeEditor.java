@@ -50,7 +50,7 @@ public class CodeEditor extends StackPane {
     "    lineNumbers: true," +
     "    matchBrackets: true," +
     "   styleActiveLine: true,"+
-    //"   theme: \"\","+
+    "   theme: \"eclipse\","+
     "   smartIndent: false,"+
     "    mode: \"text/x-java\"" +
     "  });" +
