@@ -17,6 +17,7 @@ public class CourseListItem extends HBox {
     private String css;
     private Boolean isCourse;
     private Boolean isTheme;
+    private Boolean isExpanded;
     private int themeId;
     private int courseId;
 
@@ -25,12 +26,14 @@ public class CourseListItem extends HBox {
         this.css = "";
         this.isCourse = false;
         this.isTheme = false;
+        this.isExpanded=false;
     }
     public CourseListItem(String cours, String css) {
         this.lab = new Label(cours);
         this.css = css;
         this.isCourse = false;
         this.isTheme = false;
+        this.isExpanded=false;
     }
     
     public CourseListItem(String cours, String css, boolean isTh, int thId){
@@ -107,6 +110,20 @@ public class CourseListItem extends HBox {
      */
     public Boolean getIsTheme() {
         return isTheme;
+    }
+
+    /**
+     * @return the isExpanded
+     */
+    public Boolean getIsExpanded() {
+        return isExpanded;
+    }
+
+    /**
+     * @param isExpanded the isExpanded to set
+     */
+    public void setIsExpanded(Boolean isExpanded) {
+        this.isExpanded = isExpanded;
     }
     
 }

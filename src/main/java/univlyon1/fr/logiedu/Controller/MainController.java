@@ -16,6 +16,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -158,6 +160,23 @@ public class MainController {
                     //setText(""); // appropriate text for item
                     Label lab = it.getLab();
                     lab.getStyleClass().add(it.getCss());
+                    /*if(!it.getIsTheme() && !it.getIsCourse()){
+                        Image image = new Image(getClass().getResourceAsStream("/images/square.png"));
+                        lab.setGraphic(new ImageView(image));
+                    }*/
+                    if(!it.getIsTheme() && it.getIsCourse()){
+                        Image image = new Image(getClass().getResourceAsStream("/images/puce.png"));
+                        lab.setGraphic(new ImageView(image));
+                    }
+                    if(it.getIsTheme() && !it.getIsCourse()){
+                        Image image;
+                        if(it.getIsExpanded()){
+                            image = new Image(getClass().getResourceAsStream("/images/arrowd.png"));
+                        }else{
+                            image = new Image(getClass().getResourceAsStream("/images/arrow.png"));
+                        }
+                        lab.setGraphic(new ImageView(image));
+                    }
                     setGraphic(lab);
                 }
             }
@@ -182,6 +201,24 @@ public class MainController {
                     //setText(""); // appropriate text for item
                     Label lab = it.getLab();
                     lab.getStyleClass().add(it.getCss());
+                    /*if(!it.getIsExercice() && !it.getIsCourse()){
+                        Image image = new Image(getClass().getResourceAsStream("/images/arrowd.png"));
+                        lab.setGraphic(new ImageView(image));
+                    }*/
+                    if(!it.getIsExercice() && it.getIsCourse()){
+                        Image image;
+                        if(it.getIsExpanded()){
+                            image = new Image(getClass().getResourceAsStream("/images/arrowd.png"));
+                        }
+                        else{
+                            image = new Image(getClass().getResourceAsStream("/images/arrow.png"));
+                        }
+                        lab.setGraphic(new ImageView(image));
+                    }
+                    if(it.getIsExercice() && !it.getIsCourse()){
+                        Image image = new Image(getClass().getResourceAsStream("/images/puce.png"));
+                        lab.setGraphic(new ImageView(image));
+                    }
                     setGraphic(lab);
                 }
             }
@@ -290,8 +327,14 @@ public class MainController {
                     }
                     else if(it.getIsTheme()){
                         if(event.getButton().equals(MouseButton.PRIMARY)){
-                            if(!view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().isExpanded()) view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().setExpanded(true);
-                            else view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().setExpanded(false);
+                            if(!view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().isExpanded()) {
+                                view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().setExpanded(true);
+                                it.setIsExpanded(true);
+                            }
+                            else {
+                                view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().setExpanded(false);
+                                it.setIsExpanded(false);
+                            }
                             if(event.getClickCount() == 2) {
                                 Course currCo = model.getThemes().get(it.getThemeId()).getCourseList().get(0);
                                 setCourseViewEvents(currCo, 0);
@@ -337,9 +380,16 @@ public class MainController {
                     else if(it.getIsCourse()){
                         if(event.getButton().equals(MouseButton.PRIMARY)){
                             if(event.getClickCount() == 1) {
-                                if(!view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().isExpanded())
-                                view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().setExpanded(true);
-                                else view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().setExpanded(false);
+                                if(!view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().isExpanded()){
+                                    view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().setExpanded(true);
+                                    ExerciceListItem itm = (ExerciceListItem)view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().getValue();
+                                    itm.setIsExpanded(true);
+                            }
+                                else {
+                                    view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().setExpanded(false);
+                                    ExerciceListItem itm = (ExerciceListItem)view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().getValue();
+                                    itm.setIsExpanded(false);
+                                }
                             }
                             if(event.getClickCount() == 2) {
                                 System.out.println("selec th " + it.getThemeId() + ", course : "+ it.getCourseId());

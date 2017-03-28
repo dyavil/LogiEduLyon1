@@ -17,6 +17,7 @@ public class ExerciceListItem extends HBox {
     private String css;
     private Boolean isExercice;
     private Boolean isCourse;
+    private Boolean isExpanded;
     private int themeId;
     private int courseId;
     private int exerciceId;
@@ -26,12 +27,14 @@ public class ExerciceListItem extends HBox {
         this.css = "";
         this.isExercice = false;
         this.isCourse = false;
+        this.isExpanded =false;
     }
     public ExerciceListItem(String exercice, String css) {
         this.lab = new Label(exercice);
         this.css = css;
         this.isExercice = false;
         this.isCourse = false;
+        this.isExpanded =false;
     }
     public ExerciceListItem(String exercice, String css, boolean isco, int thId, int coId) {
         this.lab = new Label(exercice);
@@ -40,6 +43,7 @@ public class ExerciceListItem extends HBox {
         this.isExercice = false;
         this.themeId=thId;
         this.courseId = coId;
+        this.isExpanded =false;
     }
     public ExerciceListItem(String exercice, String css, boolean isex, int thId, int coId, int exId) {
         this.lab = new Label(exercice);
@@ -49,6 +53,7 @@ public class ExerciceListItem extends HBox {
         this.themeId=thId;
         this.exerciceId = exId;
         this.courseId = coId;
+        this.isExpanded =false;
     }
 
     /**
@@ -98,5 +103,19 @@ public class ExerciceListItem extends HBox {
      */
     public Boolean getIsCourse() {
         return isCourse;
+    }
+
+    /**
+     * @return the isExpanded
+     */
+    public Boolean getIsExpanded() {
+        return isExpanded;
+    }
+
+    /**
+     * @param isExpanded the isExpanded to set
+     */
+    public void setIsExpanded(Boolean isExpanded) {
+        this.isExpanded = isExpanded;
     }
 }
