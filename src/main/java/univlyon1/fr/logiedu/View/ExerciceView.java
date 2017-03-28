@@ -81,7 +81,7 @@ public class ExerciceView extends GridPane{
         this.getColumnConstraints().add(marge);
         this.getRowConstraints().add(new RowConstraints(20));
         this.getRowConstraints().add(new RowConstraints(60));
-        this.getRowConstraints().add(new RowConstraints(350));
+        this.getRowConstraints().add(new RowConstraints(500));
         this.add(this.topPane, 1, 1);
         this.add(this.middlePane, 1, 2);
         this.add(this.bottomPane, 1, 3);

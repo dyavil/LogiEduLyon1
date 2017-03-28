@@ -20,7 +20,7 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         
         stage.setTitle("Logi Edu");
-        MainView view = new MainView(800, 600);
+        MainView view = new MainView(1200, 700);
         App model = new App();
         MainController controller = new MainController(view, model, stage);
         stage.show();

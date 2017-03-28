@@ -31,6 +31,7 @@ import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLElement;
+import univlyon1.fr.logiedu.Utility.CodeEditor;
 
 /**
  *
@@ -42,10 +43,10 @@ public class ExerciceWithSourcesView extends ExerciceView {
     private GridPane codePane;
     private Label textContent;
     private TextArea sourceContent;
-    private WebView sourceContentWV;
     private Label stdOutput;
     private Label errOutput;
     private Button runButton;
+    private CodeEditor editor;
     
     public ExerciceWithSourcesView(String course, String name, String content, int parentWidth, String fileContent) {
         super(course, name, content, parentWidth);
@@ -68,23 +69,7 @@ public class ExerciceWithSourcesView extends ExerciceView {
         this.textContent.getStyleClass().add("exercice-content");
         this.sourceContent = new TextArea(fileContent);
         this.sourceContent.setWrapText(true);
-        this.sourceContentWV = new WebView();
-        this.sourceContentWV.getStylesheets().add("/lib/codemirror.css");
-        
-        this.sourceContentWV.getEngine().loadContent("<html><body style='max-width:200px; height:200px; margin:0px; padding:0px;' ><div style='position: absolute;\n" +
-"        top: 0;\n" +
-"        right: 0;\n" +
-"        bottom: 0;\n" +
-"        left: 0;' id='code'>"+fileContent+"</div></body></html>");
-        this.sourceContentWV.applyCss();
-        this.sourceContentWV.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
-            public void changed(ObservableValue ov, State oldState, State newState) {
-                if (newState == Worker.State.SUCCEEDED) {
-                    getSourceContentWV().getEngine().executeScript(getJS()+"\n" +
-                    "ace.require(\"ace/ext/language_tools\");var editor = ace.edit(\"code\");editor.setTheme(\"ace/theme/merbivore\");editor.getSession().setMode(\"ace/mode/java\");var cod = editor.getValue();");
-                        }
-                    }
-                });
+
 
         this.runButton = new Button("Run");
         ColumnConstraints midCol = new ColumnConstraints((parentWidth-80)/2);
@@ -96,9 +81,11 @@ public class ExerciceWithSourcesView extends ExerciceView {
         this.returnPane.getColumnConstraints().add(new ColumnConstraints(40));
         this.returnPane.getColumnConstraints().add(amidCol);
         this.getMiddlePane().getRowConstraints().clear();
-        this.getMiddlePane().getRowConstraints().add(new RowConstraints(250));
-        this.codePane.add(this.sourceContentWV, 0, 0);
+        this.getMiddlePane().getRowConstraints().add(new RowConstraints(350));
+        
         this.codePane.add(this.textContent, 1, 0);
+        editor = new CodeEditor(fileContent, parentWidth);
+        this.codePane.add(editor, 0, 0);
         
         this.getMiddlePane().getRowConstraints().add(new RowConstraints(100));
         this.returnPane.add(this.stdOutput, 0, 0);
@@ -110,37 +97,9 @@ public class ExerciceWithSourcesView extends ExerciceView {
         this.getMiddlePane().add(returnPane, 0, 1);
     }
     
-    public String getJS(){
-        try {
-            InputStream f = getClass().getResourceAsStream("/lib/jquery-3.2.0.min.js");
-            String content0 = IOUtils.toString(f, "UTF-8");
-            InputStream f2 = getClass().getResourceAsStream("/styles/ace.js");
-            String content1 = IOUtils.toString(f2, "UTF-8");
-            InputStream f3 = getClass().getResourceAsStream("/styles/ext-language_tools.js");
-            String content2 = IOUtils.toString(f3, "UTF-8");
-            return (content0+content1+content2);
-        } catch (IOException ex) {
-            Logger.getLogger(ExerciceWithSourcesView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
     
     
-    public String getModifiedSource(){
-        String res = this.sourceContent.getText();
-        NodeList  n = sourceContentWV.getEngine().getDocument().getElementById("code").getChildNodes();
-            for(int i = 0; i < n.getLength(); i++){
-                Node no = n.item(i).getAttributes().getNamedItem("class");
-                if(no != null){
-                    if(no.getNodeValue().contains("ace_scroller")){
-                        System.out.println("scroller found");
-                        res = n.item(i).getTextContent().replaceAll("(    )+", "\n    ");
-                    }
-                    System.out.println(no.getNodeValue());
-                }
-            }
-            return res;
-    }
+
 
     /**
      * @return the textContent
@@ -178,11 +137,13 @@ public class ExerciceWithSourcesView extends ExerciceView {
     }
 
     /**
-     * @return the sourceContentWV
+     * @return the editor
      */
-    public WebView getSourceContentWV() {
-        return sourceContentWV;
+    public CodeEditor getEditor() {
+        return editor;
     }
+
+
 
     
 }
