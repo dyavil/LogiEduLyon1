@@ -136,6 +136,8 @@ public class MainController {
     
     private void loadHomePane(){
         this.view.displayHomePane(this.model.getLoggedUser().getUserName());
+        this.loadCourseList();  
+        this.loadExerciceList();
         logoutHandler();
         this.view.getHomePane().getCoursesButton().setOnAction((ActionEvent e) -> {
                 this.loadCourseList();  
@@ -146,7 +148,7 @@ public class MainController {
     }
     
     private void colorList(){
-        this.view.getCoursePane().getCoursesList().setCellFactory(tv -> {
+        this.view.getHomeView().getCoursesList().setCellFactory(tv -> {
         TreeCell<HBox> cell = new TreeCell<HBox>() {
             @Override
             public void updateItem(HBox item, boolean empty) {
@@ -187,7 +189,7 @@ public class MainController {
     }
     
     private void exerciceColorList(){
-        this.view.getExercicePane().getExercicesList().setCellFactory(tv -> {
+        this.view.getHomeView().getExercicesList().setCellFactory(tv -> {
         TreeCell<HBox> cell = new TreeCell<HBox>() {
             @Override
             public void updateItem(HBox item, boolean empty) {
@@ -229,7 +231,7 @@ public class MainController {
     }
 
     private void loadCourseList() {
-        this.view.getCoursePane().getCoursesList().getRoot().getChildren().clear();
+        this.view.getHomeView().getCoursesList().getRoot().getChildren().clear();
         for(Theme th : this.model.getThemes()){
             CourseListItem tbox = new CourseListItem(th.getName(), "no-change", true, th.getId());
             
@@ -240,17 +242,17 @@ public class MainController {
                 TreeItem<HBox> item = new TreeItem<>(box);
                 themBranch.getChildren().add(item);
             }
-            this.view.getCoursePane().getCoursesList().getRoot().getChildren().add(themBranch);
+            this.view.getHomeView().getCoursesList().getRoot().getChildren().add(themBranch);
         }
         
-        this.view.getCoursePane().getCoursesList().getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        this.view.getHomeView().getCoursesList().getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         this.colorList();
         this.setSelectCourseEventHandler();
-        this.view.getCoursePane().getHomeButton().setOnAction((ActionEvent e) -> {
+        /*this.view.getCoursePane().getHomeButton().setOnAction((ActionEvent e) -> {
                 this.loadHomePane();
-            });
-        this.view.getCoursePane().getCoursesList().getRoot().setExpanded(true);
-        this.view.displayCoursesPane();
+            });*/
+        this.view.getHomeView().getCoursesList().getRoot().setExpanded(true);
+        //this.view.displayCoursesPane();
     }
     
     private void logoutHandler(){
@@ -265,7 +267,7 @@ public class MainController {
     }
     
     private void loadExerciceList() {
-        this.view.getExercicePane().getExercicesList().getRoot().getChildren().clear();
+        this.view.getHomeView().getExercicesList().getRoot().getChildren().clear();
         for(Theme th : this.model.getThemes()){
             ExerciceListItem tbox = new ExerciceListItem(th.getName(), "no-change");
             
@@ -283,29 +285,29 @@ public class MainController {
                 
             }
             themBranch.setExpanded(true);
-            this.view.getExercicePane().getExercicesList().getRoot().getChildren().add(themBranch);
+            this.view.getHomeView().getExercicesList().getRoot().getChildren().add(themBranch);
         }
         
-        this.view.getExercicePane().getExercicesList().getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        this.view.getHomeView().getExercicesList().getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         this.exerciceColorList();
         this.setSelectExerciceEventHandler();
-        this.view.getExercicePane().getHomeButton().setOnAction((ActionEvent e) -> {
+        /*this.view.getExercicePane().getHomeButton().setOnAction((ActionEvent e) -> {
                 this.loadHomePane();
-            });
-        this.view.getExercicePane().getExercicesList().getRoot().setExpanded(true);
-        this.view.displayExercicesPane();
+            });*/
+        this.view.getHomeView().getExercicesList().getRoot().setExpanded(true);
+        //this.view.displayExercicesPane();
     }
 
 
     private void setSelectCourseEventHandler() {
         view.getCoursePane().hidegoButton();
-        this.view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem();
-        this.view.getCoursePane().getCoursesList().setOnMouseClicked(new EventHandler<MouseEvent>() {
+        this.view.getHomeView().getCoursesList().getSelectionModel().getSelectedItem();
+        this.view.getHomeView().getCoursesList().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 
-                if(view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().getValue() instanceof CourseListItem){
-                    CourseListItem it = (CourseListItem) view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().getValue();
+                if(view.getHomeView().getCoursesList().getSelectionModel().getSelectedItem().getValue() instanceof CourseListItem){
+                    CourseListItem it = (CourseListItem) view.getHomeView().getCoursesList().getSelectionModel().getSelectedItem().getValue();
                     if(it.getIsCourse()){
                         
                         view.getCoursePane().showgoButton();
@@ -327,12 +329,12 @@ public class MainController {
                     }
                     else if(it.getIsTheme()){
                         if(event.getButton().equals(MouseButton.PRIMARY)){
-                            if(!view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().isExpanded()) {
-                                view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().setExpanded(true);
+                            if(!view.getHomeView().getCoursesList().getSelectionModel().getSelectedItem().isExpanded()) {
+                                view.getHomeView().getCoursesList().getSelectionModel().getSelectedItem().setExpanded(true);
                                 it.setIsExpanded(true);
                             }
                             else {
-                                view.getCoursePane().getCoursesList().getSelectionModel().getSelectedItem().setExpanded(false);
+                                view.getHomeView().getCoursesList().getSelectionModel().getSelectedItem().setExpanded(false);
                                 it.setIsExpanded(false);
                             }
                             if(event.getClickCount() == 2) {
@@ -351,13 +353,13 @@ public class MainController {
 
     private void setSelectExerciceEventHandler() {
         //view.getCoursePane().hidegoButton();
-        this.view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem();
-        this.view.getExercicePane().getExercicesList().setOnMouseClicked(new EventHandler<MouseEvent>() {
+        this.view.getHomeView().getExercicesList().getSelectionModel().getSelectedItem();
+        this.view.getHomeView().getExercicesList().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 
-                if(view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().getValue() instanceof ExerciceListItem){
-                    ExerciceListItem it = (ExerciceListItem) view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().getValue();
+                if(view.getHomeView().getExercicesList().getSelectionModel().getSelectedItem().getValue() instanceof ExerciceListItem){
+                    ExerciceListItem it = (ExerciceListItem) view.getHomeView().getExercicesList().getSelectionModel().getSelectedItem().getValue();
                     if(it.getIsExercice()){
                         
                         //view.getCoursePane().showgoButton();
@@ -380,14 +382,14 @@ public class MainController {
                     else if(it.getIsCourse()){
                         if(event.getButton().equals(MouseButton.PRIMARY)){
                             if(event.getClickCount() == 1) {
-                                if(!view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().isExpanded()){
-                                    view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().setExpanded(true);
-                                    ExerciceListItem itm = (ExerciceListItem)view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().getValue();
+                                if(!view.getHomeView().getExercicesList().getSelectionModel().getSelectedItem().isExpanded()){
+                                    view.getHomeView().getExercicesList().getSelectionModel().getSelectedItem().setExpanded(true);
+                                    ExerciceListItem itm = (ExerciceListItem)view.getHomeView().getExercicesList().getSelectionModel().getSelectedItem().getValue();
                                     itm.setIsExpanded(true);
                             }
                                 else {
-                                    view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().setExpanded(false);
-                                    ExerciceListItem itm = (ExerciceListItem)view.getExercicePane().getExercicesList().getSelectionModel().getSelectedItem().getValue();
+                                    view.getHomeView().getExercicesList().getSelectionModel().getSelectedItem().setExpanded(false);
+                                    ExerciceListItem itm = (ExerciceListItem)view.getHomeView().getExercicesList().getSelectionModel().getSelectedItem().getValue();
                                     itm.setIsExpanded(false);
                                 }
                             }

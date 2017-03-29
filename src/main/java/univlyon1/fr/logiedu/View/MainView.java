@@ -34,6 +34,7 @@ public class MainView extends GridPane implements Observer {
     private LoggedPane homePane;
     private CoursesPane coursePane;
     private ExercicesPane exercicePane;
+    private HomeView homeView;
     private int width;
     private int height;
     private ArrayList<UserPane> usersPane;
@@ -50,6 +51,7 @@ public class MainView extends GridPane implements Observer {
         homePane = new LoggedPane("", this.getTWidth(), this.getTHeight());
         coursePane = new CoursesPane(this.getTWidth());
         exercicePane = new ExercicesPane(this.getTWidth());
+        homeView = new HomeView(width);
         root = new Group();
         Scene scene = new Scene(getRoot());
         scene.getStylesheets().add("/styles/Styles.css");
@@ -124,8 +126,8 @@ public class MainView extends GridPane implements Observer {
     
     public void displayHomePane(String loggedUser){
         clearPanes();
-        getCenter().getRowConstraints().add(new RowConstraints(100));
-        this.center.add(this.homePane, 0, 1);
+        getCenter().getRowConstraints().add(new RowConstraints(50));
+        this.center.add(this.getHomeView(), 0, 1);
         this.getNameLabel().setText(loggedUser);
         this.head.displayLoggedMenu();
     }
@@ -261,6 +263,20 @@ public class MainView extends GridPane implements Observer {
      */
     public Button getOtherUsersListLog() {
         return otherUsersListLog;
+    }
+
+    /**
+     * @return the homeView
+     */
+    public HomeView getHomeView() {
+        return homeView;
+    }
+
+    /**
+     * @param homeView the homeView to set
+     */
+    public void setHomeView(HomeView homeView) {
+        this.homeView = homeView;
     }
     
 }
