@@ -35,6 +35,7 @@ import univlyon1.fr.logiedu.View.ExerciceView;
 import univlyon1.fr.logiedu.View.ExerciceWithSourcesView;
 import univlyon1.fr.logiedu.View.MainView;
 import univlyon1.fr.logiedu.View.UserPane;
+import univlyon1.fr.logiedu.View.infoPane.infoPane;
 
 /**
  *
@@ -532,9 +533,12 @@ public class MainController {
             if(ex.CompileCode()) {
                 ex.ExecuteCode();
                 ((ExerciceWithSourcesView)exv).getStdOutput().setText(ex.gotStdExecutionRes());
+                ((ExerciceWithSourcesView)exv).getCompilePane().setContent("Compilation OK !", "ok");
                 ((ExerciceWithSourcesView)exv).getErrOutput().setText(ex.gotErrExecutionRes());
             }else{
                 ((ExerciceWithSourcesView)exv).getErrOutput().setText(ex.gotErrExecutionRes());
+                ((ExerciceWithSourcesView)exv).getCompilePane().setContent(ex.getCompileLog(), "warning");
+                
             }
             
         });

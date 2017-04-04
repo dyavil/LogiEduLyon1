@@ -15,6 +15,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import univlyon1.fr.logiedu.Model.GameModel.Game;
+import univlyon1.fr.logiedu.Utility.ErrParser;
 import univlyon1.fr.logiedu.Utility.ExecUtility;
 
 /**
@@ -31,6 +32,7 @@ public class Exercice {
     private Progress progress;
     private Boolean mandatory;
     private Boolean gotSources;
+    private String compileLog;
     
     public Exercice(String n, String content, Course c, int id, int diff, Boolean mand, Boolean src){
         this.name = n;
@@ -42,6 +44,7 @@ public class Exercice {
         this.progress = null;
         this.mandatory = mand;
         this.gotSources = src;
+        this.compileLog = "";
     }
     
     public Exercice(String n, String content, Course c, int id, int diff, Progress prog, Boolean mand, Boolean src){
@@ -136,7 +139,8 @@ public class Exercice {
                 String content = new Scanner(new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
                         +this.correspondingCourse.getReferingTheme().getId()+"/"
                         +this.correspondingCourse.getId()+"/"+this.getId()+"/user/errC.txt")).useDelimiter("\\Z").next();
-                return content;
+                compileLog = ErrParser.getCompileTypeOutput(content);
+                return content.split("Main.java")[1];
             } catch (Exception ex) {
                 Logger.getLogger(Exercice.class.getName()).log(Level.WARNING, null, ex);
                 return "no error";
@@ -256,5 +260,12 @@ public class Exercice {
      */
     public Boolean getGotSources() {
         return gotSources;
+    }
+
+    /**
+     * @return the compileLog
+     */
+    public String getCompileLog() {
+        return compileLog;
     }
 }

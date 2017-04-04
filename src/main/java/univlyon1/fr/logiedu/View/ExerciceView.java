@@ -33,6 +33,7 @@ public class ExerciceView extends GridPane{
     private Boolean nextShowned;
     private Boolean prevShowned;
     
+    
     public ExerciceView(String course, String name, String content, int parentWidth){
         this.topPane = new GridPane();
         this.middlePane = new GridPane();
@@ -81,7 +82,7 @@ public class ExerciceView extends GridPane{
         this.getColumnConstraints().add(marge);
         this.getRowConstraints().add(new RowConstraints(20));
         this.getRowConstraints().add(new RowConstraints(60));
-        this.getRowConstraints().add(new RowConstraints(500));
+        this.getRowConstraints().add(new RowConstraints(520));
         this.add(this.topPane, 1, 1);
         this.add(this.middlePane, 1, 2);
         this.add(this.bottomPane, 1, 3);

@@ -250,3 +250,20 @@
 .older-user{
     
 }
+
+.warning{
+    -fx-background-color:#dd8f02;
+    -fx-padding:10px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+}
+.ok{
+    -fx-background-color:#90d026;
+    -fx-padding:10px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+}

@@ -14,6 +14,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import univlyon1.fr.logiedu.Utility.CodeEditor;
+import univlyon1.fr.logiedu.View.infoPane.infoPane;
 
 /**
  *
@@ -30,10 +31,18 @@ public class ExerciceWithSourcesView extends ExerciceView {
     private Button runButton;
     private CodeEditor editor;
     
+    
+    private infoPane compilePane;
+    private infoPane execPane;
+    
     public ExerciceWithSourcesView(String course, String name, String content, int parentWidth, String fileContent) {
         super(course, name, content, parentWidth);
         this.returnPane = new GridPane();
         this.codePane = new GridPane();
+        
+        this.compilePane = new infoPane("");
+        this.execPane = new infoPane("");
+        
         this.stdOutput = new Label("stdout");
         this.stdOutput.setMinHeight(80);
         this.stdOutput.setMinWidth(((parentWidth-100)/2));
@@ -64,17 +73,21 @@ public class ExerciceWithSourcesView extends ExerciceView {
         amidCol2.setHalignment(HPos.CENTER);
         this.returnPane.getColumnConstraints().add(amidCol2);
         this.returnPane.getColumnConstraints().add(amidCol);
+        this.returnPane.getRowConstraints().add(new RowConstraints(90));
+        this.returnPane.getRowConstraints().add(new RowConstraints(100));
         this.getMiddlePane().getRowConstraints().clear();
-        this.getMiddlePane().getRowConstraints().add(new RowConstraints(350));
+        this.getMiddlePane().getRowConstraints().add(new RowConstraints(300));
         
         this.codePane.add(this.textContent, 1, 0);
         editor = new CodeEditor(fileContent, parentWidth);
         this.codePane.add(editor, 0, 0);
         
-        this.getMiddlePane().getRowConstraints().add(new RowConstraints(100));
-        this.returnPane.add(this.stdOutput, 0, 0);
-        this.returnPane.add(this.runButton, 1, 0);
-        this.returnPane.add(this.errOutput, 2, 0);
+        this.getMiddlePane().getRowConstraints().add(new RowConstraints(170));
+        this.returnPane.add(this.execPane, 0, 0);
+        this.returnPane.add(this.compilePane, 2, 0);
+        this.returnPane.add(this.stdOutput, 0, 1);
+        this.returnPane.add(this.runButton, 1, 1);
+        this.returnPane.add(this.errOutput, 2, 1);
         
         this.getMiddlePane().getChildren().clear();
         this.getMiddlePane().add(codePane, 0, 0);
@@ -126,6 +139,35 @@ public class ExerciceWithSourcesView extends ExerciceView {
     public CodeEditor getEditor() {
         return editor;
     }
+
+    /**
+     * @return the codePane
+     */
+    public GridPane getCodePane() {
+        return codePane;
+    }
+
+    /**
+     * @param codePane the codePane to set
+     */
+    public void setCodePane(GridPane codePane) {
+        this.codePane = codePane;
+    }
+
+    /**
+     * @return the compilePane
+     */
+    public infoPane getCompilePane() {
+        return compilePane;
+    }
+
+    /**
+     * @return the execPane
+     */
+    public infoPane getExecPane() {
+        return execPane;
+    }
+
 
 
 
