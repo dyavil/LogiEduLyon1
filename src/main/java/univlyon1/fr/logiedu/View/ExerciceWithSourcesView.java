@@ -57,10 +57,12 @@ public class ExerciceWithSourcesView extends ExerciceView {
         ColumnConstraints midCol = new ColumnConstraints((parentWidth-80)/2);
         this.codePane.getColumnConstraints().add(midCol);
         this.codePane.getColumnConstraints().add(midCol);
-        ColumnConstraints amidCol = new ColumnConstraints((parentWidth-100)/2);
+        ColumnConstraints amidCol = new ColumnConstraints((parentWidth-110)/2);
         amidCol.setHalignment(HPos.CENTER);
         this.returnPane.getColumnConstraints().add(amidCol);
-        this.returnPane.getColumnConstraints().add(new ColumnConstraints(40));
+        ColumnConstraints amidCol2 = new ColumnConstraints(60);
+        amidCol2.setHalignment(HPos.CENTER);
+        this.returnPane.getColumnConstraints().add(amidCol2);
         this.returnPane.getColumnConstraints().add(amidCol);
         this.getMiddlePane().getRowConstraints().clear();
         this.getMiddlePane().getRowConstraints().add(new RowConstraints(350));

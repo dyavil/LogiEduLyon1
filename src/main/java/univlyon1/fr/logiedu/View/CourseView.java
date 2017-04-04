@@ -30,7 +30,6 @@ public class CourseView extends GridPane {
     private Label courseName;
     private Label courseContent;
     private Button homeButton;
-    private Button backToList;
     private Button nextCourse;
     private Button nextSlide;
     private Button prevCourse;
@@ -58,7 +57,6 @@ public class CourseView extends GridPane {
         contentHtml = new WebView();
         contentHtml.getEngine().loadContent("<body style='font-size:15px; font-family:\"Helvetica\";'>"+content+"</body>", "text/html");
         this.homeButton = new Button();
-        this.backToList = new Button("Liste de cours");
         this.nextCourse = new Button("Cours suivant");
         this.nextSlide = new Button("Suivant");
         this.prevCourse = new Button("Cours precedent");
@@ -99,7 +97,6 @@ public class CourseView extends GridPane {
         this.bottomPaneTop.getColumnConstraints().add(topCol23);
         this.bottomPaneTop.getColumnConstraints().add(topCol33);
         this.bottomPaneBottom.getColumnConstraints().add(topCol2);
-        this.topPane.add(this.backToList, 0, 0);
         this.topPane.add(this.themeName, 1, 0);
         this.topPane.add(this.homeButton, 2, 0);
         this.middlePane.add(this.contentHtml, 0, 0);
@@ -258,19 +255,6 @@ public class CourseView extends GridPane {
         this.homeButton = homeButton;
     }
 
-    /**
-     * @return the backToList
-     */
-    public Button getBackToList() {
-        return backToList;
-    }
-
-    /**
-     * @param backToList the backToList to set
-     */
-    public void setBackToList(Button backToList) {
-        this.backToList = backToList;
-    }
 
     /**
      * @return the nextCourse

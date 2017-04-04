@@ -27,7 +27,7 @@ public class ExerciceView extends GridPane{
     private Label exerciceContent;
     private Button nextExercice;
     private Button prevExercice;
-    private Button backButton;
+    //private Button backButton;
     private Button courseButton;
     private Button homeButton;
     private Boolean nextShowned;
@@ -48,7 +48,7 @@ public class ExerciceView extends GridPane{
         this.nextShowned = false;
         this.prevShowned = false;
         this.homeButton = new Button();
-        this.backButton = new Button("Retour");
+        //this.backButton = new Button("Retour");
         this.courseButton = new Button("Cours");
         this.courseButton.getStyleClass().add("green");
         this.homeButton.getStyleClass().add("toggle-button");
@@ -64,7 +64,7 @@ public class ExerciceView extends GridPane{
         this.topPane.getColumnConstraints().add(third1);
         this.topPane.getColumnConstraints().add(third2);
         this.topPane.getColumnConstraints().add(third3);
-        this.topPane.add(this.backButton, 0, 0);
+        //this.topPane.add(this.backButton, 0, 0);
         this.topPane.add(this.courseName, 1, 0);
         this.topPane.add(this.homeButton, 2, 0);
         this.middlePane.add(this.exerciceName, 0, 0);
@@ -171,9 +171,9 @@ public class ExerciceView extends GridPane{
     /**
      * @return the backButton
      */
-    public Button getBackButton() {
+   /* public Button getBackButton() {
         return backButton;
-    }
+    }*/
 
     /**
      * @return the courseButton

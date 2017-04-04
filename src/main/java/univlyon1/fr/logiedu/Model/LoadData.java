@@ -112,9 +112,13 @@ public class LoadData {
                     int k = 0;
                     for (Iterator iterator2 = exercices.iterator(); iterator2.hasNext();) {
                         JSONObject ex = (JSONObject) iterator2.next();
-                        File thEx = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"+i+"/"+j+"/"+k);
+                        File thEx = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"+i+"/"+j+"/"+k+"/base");
+                        File thEx2 = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"+i+"/"+j+"/"+k+"/user");
                         Number nmand = (Number) ex.get("sourceFiles");
-                        if(nmand.intValue() > 0) thEx.mkdir();                       
+                        if(nmand.intValue() > 0) {
+                            thEx.mkdirs();
+                            thEx2.mkdirs();
+                        }                       
                         k++;
                     }
                     j++;

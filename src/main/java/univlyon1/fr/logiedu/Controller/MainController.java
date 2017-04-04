@@ -68,6 +68,11 @@ public class MainController {
         
     }
     
+    /**
+     * Method called to check weither it is needed to add a dropdown
+     * button or not, depending on the number of user
+     * @return 
+     */
     private Boolean checkMore(){
         if(this.model.getUsers().size()>4){
             this.view.getOtherUsersList().getItems().clear();
@@ -97,6 +102,10 @@ public class MainController {
         }else return false;
     }
     
+    /**
+     * Method used to add a user into the model then
+     * update the starting pane accordingly
+     */
     private void addUserAction(){
         TextInputDialog dialog = new TextInputDialog("pseudo");
                 dialog.setTitle("Pseudo : ");
@@ -111,6 +120,10 @@ public class MainController {
                 }
     }
     
+    /**
+     * Based on the model, update the userpanes 
+     * of the view
+     */
     private void updateUserPane(){
         Collections.sort(this.model.getUsers());
         this.view.getUsersPane().clear();
@@ -122,6 +135,9 @@ public class MainController {
         }
     }
     
+    /**
+     * Set actions on start pane
+     */
     private void refreshUsersPane(){
         this.view.getUsersPane().stream().forEach((usp) -> {
             usp.getLogButton().setOnAction((ActionEvent e) -> {
@@ -134,10 +150,14 @@ public class MainController {
         });
     }
     
+    /**
+     * Called when logged in, display the home
+     * view
+     */
     private void loadHomePane(){
         this.view.displayHomePane(this.model.getLoggedUser().getUserName());
         this.loadCourseList();  
-        this.loadExerciceList();
+        //this.loadExerciceList();
         logoutHandler();
         this.view.getHomePane().getCoursesButton().setOnAction((ActionEvent e) -> {
                 this.loadCourseList();  
@@ -147,6 +167,10 @@ public class MainController {
             });
     }
     
+    /**
+     * Method used to handle the course tree appearance 
+     * depending on the node type
+     */
     private void colorList(){
         this.view.getHomeView().getCoursesList().setCellFactory(tv -> {
         TreeCell<HBox> cell = new TreeCell<HBox>() {
@@ -188,6 +212,10 @@ public class MainController {
         });
     }
     
+    /**
+     * Method used to handle the exercise tree appearance 
+     * depending on the node type
+     */
     private void exerciceColorList(){
         this.view.getHomeView().getExercicesList().setCellFactory(tv -> {
         TreeCell<HBox> cell = new TreeCell<HBox>() {
@@ -297,6 +325,35 @@ public class MainController {
         this.view.getHomeView().getExercicesList().getRoot().setExpanded(true);
         //this.view.displayExercicesPane();
     }
+    
+    private void loadShortExerciceList(Course co) {
+        this.view.getHomeView().getExercicesList().getRoot().getChildren().clear();
+        ExerciceListItem tbox = new ExerciceListItem(co.getTitle(), "no-change");
+
+        TreeItem<HBox> themBranch = new TreeItem<>(tbox);
+        themBranch.getChildren().clear();
+        
+        int i = 0;
+        for(Exercice exo : co.getExercices()){
+            ExerciceListItem exBox = new ExerciceListItem(exo.getName(), "no-change", true, co.getReferingTheme().getId(), co.getId(), exo.getId());
+            TreeItem<HBox> exItem = new TreeItem<>(exBox);
+            themBranch.getChildren().add(exItem);
+            i++;
+        }
+        System.out.println(i);
+        themBranch.setExpanded(true);
+        this.view.getHomeView().getExercicesList().getRoot().getChildren().add(themBranch);
+        this.view.getHomeView().getExercicesList().getSelectionModel().select(themBranch);
+
+        this.view.getHomeView().getExercicesList().getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        this.exerciceColorList();
+        this.setSelectExerciceEventHandler();
+        /*this.view.getExercicePane().getHomeButton().setOnAction((ActionEvent e) -> {
+                this.loadHomePane();
+            });*/
+        this.view.getHomeView().getExercicesList().getRoot().setExpanded(true);
+        //this.view.displayExercicesPane();
+    }
 
 
     private void setSelectCourseEventHandler() {
@@ -318,6 +375,11 @@ public class MainController {
                             
                         });
                         if(event.getButton().equals(MouseButton.PRIMARY)){
+                            if(event.getClickCount() == 1){
+                                System.out.println("show exercises");
+                                Course currCo = model.getThemes().get(it.getThemeId()).getCourseList().get(it.getCourseId());
+                                loadShortExerciceList(currCo);
+                            }
                             if(event.getClickCount() == 2) {
                                 System.out.println("selec th " + it.getThemeId() + ", course : "+ it.getCourseId());
                                 Course currCo = model.getThemes().get(it.getThemeId()).getCourseList().get(it.getCourseId());
@@ -458,9 +520,9 @@ public class MainController {
         exv.getHomeButton().setOnAction((ActionEvent e1) -> {
             loadHomePane();
         });
-        exv.getBackButton().setOnAction((ActionEvent e2) -> {
+        /*exv.getBackButton().setOnAction((ActionEvent e2) -> {
             loadExerciceList();
-        });
+        });*/
         exv.getCourseButton().setOnAction((ActionEvent e3) -> {
             setCourseViewEvents(ex.getCorrespondingCourse(), 0);
         });
@@ -546,9 +608,6 @@ public class MainController {
             
             cv.getHomeButton().setOnAction((ActionEvent e1) -> {
                 loadHomePane();
-            });
-            cv.getBackToList().setOnAction((ActionEvent e2) -> {
-                loadCourseList();
             });
             cv.getExercices().setOnAction((ActionEvent e3) -> {
                 setExerciceGridViewEvents(co);

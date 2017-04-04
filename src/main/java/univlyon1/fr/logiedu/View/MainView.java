@@ -132,7 +132,7 @@ public class MainView extends GridPane implements Observer {
         this.head.displayLoggedMenu();
     }
     
-    public void displayCoursesPane(){
+    /*public void displayCoursesPane(){
         clearPanes();
         this.center.add(this.coursePane, 0, 0);
         this.head.displayLoggedMenu();
@@ -142,7 +142,7 @@ public class MainView extends GridPane implements Observer {
         clearPanes();
         this.center.add(this.exercicePane, 0, 0);
         this.head.displayLoggedMenu();
-    }
+    }*/
     
     public void displayCourseView(CourseView cv){
         clearPanes();
