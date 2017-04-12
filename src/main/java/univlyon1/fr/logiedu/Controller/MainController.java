@@ -531,10 +531,12 @@ public class MainController {
             ((ExerciceWithSourcesView)exv).getRunButton().setOnAction((ActionEvent e4) -> {
             ex.writeToFile(((ExerciceWithSourcesView)exv).getEditor().getCodeAndSnapshot());
             if(ex.CompileCode()) {
-                ex.ExecuteCode();
+                Boolean exec = ex.ExecuteCode();
                 ((ExerciceWithSourcesView)exv).getStdOutput().setText(ex.gotStdExecutionRes());
                 ((ExerciceWithSourcesView)exv).getCompilePane().setContent("Compilation OK !", "ok");
                 ((ExerciceWithSourcesView)exv).getErrOutput().setText(ex.gotErrExecutionRes());
+                if(exec) ((ExerciceWithSourcesView)exv).getCompilePane().setContent("Compilation OK !\nExecution OK !", "ok");
+                else ((ExerciceWithSourcesView)exv).getExecPane().setContent(ex.getExecLog(), "warning");
             }else{
                 ((ExerciceWithSourcesView)exv).getErrOutput().setText(ex.gotErrExecutionRes());
                 ((ExerciceWithSourcesView)exv).getCompilePane().setContent(ex.getCompileLog(), "warning");
