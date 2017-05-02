@@ -532,11 +532,25 @@ public class MainController {
             ex.writeToFile(((ExerciceWithSourcesView)exv).getEditor().getCodeAndSnapshot());
             if(ex.CompileCode()) {
                 ex.ExecuteCode();
-                ((ExerciceWithSourcesView)exv).getStdOutput().setText(ex.gotStdExecutionRes());
+                String tmp = ex.gotStdExecutionRes();
+                //((ExerciceWithSourcesView)exv).getStdOutput().setText(tmp);
+                tmp = tmp.replaceAll("\n", "</br>");
+                ((ExerciceWithSourcesView)exv).setOutput("<div style='color:white; font-size:13px; font-family: \"Helvetica\";'><i style='font-size:14px;'>Sortie standard :</i></br><div style='padding-left:5px;'>"+tmp+"</div></div>");
+                
                 ((ExerciceWithSourcesView)exv).getCompilePane().setContent("Compilation OK !", "ok");
-                ((ExerciceWithSourcesView)exv).getErrOutput().setText(ex.gotErrExecutionRes());
+                String tmp2 = ex.gotErrExecutionRes(0);
+                //((ExerciceWithSourcesView)exv).getErrOutput().setText(tmp2);
+                tmp2 = tmp2.replaceAll("\n", "</br>");
+                System.out.println("lololololol"+tmp2);
+                if(!tmp2.equals("no error")) ((ExerciceWithSourcesView)exv).addOutput("</br><div style='color:red; font-size:13px; font-family: \"Helvetica\";'><i style='font-size:14px;'>Sortie erreur :</i></br><div style='padding-left:5px;'>"+tmp2+"</div></div>");
+                if(!ex.getExecuteLog().equals("")) ((ExerciceWithSourcesView)exv).getCompilePane().setContent(ex.getExecuteLog(), "warning");
+                
             }else{
-                ((ExerciceWithSourcesView)exv).getErrOutput().setText(ex.gotErrExecutionRes());
+                String tmp = ex.gotErrExecutionRes(1);
+                //((ExerciceWithSourcesView)exv).getErrOutput().setText(tmp);
+                System.out.println("lololololol"+tmp);
+                tmp = tmp.replaceAll("\n", "</br>");
+                ((ExerciceWithSourcesView)exv).setOutput("<div style='color:red; font-size:13px; font-family: \"Helvetica\";'><i style='font-size:14px;'>Sortie erreur :</i></br><div style='padding-left:5px;'>"+tmp+"</div></div>");
                 ((ExerciceWithSourcesView)exv).getCompilePane().setContent(ex.getCompileLog(), "warning");
                 
             }

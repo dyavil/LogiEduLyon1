@@ -7,12 +7,14 @@ package univlyon1.fr.logiedu.View;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.web.WebView;
 import univlyon1.fr.logiedu.Utility.CodeEditor;
 import univlyon1.fr.logiedu.View.infoPane.infoPane;
 
@@ -25,11 +27,11 @@ public class ExerciceWithSourcesView extends ExerciceView {
     private GridPane returnPane;
     private GridPane codePane;
     private Label textContent;
-    private TextArea sourceContent;
-    private Label stdOutput;
-    private Label errOutput;
+    private WebView Output;
     private Button runButton;
     private CodeEditor editor;
+    private String outputContent;
+    private String startOutputContent;
     
     
     private infoPane compilePane;
@@ -39,32 +41,28 @@ public class ExerciceWithSourcesView extends ExerciceView {
         super(course, name, content, parentWidth);
         this.returnPane = new GridPane();
         this.codePane = new GridPane();
+        this.Output = new WebView();
         
         this.compilePane = new infoPane("");
         this.execPane = new infoPane("");
-        
-        this.stdOutput = new Label("stdout");
-        this.stdOutput.setMinHeight(80);
-        this.stdOutput.setMinWidth(((parentWidth-100)/2));
-        this.stdOutput.getStyleClass().add("stdPane");
-        this.stdOutput.setAlignment(Pos.TOP_LEFT);
-        this.stdOutput.setWrapText(true);
-        this.errOutput = new Label("sdterr");
-        this.errOutput.getStyleClass().add("errPane");
-        this.errOutput.setMinHeight(80);
-        this.errOutput.setMinWidth(((parentWidth-100)/2));
-        this.errOutput.setAlignment(Pos.TOP_LEFT);
-        this.errOutput.setWrapText(true);
+        this.outputContent = "";
+        this.startOutputContent = "<html style='background-color:black'; padding:5px; font-family: \"Helvetica\";><div style='text-align:center; color:lightgray;'>-- Console --</div>";
+        this.Output.getEngine().loadContent(startOutputContent+outputContent+"</html>");
+
+
         this.textContent = new Label(content);
         this.textContent.setWrapText(true);
         this.textContent.getStyleClass().add("exercice-content");
-        this.sourceContent = new TextArea(fileContent);
-        this.sourceContent.setWrapText(true);
 
 
-        this.runButton = new Button("Run");
+        this.runButton = new Button();
+        this.runButton.getStyleClass().add("run");
         ColumnConstraints midCol = new ColumnConstraints((parentWidth-80)/2);
+        ColumnConstraints midCol3 = new ColumnConstraints(60);
+        midCol3.setHalignment(HPos.CENTER);
+        //System.out.println((parentWidth-80)/2 + ", " + parentWidth);
         this.codePane.getColumnConstraints().add(midCol);
+        this.codePane.getColumnConstraints().add(midCol3);
         this.codePane.getColumnConstraints().add(midCol);
         ColumnConstraints amidCol = new ColumnConstraints((parentWidth-110)/2);
         amidCol.setHalignment(HPos.CENTER);
@@ -73,29 +71,52 @@ public class ExerciceWithSourcesView extends ExerciceView {
         amidCol2.setHalignment(HPos.CENTER);
         this.returnPane.getColumnConstraints().add(amidCol2);
         this.returnPane.getColumnConstraints().add(amidCol);
-        this.returnPane.getRowConstraints().add(new RowConstraints(90));
-        this.returnPane.getRowConstraints().add(new RowConstraints(100));
+        RowConstraints rowc1 = new RowConstraints(90);
+        rowc1.setValignment(VPos.TOP);
+        this.returnPane.getRowConstraints().add(rowc1);
         this.getMiddlePane().getRowConstraints().clear();
-        this.getMiddlePane().getRowConstraints().add(new RowConstraints(300));
+        this.getMiddlePane().getRowConstraints().add(new RowConstraints());
+        this.getMiddlePane().getRowConstraints().add(new RowConstraints(400));
         
-        this.codePane.add(this.textContent, 1, 0);
-        editor = new CodeEditor(fileContent, parentWidth);
-        this.codePane.add(editor, 0, 0);
         
-        this.getMiddlePane().getRowConstraints().add(new RowConstraints(170));
+        GridPane testBack = new GridPane();
+        GridPane testBack2 = new GridPane();
+        ColumnConstraints midColtest = new ColumnConstraints((parentWidth-80)/2-30);
+        midColtest.setHalignment(HPos.CENTER);
+        testBack.getColumnConstraints().add(midColtest);
+        testBack2.getColumnConstraints().add(midColtest);
+        testBack.getStyleClass().add("pcback");
+        testBack2.getStyleClass().add("pcback");
+        //testBack.getRowConstraints().add(new RowConstraints(5));
+        
+        
+        editor = new CodeEditor(fileContent, parentWidth-20);
+        testBack.add(editor, 0, 0);
+        testBack2.add(Output, 0, 0);
+        Output.getStyleClass().add("pcback2");
+        this.codePane.add(testBack, 0, 0);
+        this.codePane.add(testBack2, 2, 0);
+        
+        this.getMiddlePane().getRowConstraints().add(new RowConstraints(80));
         this.returnPane.add(this.execPane, 0, 0);
         this.returnPane.add(this.compilePane, 2, 0);
-        this.returnPane.add(this.stdOutput, 0, 1);
-        this.returnPane.add(this.runButton, 1, 1);
-        this.returnPane.add(this.errOutput, 2, 1);
+        this.codePane.add(this.runButton, 1, 0);
         
         this.getMiddlePane().getChildren().clear();
-        this.getMiddlePane().add(codePane, 0, 0);
-        this.getMiddlePane().add(returnPane, 0, 1);
+        this.getMiddlePane().add(textContent, 0, 0);
+        this.getMiddlePane().add(codePane, 0, 1);
+        this.getMiddlePane().add(returnPane, 0, 2);
     }
     
     
-    
+    public void setOutput(String htmlContent){
+        this.Output.getEngine().loadContent(this.startOutputContent+htmlContent+"</html>");
+        outputContent = htmlContent;
+    }
+    public void addOutput(String htmlContent){
+        outputContent += htmlContent;
+        this.Output.getEngine().loadContent(this.startOutputContent+outputContent+"</html>");
+    }
 
 
     /**
@@ -105,26 +126,8 @@ public class ExerciceWithSourcesView extends ExerciceView {
         return textContent;
     }
 
-    /**
-     * @return the sourceContent
-     */
-    public TextArea getSourceContent() {
-        return sourceContent;
-    }
 
-    /**
-     * @return the stdOutput
-     */
-    public Label getStdOutput() {
-        return stdOutput;
-    }
 
-    /**
-     * @return the errOutput
-     */
-    public Label getErrOutput() {
-        return errOutput;
-    }
 
     /**
      * @return the runButton

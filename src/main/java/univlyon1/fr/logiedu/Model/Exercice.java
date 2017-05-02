@@ -33,6 +33,7 @@ public class Exercice {
     private Boolean mandatory;
     private Boolean gotSources;
     private String compileLog;
+    private String executeLog;
     
     public Exercice(String n, String content, Course c, int id, int diff, Boolean mand, Boolean src){
         this.name = n;
@@ -120,27 +121,38 @@ public class Exercice {
     
     public String gotStdExecutionRes(){
         if(this.getGotSources()){
+            String content2 = "";
+            try {
+                content2 = new Scanner(new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
+                        +this.correspondingCourse.getReferingTheme().getId()+"/"
+                        +this.correspondingCourse.getId()+"/"+this.getId()+"/user/errC.txt")).useDelimiter("\\Z").next();
+            } catch (Exception ex) {
+                Logger.getLogger(Exercice.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                executeLog = ErrParser.getExecuteTypeOutput(content2);
             try {
                 String content = new Scanner(new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
                         +this.correspondingCourse.getReferingTheme().getId()+"/"
                         +this.correspondingCourse.getId()+"/"+this.getId()+"/user/stdC.txt")).useDelimiter("\\Z").next();
+                
                 return content;
-            } catch (FileNotFoundException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(Exercice.class.getName()).log(Level.WARNING, null, ex);
-                return "no output";
+                return content2;
             }
         }
         return null;
     }
     
-    public String gotErrExecutionRes(){
+    public String gotErrExecutionRes(int type){
         if(this.getGotSources()){
             try {
                 String content = new Scanner(new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
                         +this.correspondingCourse.getReferingTheme().getId()+"/"
                         +this.correspondingCourse.getId()+"/"+this.getId()+"/user/errC.txt")).useDelimiter("\\Z").next();
                 compileLog = ErrParser.getCompileTypeOutput(content);
-                return content.split("Main.java")[1];
+                if(type == 1) return content.split("Main.java")[1];
+                return content;
             } catch (Exception ex) {
                 Logger.getLogger(Exercice.class.getName()).log(Level.WARNING, null, ex);
                 return "no error";
@@ -267,5 +279,12 @@ public class Exercice {
      */
     public String getCompileLog() {
         return compileLog;
+    }
+
+    /**
+     * @return the executeLog
+     */
+    public String getExecuteLog() {
+        return executeLog;
     }
 }

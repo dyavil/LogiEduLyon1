@@ -22,7 +22,7 @@ public class infoPane extends GridPane{
         this.content = new Label();
         RowConstraints c1 = new RowConstraints();
         c1.setPercentHeight(100);
-        c1.setValignment(VPos.BOTTOM);
+        c1.setValignment(VPos.TOP);
         this.getRowConstraints().add(c1);
         this.setContent(c, "");
         this.add(content, 0, 0);

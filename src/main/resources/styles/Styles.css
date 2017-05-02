@@ -267,3 +267,22 @@
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
 }
+
+.pcback{
+    -fx-background-image: url("../images/pc.png");
+    -fx-background-repeat: stretch;  
+    -fx-background-size: 570 408;
+    -fx-padding:15 20 78 17;
+    -fx-background-position: top center;
+}
+
+.pcback2{
+    -fx-background-color:grey;
+}
+
+.run{
+  -fx-graphic: "images/plus.png";
+  -fx-background-color:#ffffff;
+  -fx-border-color: #ffffff;
+  -fx-padding:0 0 38 4;
+}

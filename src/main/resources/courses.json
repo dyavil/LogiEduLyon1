@@ -1,22 +1,18 @@
 {
   "themes": [
     {
-      "name": "Le point de vue Objet",
+      "name": "Introduction",
       "courses": [
         {
-          "title": "titre 1",
-          "content": " ipsum",
+          "title": "Ce qu’est Java",
+          "content": "ipsum",
           "slides": [
             {
-              "content": "<div><b>Lorem ipsum</b> <u>dolor sit amet</u>, <div style='color:red;'>adipiscing</div> elit. Mauris sit amet lacus eget tellus porta blandit suscipit non purus. Cras non hendrerit mi. Nulla dapibus consequat urna non feugiat. Vestibulum a finibus urna. Suspendisse mollis risus in nisl vehicula dignissim. Vestibulum vitae tristique ipsum. Integer viverra faucibus dapibus. Maecenas accumsan auctor ligula eget volutpat. Nunc vitae neque blandit, vestibulum mi a, sagittis orci. Fusce nibh nisi, lobortis at mi nec, sollicitudin consectetur lorem. Ut fringilla mi nec velit hendrerit, vitae blandit odio vestibulum. Mauris volutpat facilisis arcu id fermentum.</div>",
-              "imagePath": ""
-            },
-            {
-              "content": "<div><div style='color:red;'>Curabitur rhoncus, libero at laoreet ultricies, felis urna scelerisque felis, quis accumsan lorem tellus ut nisi. In tempus nisl leo, eget maximus enim facilisis ac. Donec ligula quam, dictum at urna eu, semper mollis enim. Morbi sed libero sed est mollis rhoncus nec vel dui. Quisque aliquet est euismod enim ullamcorper, id fermentum urna hendrerit.</div>Cras a mauris varius nulla suscipit ultricies ut ut arcu. Suspendisse sodales auctor purus non dapibus. Sed eu eros risus. Nam id lorem pellentesque, auctor mi vitae, tincidunt lacus. Ut non volutpat velit, non auctor urna. Sed vitae risus id lectus blandit aliquam vitae nec urna. Donec ut est ligula.</div>",
+              "content": "<div style='text-align:justify'>Si tu es dans cette application c'est que tu veux apprendre à programmer et que tu as décidé de commencer par le Java, tu as bien fait de venir ici.</br>Bon alors je sais toi tu veux coder, mais tu ne vas pas y couper on va faire de la théorie. Ne commence pas à râler, si tu veux pouvoir faire des choses intéressantes, tu dois comprendre ce que tu fais et ça tu ne peux y arriver qu’en connaissant la théorie.</br></br><b>Alors un bref historique:</b></br><p style='padding-left:15px;'>La première version de Java est apparue le 23 Janvier 1996, elle est développée par Sun Microsystem. En 2009 Sun a été racheté par Oracle qui poursuivit le développement de Java pour aujourd’hui pouvoir proposer la version 8.</p></div>",
               "imagePath": "/images/java.png"
             },
             {
-              "content": "Donec luctus sagittis turpis ac finibus. Proin sit amet fringilla lectus, eu porta diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Curabitur eget blandit orci. Pellentesque condimentum dapibus ex id sodales. Nulla facilisi. Donec sed elementum nisi, tristique efficitur lacus. Morbi convallis elementum ligula vitae feugiat. Sed condimentum a magna vitae dapibus. Fusce auctor sapien quis dapibus varius. Donec a condimentum urna. Proin tempus eu velit a sodales. Phasellus elementum nisl sit amet placerat varius. In mollis urna lacus, ac vestibulum tellus consectetur sit amet. Nam mollis ornare magna, semper volutpat ligula faucibus a.",
+              "content": "<div style='text-align:justify'>Quels sont les OUI au profits de Java ?</br></br>Et bien tout d’abords Java est un langage très demandé en entreprise (comme vous pouvez voir sur l’image de gauche). Java est aussi un langage extrêmement portable qui peut être exécuté sous Windows, Linux ou Mac, sous réserve d’avoir installé l’environnement java. En effet pour exécuter une application Java il te faudra la <b>JVM</b> (Java Virtual Machine) installée sur ta machine mais nous y reviendrons plus tard.</br></br>L’autre avantage de Java c’est que tu peux faire n’importe quel type d’application. En effet, tu peux faire des applications Web, des applications bureau (lourde ou légère), et des applications mobiles.</div>",
               "imagePath": ""
             }
           ],
@@ -39,11 +35,11 @@
           ]
         },
         {
-          "title": "titre 2",
+          "title": "L’environnement Java",
           "content": "contenu 2",
           "slides": [
             {
-              "content": "Etiam vel turpis tristique, mollis ante auctor, eleifend ex. Donec interdum augue eget odio rutrum cursus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultricies molestie nisl, vel ullamcorper ligula tempus quis. Integer et fringilla ante, non dignissim dolor. Phasellus scelerisque commodo condimentum. Quisque lobortis, justo ac iaculis venenatis, mauris magna eleifend eros, quis tristique turpis enim quis neque.",
+              "content": "<div>Afin de pouvoir développer et exécuter des applications Java il te faudra la JVM (Java Virtual Machine) ainsi que le JDK (Java Development Kit).</br></br><i style='color:light-grey'>Mais qu’est ce que ça peut bien être que ces trucs ?</i></br></br></div>",
               "imagePath": "/images/java.png"
             }
           ],

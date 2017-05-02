@@ -24,6 +24,7 @@ public class ExecUtility {
             new InputStreamReader(ins));
         while ((line = in.readLine()) != null) {
             stdOut.write(line.getBytes());
+            stdOut.write(("\n").getBytes());
             System.out.println(name + " " + line);
             ret = false;
         }
