@@ -281,8 +281,12 @@
 }
 
 .run{
-  -fx-graphic: "images/plus.png";
+  -fx-graphic: "images/run.png";
   -fx-background-color:#ffffff;
   -fx-border-color: #ffffff;
   -fx-padding:0 0 38 4;
+}
+
+.run:hover{
+   -fx-graphic: "images/run2.png";
 }

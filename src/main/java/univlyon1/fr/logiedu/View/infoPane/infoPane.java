@@ -20,10 +20,13 @@ public class infoPane extends GridPane{
     
     public infoPane(String c){
         this.content = new Label();
+        ColumnConstraints col = new ColumnConstraints();
+        col.setPercentWidth(100);
         RowConstraints c1 = new RowConstraints();
         c1.setPercentHeight(100);
         c1.setValignment(VPos.TOP);
         this.getRowConstraints().add(c1);
+        this.getColumnConstraints().add(col);
         this.setContent(c, "");
         this.add(content, 0, 0);
     }
