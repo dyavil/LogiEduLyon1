@@ -5,9 +5,11 @@
  */
 package univlyon1.fr.logiedu.View;
 
+import javafx.event.EventType;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -40,6 +42,7 @@ public class ExerciceView extends GridPane{
         this.bottomPane = new GridPane();
         
         this.courseName = new Label(course);
+        
         this.exerciceName = new Label(name);
         this.exerciceContent = new Label(content);
         this.nextExercice = new Button("Exercice suivant");
@@ -56,11 +59,11 @@ public class ExerciceView extends GridPane{
         this.exerciceContent.getStyleClass().add("course-content");
         this.exerciceContent.setWrapText(true);
         
-        ColumnConstraints third1 = new ColumnConstraints((parentWidth-80)/3);
+        ColumnConstraints third1 = new ColumnConstraints((parentWidth-20)/3);
         third1.setHalignment(HPos.LEFT);
-        ColumnConstraints third2 = new ColumnConstraints((parentWidth-80)/3);
+        ColumnConstraints third2 = new ColumnConstraints((parentWidth)/3);
         third2.setHalignment(HPos.CENTER);
-        ColumnConstraints third3 = new ColumnConstraints((parentWidth-80)/3);
+        ColumnConstraints third3 = new ColumnConstraints((parentWidth-20)/3);
         third3.setHalignment(HPos.RIGHT);
         this.topPane.getColumnConstraints().add(third1);
         this.topPane.getColumnConstraints().add(third2);
@@ -75,14 +78,14 @@ public class ExerciceView extends GridPane{
         this.bottomPane.getColumnConstraints().add(third3);
         this.bottomPane.add(this.courseButton, 1, 0);
         
-        ColumnConstraints marge = new ColumnConstraints(10);
-        ColumnConstraints midCol = new ColumnConstraints(parentWidth-20);
+        ColumnConstraints marge = new ColumnConstraints(5);
+        ColumnConstraints midCol = new ColumnConstraints(parentWidth-10);
         this.getColumnConstraints().add(marge);
         this.getColumnConstraints().add(midCol);
         this.getColumnConstraints().add(marge);
         this.getRowConstraints().add(new RowConstraints(20));
-        this.getRowConstraints().add(new RowConstraints(60));
-        this.getRowConstraints().add(new RowConstraints(600));
+        this.getRowConstraints().add(new RowConstraints(50));
+        this.getRowConstraints().add(new RowConstraints(540));
         this.add(this.topPane, 1, 1);
         this.add(this.middlePane, 1, 2);
         this.add(this.bottomPane, 1, 3);

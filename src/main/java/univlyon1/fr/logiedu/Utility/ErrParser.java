@@ -15,7 +15,7 @@ public class ErrParser{
         String[] keyWords = new String[]{"expected","end of file", "cannot find symbol", "not a statement"};
         String res = "Erreur de compilation";
         if(in.contains(keyWords[0])){
-            res += "\nVérifiez la sémantique(point virgule, parenthèses, accolades...)";
+            res += "\nVérifiez la syntaxe(point virgule, parenthèses, accolades...)";
         }
         if(in.contains(keyWords[1])){
             res += "\nVérifiez que vos fonctions, if, for sont biens fermées !";

@@ -138,7 +138,7 @@ public class Exercice {
                 return content;
             } catch (Exception ex) {
                 Logger.getLogger(Exercice.class.getName()).log(Level.WARNING, null, ex);
-                return content2;
+                return "";
             }
         }
         return null;

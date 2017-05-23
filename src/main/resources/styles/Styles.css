@@ -39,6 +39,7 @@
   -fx-border-color: #395306;
   -fx-background-radius: 50%, 50%;
   -fx-border-radius: 50%, 50%;
+  -fx-cursor:hand;
 }
 
 .tree-cell:selected{
@@ -71,11 +72,25 @@
    -fx-font-family: "Helvetica"
 }
 
+.theme-label{
+    -fx-font-size: 20px;
+    -fx-alignement:center;
+   -fx-font-family: "Helvetica"
+}
+
 .course-content{
     -fx-font-size: 15px;
     -fx-font-family: "Helvetica"
 }
 
+.scroll-pane{
+    -fx-control-inner-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
 
 .dark-blue-th {
     -fx-background-color: 
@@ -121,6 +136,7 @@
     -fx-text-fill: linear-gradient(white, #d0d0d0);
     -fx-font-size: 12px;
     -fx-padding: 10 20 10 20;
+    -fx-cursor:hand;
 }
 .dark-blue Text {
     -fx-effect: dropshadow( one-pass-box , rgba(0,0,0,0.9) , 1, 0.0 , 0 , 1 );
@@ -145,11 +161,15 @@
     -fx-background-insets: 0,1,2;
     -fx-text-fill: black;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-cursor:hand;
 }
 
 .exercice-grid-elem{
-    -fx-background-color: #90dd13;
+    -fx-background-color: #d0ffc1;
     -fx-background-radius: 5,4,3,5;
+    -fx-border-radius:  5,4,3,5;
+    -fx-border-style:solid;
+    -fx-border-width : 2px;
     -fx-background-insets: 0,1,2,0;
     -fx-margin:10;
     -fx-padding:10;
@@ -157,7 +177,9 @@
    -fx-font-family: "Helvetica"
 }
 .exercice-grid-elem:hover{
-    -fx-background-color: #90d026
+    -fx-background-color: #90d026;
+    -fx-cursor:hand;
+      
 }
 
 .green {
@@ -186,6 +208,7 @@
 
 .plus-button:hover {
     -fx-border-color: #395306;
+    -fx-cursor:hand;
 }
 
 .bold{
@@ -289,4 +312,5 @@
 
 .run:hover{
    -fx-graphic: "images/run2.png";
+   -fx-cursor:hand;
 }

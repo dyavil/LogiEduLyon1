@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -54,7 +55,12 @@ public class ExerciceWithSourcesView extends ExerciceView {
         this.textContent.setWrapText(true);
         this.textContent.getStyleClass().add("exercice-content");
 
-
+        ScrollPane contentPane = new ScrollPane();
+        contentPane.setContent(this.textContent);
+        contentPane.getStyleClass().add("scroll-pane");
+        textContent.wrapTextProperty().setValue(Boolean.TRUE);
+        contentPane.setFitToWidth(true);
+        contentPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         this.runButton = new Button();
         this.runButton.getStyleClass().add("run");
         ColumnConstraints midCol = new ColumnConstraints((parentWidth-80)/2);
@@ -75,7 +81,8 @@ public class ExerciceWithSourcesView extends ExerciceView {
         rowc1.setValignment(VPos.TOP);
         this.returnPane.getRowConstraints().add(rowc1);
         this.getMiddlePane().getRowConstraints().clear();
-        this.getMiddlePane().getRowConstraints().add(new RowConstraints());
+        this.getMiddlePane().getRowConstraints().add(new RowConstraints(80));
+        this.getMiddlePane().getRowConstraints().add(new RowConstraints(10));
         this.getMiddlePane().getRowConstraints().add(new RowConstraints(400));
         
         
@@ -97,15 +104,15 @@ public class ExerciceWithSourcesView extends ExerciceView {
         this.codePane.add(testBack, 0, 0);
         this.codePane.add(testBack2, 2, 0);
         
-        this.getMiddlePane().getRowConstraints().add(new RowConstraints(80));
+        this.getMiddlePane().getRowConstraints().add(new RowConstraints(30));
         this.returnPane.add(this.execPane, 0, 0);
         this.returnPane.add(this.compilePane, 2, 0);
         this.codePane.add(this.runButton, 1, 0);
         
         this.getMiddlePane().getChildren().clear();
-        this.getMiddlePane().add(textContent, 0, 0);
-        this.getMiddlePane().add(codePane, 0, 1);
-        this.getMiddlePane().add(returnPane, 0, 2);
+        this.getMiddlePane().add(contentPane, 0, 0);
+        this.getMiddlePane().add(codePane, 0, 2);
+        this.getMiddlePane().add(returnPane, 0, 3);
     }
     
     

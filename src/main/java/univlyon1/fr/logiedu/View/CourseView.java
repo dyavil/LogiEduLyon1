@@ -50,6 +50,7 @@ public class CourseView extends GridPane {
         this.bottomPaneBottom = new GridPane();
         this.courseName = new Label(name);
         this.themeName = new Label(theme);
+        this.themeName.getStyleClass().add("theme-label");
         this.courseName.getStyleClass().add("course-label");
         this.courseContent = new Label(content);
         this.courseContent.getStyleClass().add("course-content");
@@ -71,20 +72,20 @@ public class CourseView extends GridPane {
         this.getRowConstraints().add(new RowConstraints(20));
         this.getRowConstraints().add(new RowConstraints(60));
         this.getRowConstraints().add(new RowConstraints(50));
-        this.getRowConstraints().add(new RowConstraints(300));
-        this.getColumnConstraints().add(new ColumnConstraints(40));
-        ColumnConstraints colc = new ColumnConstraints(parentWidth-80);
+        this.getRowConstraints().add(new RowConstraints(340));
+        this.getColumnConstraints().add(new ColumnConstraints(30));
+        ColumnConstraints colc = new ColumnConstraints(parentWidth-60);
         colc.setHalignment(HPos.RIGHT);
         this.getColumnConstraints().add(colc);
-        this.getColumnConstraints().add(new ColumnConstraints(40));
-        ColumnConstraints topCol1 = new ColumnConstraints((parentWidth-80)/2);
-        ColumnConstraints topCol2 = new ColumnConstraints((parentWidth-80)/2);
+        this.getColumnConstraints().add(new ColumnConstraints(30));
+        ColumnConstraints topCol1 = new ColumnConstraints((parentWidth-60)/2);
+        ColumnConstraints topCol2 = new ColumnConstraints((parentWidth-60)/2);
         topCol1.setHalignment(HPos.LEFT);
         topCol2.setHalignment(HPos.RIGHT);
         
-        ColumnConstraints topCol13 = new ColumnConstraints((parentWidth-80)/3);
-        ColumnConstraints topCol23 = new ColumnConstraints((parentWidth-80)/3);
-        ColumnConstraints topCol33 = new ColumnConstraints((parentWidth-80)/3);
+        ColumnConstraints topCol13 = new ColumnConstraints((parentWidth-60)/3);
+        ColumnConstraints topCol23 = new ColumnConstraints((parentWidth-60)/3);
+        ColumnConstraints topCol33 = new ColumnConstraints((parentWidth-60)/3);
         topCol13.setHalignment(HPos.LEFT);
         topCol23.setHalignment(HPos.CENTER);
         topCol33.setHalignment(HPos.RIGHT);
@@ -99,6 +100,8 @@ public class CourseView extends GridPane {
         this.bottomPaneBottom.getColumnConstraints().add(topCol2);
         this.topPane.add(this.themeName, 1, 0);
         this.topPane.add(this.homeButton, 2, 0);
+        
+        this.middlePane.getColumnConstraints().add(new ColumnConstraints(parentWidth-60));
         this.middlePane.add(this.contentHtml, 0, 0);
         this.bottomPaneTop.add(this.exercices, 1, 0);
         this.bottomPane.getRowConstraints().add(new RowConstraints(40));
@@ -118,11 +121,13 @@ public class CourseView extends GridPane {
     public CourseView(String th, String name, String content, int parentWidth, String imPath){
         this(th, name, content, parentWidth);
         this.middlePane.getChildren().clear();
+        this.middlePane.getColumnConstraints().clear();
         this.image = new ImageView(imPath);
-        this.image.setFitHeight(300);
+        this.image.setFitHeight(340);
         this.image.setPreserveRatio(true);
-        ColumnConstraints topCol1 = new ColumnConstraints((parentWidth-80)/2+10);
-        ColumnConstraints topCol2 = new ColumnConstraints((parentWidth-80)/2-10);
+        ColumnConstraints topCol1 = new ColumnConstraints((parentWidth-60)/2-100);
+        topCol1.setHalignment(HPos.CENTER);
+        ColumnConstraints topCol2 = new ColumnConstraints((parentWidth-60)/2+100);
         this.middlePane.getColumnConstraints().add(topCol1);
         this.middlePane.getColumnConstraints().add(topCol2);
         this.middlePane.add(this.image, 0, 0);

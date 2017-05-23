@@ -541,7 +541,7 @@ public class MainController {
                 String tmp2 = ex.gotErrExecutionRes(0);
                 //((ExerciceWithSourcesView)exv).getErrOutput().setText(tmp2);
                 tmp2 = tmp2.replaceAll("\n", "</br>");
-                System.out.println("lololololol"+tmp2);
+                System.out.println("lololololol"+tmp);
                 if(!tmp2.equals("no error")) ((ExerciceWithSourcesView)exv).addOutput("</br><div style='color:red; font-size:13px; font-family: \"Helvetica\";'><i style='font-size:14px;'>Sortie erreur :</i></br><div style='padding-left:5px;'>"+tmp2+"</div></div>");
                 if(!ex.getExecuteLog().equals("")) ((ExerciceWithSourcesView)exv).getCompilePane().setContent(ex.getExecuteLog(), "warning");
                 
