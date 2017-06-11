@@ -7,12 +7,14 @@ package univlyon1.fr.logiedu.Model;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.text.DateFormat;
@@ -37,6 +39,7 @@ import univlyon1.fr.logiedu.Utility.UnzipUtility;
 public class LoadData {
     
     private File configFile;
+    private String configString;
     private JSONObject baseConfig;
     
     //static content
@@ -54,9 +57,12 @@ public class LoadData {
     public LoadData(){
         FileReader in;
         FileWriter out;
+        configString = "";
         try {
-            File configDir = new File(System.getProperty("user.home")+"/LogiEdu");
             configFile = new File(System.getProperty("user.home")+"/LogiEdu/config.json");
+            
+            File configDir = new File(System.getProperty("user.home")+"/LogiEdu");
+            
             if(!configDir.exists()) configDir.mkdirs();
             if(!configFile.exists()){
                 
@@ -78,9 +84,15 @@ public class LoadData {
                 
             }
             else{
+                InputStream is = new FileInputStream(System.getProperty("user.home")+"/LogiEdu/config.json");
+                BufferedReader inFile = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+                String str;
+                while ((str = inFile.readLine()) != null) {
+                    configString += str;
+                }
                 JSONParser parser = new JSONParser();
                 in = new FileReader(configFile);
-                Object obj = parser.parse(in);
+                Object obj = parser.parse(configString);
                 baseConfig = (JSONObject) obj;
                 userList = (JSONArray) baseConfig.get("users");
                 in.close();
@@ -167,7 +179,7 @@ public class LoadData {
     private void initThemes(){
         try {
             InputStream f = getClass().getResourceAsStream("/courses.json");
-            BufferedReader rd = new BufferedReader(new InputStreamReader(f));
+            BufferedReader rd = new BufferedReader(new InputStreamReader(f, StandardCharsets.UTF_8));
             String content = "";
             String t;
             while((t = rd.readLine()) != null) content += t;
@@ -442,7 +454,7 @@ public class LoadData {
                     JSONObject jsonProgress = (JSONObject) currentCourse.get("courseProgress");
                     Number state = (Number) jsonProgress.get("progressState");
                     String progressComment = (String) jsonProgress.get("progressComment");
-                    c.setCourseProgress(new FourStepProgress(state.intValue(), progressComment));
+                    c.setCourseProgress(new ThreeStepProgress(state.intValue(), progressComment));
                     loadExercicesProgress((JSONArray) currentCourse.get("exercicesProgress"), c);
                 }
             }
@@ -464,7 +476,7 @@ public class LoadData {
                     JSONObject exerciceProg = (JSONObject) currentExercice.get("exerciceProgress");
                     Number state = (Number) exerciceProg.get("progressState");
                     String progressComment = (String) exerciceProg.get("progressComment");
-                    e.setProgress(new FourStepProgress(state.intValue(), progressComment));
+                    e.setProgress(new ThreeStepProgress(state.intValue(), progressComment));
                 }
             }
         }

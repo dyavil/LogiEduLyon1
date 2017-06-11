@@ -487,9 +487,9 @@ public class MainController {
         egv.getHomeButton().setOnAction((ActionEvent e1) -> {
             loadHomePane();
         });
-        egv.getBackButton().setOnAction((ActionEvent e2) -> {
+        /*egv.getBackButton().setOnAction((ActionEvent e2) -> {
             loadExerciceList();
-        });
+        });*/
         egv.getCourseButton().setOnAction((ActionEvent e3) -> {
             setCourseViewEvents(co, 0);
         });
@@ -529,6 +529,10 @@ public class MainController {
         });
         
         if(ex.getGotSources()){
+            if(!ex.getProgress().isFinal()){
+                ex.getProgress().nextStep();
+                model.updateExercice(ex.getCorrespondingCourse(), ex);
+            } 
             ((ExerciceWithSourcesView)exv).getValidateButton().setOnAction((ActionEvent e4) -> {
                 boolean validEx = ex.compareResult(ex.gotStdExecutionRes(model.getLoggedUser()));
                 System.out.println("res :    " + ex.getExpectedOutput());
@@ -536,6 +540,15 @@ public class MainController {
                     ex.getProgress().nextStep();
                     ((ExerciceWithSourcesView)exv).getCompilePane().setContent("Résultat OK !", "ok");
                     model.updateExercice(ex.getCorrespondingCourse(), ex);
+                    boolean allEnd = true;
+                    for(Exercice exol : ex.getCorrespondingCourse().getExercices()){
+                        if (!exol.getProgress().isFinal()) allEnd = false;
+                    }
+                    if (allEnd){
+                        //System.out.println("ennnnnnd : "+ allEnd);
+                        ex.getCorrespondingCourse().getCourseProgress().nextStep();
+                        model.updateCourse(ex.getCorrespondingCourse());
+                    }
                 }
                 else ((ExerciceWithSourcesView)exv).getCompilePane().setContent("Résultat erroné !", "warning");
             });
@@ -580,8 +593,9 @@ public class MainController {
         else cv = new CourseView(co.getReferingTheme().getName(), co.getTitle(), co.getSlides().get(sl).getContent(), (int) view.getTWidth());
             if(co.getCourseProgress().getState() < co.getCourseProgress().getCorrespondingCSS().size()-2){
                 co.getCourseProgress().nextStep();
+                if (co.getExercices().size() == 0) co.getCourseProgress().nextStep();
                 for (Exercice ex : co.getExercices()) {
-                    ex.getProgress().nextStep();
+                    //ex.getProgress().nextStep();
                 }
                 model.updateCourse(co);
             }

@@ -65,7 +65,7 @@ public class Exercice {
                 if(srcFile.exists()) folder = "user/"+us.getUserName();
                 String content = new Scanner(new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
                         +this.correspondingCourse.getReferingTheme().getId()+"/"
-                        +this.correspondingCourse.getId()+"/"+this.getId()+"/"+folder+"/Main.java")).useDelimiter("\\Z").next();
+                        +this.correspondingCourse.getId()+"/"+this.getId()+"/"+folder+"/Main.java"), "UTF-8").useDelimiter("\\Z").next();
                 return content;
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Exercice.class.getName()).log(Level.SEVERE, null, ex);
@@ -127,7 +127,7 @@ public class Exercice {
             try {
                 content2 = new Scanner(new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
                         +this.correspondingCourse.getReferingTheme().getId()+"/"
-                        +this.correspondingCourse.getId()+"/"+this.getId()+"/user/"+us.getUserName()+"/errC.txt")).useDelimiter("\\Z").next();
+                        +this.correspondingCourse.getId()+"/"+this.getId()+"/user/"+us.getUserName()+"/errC.txt"), "UTF-8").useDelimiter("\\Z").next();
             } catch (Exception ex) {
                 Logger.getLogger(Exercice.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -135,7 +135,7 @@ public class Exercice {
             try {
                 String content = new Scanner(new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
                         +this.correspondingCourse.getReferingTheme().getId()+"/"
-                        +this.correspondingCourse.getId()+"/"+this.getId()+"/user/"+us.getUserName()+"/stdC.txt")).useDelimiter("\\Z").next();
+                        +this.correspondingCourse.getId()+"/"+this.getId()+"/user/"+us.getUserName()+"/stdC.txt"), "UTF-8").useDelimiter("\\Z").next();
                 
                 return content;
             } catch (Exception ex) {

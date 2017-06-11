@@ -40,6 +40,11 @@ public class Progress {
     public void previousStep(){
         if(this.getState() > 0) this.setState(this.getState() - 1);
     }
+    
+    public boolean isFinal(){
+        if(this.getState() == this.correspondingNames.size()-1) return true;
+        else return false;
+    }
 
     /**
      * @return the state
