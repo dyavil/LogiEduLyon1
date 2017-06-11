@@ -96,6 +96,18 @@
             {
               "content": "<div>Un if n’est capable d’évaluer qu’un booléen c’est pourquoi tous les opérateur renvoient un booléen.</br>Revenons à la structure <b>if/else</b>.</br></br>En Java ça s'écrit de cette manière :</br></br>&nbsp;&nbsp;if(condition){</br>&nbsp;&nbsp;&nbsp;&nbsp;truc à faire</br>&nbsp;&nbsp;}</br>&nbsp;&nbsp;else{</br>&nbsp;&nbsp;&nbsp;&nbsp;truc à faire</br>&nbsp;&nbsp;}</br></br></br>Il est bien sur possible de rajouter des <b>else if</b> au milieu ou de ne pas mettre de else. Dans l’idée ici, la condition du <b>if</b> va être évaluée et si elle renvois Vrai la partie de code sous le if va être exécutée et si elle renvois Faux ce sera celle sous le else.</br></br>Dans le cas où il y a des <b>else if</b>  si la condition du if renvois Faux, la condition du du if else suivant sera évaluée et ainsi de suite jusqu’au else (s’il y en a un).</div>",
               "imagePath": ""
+            },
+            {
+              "content": "<div>Maintenant que les conditions n’ont plus de secret pour toi, je vais t’expliquer ce que sont les boucles. Souvent tu voudras faire un programme qui fait la même chose un grand nombre de fois, tu auras alors deux solutions, copier coller le bout de code ou faire une boucle. Tu vas être d’accord pour dire que c’est tout de même mieux d’utiliser une boucle, ça rend ton code plus court et plus facilement compréhensible.</br></br>Donc pour faire une boucle il y a 3 méthodes différentes, les boucles tant que (<b>while</b>), les boucles faire tant que (<b>do while</b>) et les boucles pour (<b>for</b>).</div>",
+              "imagePath": ""
+            },
+            {
+              "content": "<div>Les boucles <b>while</b>. C’est une boucle qui va effectuer une tâche tant qu’un certaine condition n’est pas atteinte, en Java elle s’écrit de la manière suivante :</br></br>&nbsp;while(condition){</br>&nbsp;&nbsp;truc à faire</br>&nbsp;}&nbsp;&nbsp;Il est important de noter que avec cette boucle si la condition de sortie est déjà remplie avant de rentrer dans la boucle elle sera ignorée. De même si la condition de sortie ne peut pas être atteinte, la boucle sera infinie et fera n’importe quoi.</div>",
+              "imagePath": ""
+            },
+            {
+              "content": "<div>Enfin les boucles <b>for</b>, ce sont des boucles avec un point de départ, une condition d’arrêt et un pas d’incrément. Elles sont souvent utilisées quand on sait à l’avance le nombre de tour de boucle (itération) on veut faire. Par exemple pour afficher les nombre de 1 à 10 la boucle for sera privilégiée aux autres. En Java elle se note comme ceci :</br></br>&nbsp;for(point de départ; condition; pas d’incrément){</br>&nbsp;&nbsp;truc à faire</br>&nbsp;}</div>",
+              "imagePath": ""
             }
           ],
           "imagePath": "",
