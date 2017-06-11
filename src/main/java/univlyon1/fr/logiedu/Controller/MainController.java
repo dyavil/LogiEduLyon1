@@ -533,6 +533,12 @@ public class MainController {
                 ex.getProgress().nextStep();
                 model.updateExercice(ex.getCorrespondingCourse(), ex);
             } 
+            
+           ((ExerciceWithSourcesView)exv).getReload().setOnAction((ActionEvent e5) -> {
+                ex.reloadContent(model.getLoggedUser());
+                ((ExerciceWithSourcesView)exv).setCode(ex.getSourceContent(model.getLoggedUser()));
+            });
+            
             ((ExerciceWithSourcesView)exv).getValidateButton().setOnAction((ActionEvent e4) -> {
                 boolean validEx = ex.compareResult(ex.gotStdExecutionRes(model.getLoggedUser()));
                 System.out.println("res :    " + ex.getExpectedOutput());

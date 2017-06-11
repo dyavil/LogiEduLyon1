@@ -20,7 +20,7 @@ import javafx.scene.layout.RowConstraints;
  */
 public class ExerciceView extends GridPane{
     
-    private GridPane topPane;
+    protected GridPane topPane;
     private GridPane middlePane;
     private GridPane bottomPane;
     

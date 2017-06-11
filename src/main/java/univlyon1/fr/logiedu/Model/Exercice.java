@@ -75,6 +75,29 @@ public class Exercice {
         return null;
     }
     
+    public void reloadContent(User us){
+        if(this.gotSources){
+            String folder = "base";
+            FileWriter fw = null;
+            try {
+                File srcFile = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
+                        +this.correspondingCourse.getReferingTheme().getId()+"/"
+                        +this.correspondingCourse.getId()+"/"+this.getId()+"/user/"+us.getUserName()+"/Main.java");
+                String content = new Scanner(new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
+                        +this.correspondingCourse.getReferingTheme().getId()+"/"
+                        +this.correspondingCourse.getId()+"/"+this.getId()+"/"+folder+"/Main.java"), "UTF-8").useDelimiter("\\Z").next();
+                fw = new FileWriter(srcFile);
+                fw.write(content);
+                fw.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Exercice.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Exercice.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+    }
+    
     public Boolean CompileCode(User us){
        
         if(this.getGotSources()){
@@ -101,6 +124,7 @@ public class Exercice {
     }
     public void ExecuteCode(User us){
         if(this.getGotSources()){
+            
             try {
                 File stdFile = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"
                        +this.correspondingCourse.getReferingTheme().getId()+"/"

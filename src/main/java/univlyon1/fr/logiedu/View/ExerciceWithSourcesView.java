@@ -30,6 +30,7 @@ public class ExerciceWithSourcesView extends ExerciceView {
     private Label textContent;
     private WebView Output;
     private Button runButton;
+    private Button reload;
     private CodeEditor editor;
     private String outputContent;
     private String startOutputContent;
@@ -63,6 +64,8 @@ public class ExerciceWithSourcesView extends ExerciceView {
         contentPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         this.runButton = new Button();
         this.validateButton = new Button("Valider");
+        this.reload = new Button("Réinitialiser code");
+        this.topPane.add(this.reload, 0, 0);
         this.runButton.getStyleClass().add("run");
         ColumnConstraints midCol = new ColumnConstraints((parentWidth-80)/2);
         ColumnConstraints midCol3 = new ColumnConstraints(60);
@@ -118,6 +121,9 @@ public class ExerciceWithSourcesView extends ExerciceView {
         this.getMiddlePane().add(returnPane, 0, 3);
     }
     
+    public void setCode(String content){
+        this.editor.setCode(content);
+    }
     
     public void setOutput(String htmlContent){
         this.Output.getEngine().loadContent(this.startOutputContent+htmlContent+"</html>");
@@ -177,6 +183,13 @@ public class ExerciceWithSourcesView extends ExerciceView {
      */
     public Button getValidateButton() {
         return validateButton;
+    }
+
+    /**
+     * @return the reload
+     */
+    public Button getReload() {
+        return reload;
     }
 
     /**
