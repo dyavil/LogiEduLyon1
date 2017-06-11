@@ -128,6 +128,38 @@ public class LoadData {
         }
     }
     
+    private void updateExerciceFolder(User us){
+        int i = 0;
+        for (Iterator iterator = themeList.iterator(); iterator.hasNext();) {
+            JSONObject currentTheme = (JSONObject) iterator.next();
+            int j = 0;
+            JSONArray courses = (JSONArray) currentTheme.get("courses");
+            for (Iterator iterator1 = courses.iterator(); iterator1.hasNext();) {
+                JSONObject currentCourse = (JSONObject) iterator1.next();
+                JSONArray exercices = (JSONArray) currentCourse.get("exercices");
+                int k = 0;
+                for (Iterator iterator2 = exercices.iterator(); iterator2.hasNext();) {
+                    JSONObject ex = (JSONObject) iterator2.next();
+                    File thEx = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"+i+"/"+j+"/"+k+"/base/Main.java");
+                    Number nmand = (Number) ex.get("sourceFiles");
+                    if(nmand.intValue() > 0) {
+                        try {
+                            File exUs = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"+i+"/"+j+"/"+k+"/user/"+us.getUserName());
+                            exUs.mkdir();
+                            File exUsM = new File(System.getProperty("user.home")+"/LogiEdu/ExercicesSources/"+i+"/"+j+"/"+k+"/user/"+us.getUserName()+"/Main.java");
+                            Files.copy(thEx.toPath(), exUsM.toPath(), REPLACE_EXISTING);
+                        } catch (IOException ex1) {
+                            //Logger.getLogger(LoadData.class.getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }                       
+                    k++;
+                }
+                j++;
+            }
+            i++;
+        }
+    }
+    
     /**
      * Method whic load the themes content
      * in a JSONObject which will be dealt with after
@@ -193,7 +225,7 @@ public class LoadData {
             Number nsrc = (Number) ex.get("sourceFiles");
             Boolean src = false;
             if(nsrc.intValue() > 0) src = true;
-            Exercice temp = new Exercice((String) ex.get("title"), (String)ex.get("content"), co, i, diff.intValue(), mand, src);
+            Exercice temp = new Exercice((String) ex.get("title"), (String)ex.get("content"), co, i, diff.intValue(), mand, src, (String) ex.get("result"));
             co.addExercice(temp);
             i++;
         }
@@ -264,6 +296,7 @@ public class LoadData {
         userObj.put("progress", new JSONArray());
         userList.add(userObj);
         this.initThemeProgress(userObj);
+        this.updateExerciceFolder(us);
         write();
     }
     
@@ -432,6 +465,43 @@ public class LoadData {
                     Number state = (Number) exerciceProg.get("progressState");
                     String progressComment = (String) exerciceProg.get("progressComment");
                     e.setProgress(new FourStepProgress(state.intValue(), progressComment));
+                }
+            }
+        }
+    }
+    
+    public void saveExercicesProgress(User us, Course co, Exercice ex){
+        //System.out.println(userList);
+        for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
+            JSONObject currentUser = (JSONObject) iterator.next();
+            Number id = (Number) currentUser.get("id");
+            String date = (String) currentUser.get("lastlogged");
+            Date trueDate = new Date(date);
+            User u = new User((String)currentUser.get("usn"), id.intValue(), trueDate);
+            if(us.getId() == u.getId()){
+                for(Object prog : ((JSONArray) currentUser.get("progress")).toArray()){
+                    JSONObject pr = (JSONObject) prog;
+                    Number idth = (Number) pr.get("themeid");
+                    if(idth.intValue() == co.getReferingTheme().getId()) {
+                        JSONArray courses = (JSONArray) pr.get("coursesProgress");
+                        for (Iterator iterator2 = courses.iterator(); iterator2.hasNext();){
+                            JSONObject currentCourse = (JSONObject) iterator2.next();
+                            Number idco = (Number) currentCourse.get("idCourse");
+                            if(idco.intValue() == co.getId()){
+                                JSONArray exercicess = (JSONArray) currentCourse.get("exercicesProgress");
+                                for (Iterator iterator3 = exercicess.iterator(); iterator3.hasNext();){
+                                    JSONObject currentExo = (JSONObject) iterator3.next();
+                                    Number idexo = (Number) currentExo.get("idExercice");
+                                    
+                                    if(idexo.intValue() == ex.getId()){
+                                        JSONObject exProg = (JSONObject) currentExo.get("exerciceProgress");
+                                        exProg.replace("progressState", ex.getProgress().getState());
+                                        write();
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -34,6 +34,8 @@ public class infoPane extends GridPane{
     public void setContent(String c, String ic){
         this.content.getStyleClass().clear();
         this.content.setText(c);
+        this.content.setPrefSize( Double.MAX_VALUE, Double.MAX_VALUE );
+        System.err.println("taille "+this.content.getWidth());
         this.content.getStyleClass().add(ic);
     }
 }

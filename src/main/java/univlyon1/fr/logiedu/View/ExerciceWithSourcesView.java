@@ -33,10 +33,10 @@ public class ExerciceWithSourcesView extends ExerciceView {
     private CodeEditor editor;
     private String outputContent;
     private String startOutputContent;
-    
+    private Button validateButton;
     
     private infoPane compilePane;
-    private infoPane execPane;
+    //private infoPane execPane;
     
     public ExerciceWithSourcesView(String course, String name, String content, int parentWidth, String fileContent) {
         super(course, name, content, parentWidth);
@@ -45,7 +45,7 @@ public class ExerciceWithSourcesView extends ExerciceView {
         this.Output = new WebView();
         
         this.compilePane = new infoPane("");
-        this.execPane = new infoPane("");
+        //this.execPane = new infoPane("");
         this.outputContent = "";
         this.startOutputContent = "<html style='background-color:black'; padding:5px; font-family: \"Helvetica\";><div style='text-align:center; color:lightgray;'>-- Console --</div>";
         this.Output.getEngine().loadContent(startOutputContent+outputContent+"</html>");
@@ -62,6 +62,7 @@ public class ExerciceWithSourcesView extends ExerciceView {
         contentPane.setFitToWidth(true);
         contentPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         this.runButton = new Button();
+        this.validateButton = new Button("Valider");
         this.runButton.getStyleClass().add("run");
         ColumnConstraints midCol = new ColumnConstraints((parentWidth-80)/2);
         ColumnConstraints midCol3 = new ColumnConstraints(60);
@@ -70,14 +71,15 @@ public class ExerciceWithSourcesView extends ExerciceView {
         this.codePane.getColumnConstraints().add(midCol);
         this.codePane.getColumnConstraints().add(midCol3);
         this.codePane.getColumnConstraints().add(midCol);
-        ColumnConstraints amidCol = new ColumnConstraints((parentWidth-110)/2);
+        ColumnConstraints amidCol = new ColumnConstraints((parentWidth-600));
         amidCol.setHalignment(HPos.CENTER);
-        this.returnPane.getColumnConstraints().add(amidCol);
-        ColumnConstraints amidCol2 = new ColumnConstraints(60);
+        ColumnConstraints amidCol2 = new ColumnConstraints(250);
         amidCol2.setHalignment(HPos.CENTER);
+        
         this.returnPane.getColumnConstraints().add(amidCol2);
         this.returnPane.getColumnConstraints().add(amidCol);
-        RowConstraints rowc1 = new RowConstraints(90);
+        this.returnPane.getColumnConstraints().add(new ColumnConstraints(80));
+        RowConstraints rowc1 = new RowConstraints(70);
         rowc1.setValignment(VPos.TOP);
         this.returnPane.getRowConstraints().add(rowc1);
         this.getMiddlePane().getRowConstraints().clear();
@@ -105,8 +107,9 @@ public class ExerciceWithSourcesView extends ExerciceView {
         this.codePane.add(testBack2, 2, 0);
         
         this.getMiddlePane().getRowConstraints().add(new RowConstraints(30));
-        this.returnPane.add(this.execPane, 0, 0);
-        this.returnPane.add(this.compilePane, 2, 0);
+        //this.returnPane.add(this.execPane, 0, 0);
+        this.returnPane.add(this.compilePane, 1, 0);
+        this.returnPane.add(this.validateButton, 2, 0);
         this.codePane.add(this.runButton, 1, 0);
         
         this.getMiddlePane().getChildren().clear();
@@ -132,8 +135,6 @@ public class ExerciceWithSourcesView extends ExerciceView {
     public Label getTextContent() {
         return textContent;
     }
-
-
 
 
     /**
@@ -172,11 +173,18 @@ public class ExerciceWithSourcesView extends ExerciceView {
     }
 
     /**
+     * @return the validateButton
+     */
+    public Button getValidateButton() {
+        return validateButton;
+    }
+
+    /**
      * @return the execPane
      */
-    public infoPane getExecPane() {
+    /*public infoPane getExecPane() {
         return execPane;
-    }
+    }*/
 
 
 

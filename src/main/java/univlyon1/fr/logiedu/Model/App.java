@@ -64,6 +64,10 @@ public class App {
         this.data.saveCourseProgress(c, LoggedUser);
     }
     
+    public void updateExercice(Course c, Exercice e){
+        this.data.saveExercicesProgress(LoggedUser, c, e);
+    }
+    
     /**
      * @return the users
      */

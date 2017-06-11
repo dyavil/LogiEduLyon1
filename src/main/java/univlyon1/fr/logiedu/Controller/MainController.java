@@ -336,7 +336,7 @@ public class MainController {
         
         int i = 0;
         for(Exercice exo : co.getExercices()){
-            ExerciceListItem exBox = new ExerciceListItem(exo.getName(), "no-change", true, co.getReferingTheme().getId(), co.getId(), exo.getId());
+            ExerciceListItem exBox = new ExerciceListItem(exo.getName(), exo.getProgress().getCorrespondingCSS().get(exo.getProgress().getState()), true, co.getReferingTheme().getId(), co.getId(), exo.getId());
             TreeItem<HBox> exItem = new TreeItem<>(exBox);
             themBranch.getChildren().add(exItem);
             i++;
@@ -498,7 +498,7 @@ public class MainController {
     private void setExerciceViewEvents(Exercice ex) {
         ExerciceView exv;
         if(!ex.getGotSources()) exv = new ExerciceView(ex.getCorrespondingCourse().getTitle(), ex.getName(), ex.getContent(), (int) view.getTWidth());
-        else exv = new ExerciceWithSourcesView(ex.getCorrespondingCourse().getTitle(), ex.getName(), ex.getContent(), (int) view.getTWidth(), ex.getSourceContent());
+        else exv = new ExerciceWithSourcesView(ex.getCorrespondingCourse().getTitle(), ex.getName(), ex.getContent(), (int) view.getTWidth(), ex.getSourceContent(model.getLoggedUser()));
         view.displayExerciceView(exv);
         
         if(ex.getId() < ex.getCorrespondingCourse().getExercices().size()-1) {
@@ -527,18 +527,29 @@ public class MainController {
         exv.getCourseButton().setOnAction((ActionEvent e3) -> {
             setCourseViewEvents(ex.getCorrespondingCourse(), 0);
         });
+        
         if(ex.getGotSources()){
+            ((ExerciceWithSourcesView)exv).getValidateButton().setOnAction((ActionEvent e4) -> {
+                boolean validEx = ex.compareResult(ex.gotStdExecutionRes(model.getLoggedUser()));
+                System.out.println("res :    " + ex.getExpectedOutput());
+                if (validEx) {
+                    ex.getProgress().nextStep();
+                    ((ExerciceWithSourcesView)exv).getCompilePane().setContent("Résultat OK !", "ok");
+                    model.updateExercice(ex.getCorrespondingCourse(), ex);
+                }
+                else ((ExerciceWithSourcesView)exv).getCompilePane().setContent("Résultat erroné !", "warning");
+            });
             ((ExerciceWithSourcesView)exv).getRunButton().setOnAction((ActionEvent e4) -> {
-            ex.writeToFile(((ExerciceWithSourcesView)exv).getEditor().getCodeAndSnapshot());
-            if(ex.CompileCode()) {
-                ex.ExecuteCode();
-                String tmp = ex.gotStdExecutionRes();
+            ex.writeToFile(((ExerciceWithSourcesView)exv).getEditor().getCodeAndSnapshot(), model.getLoggedUser());
+            if(ex.CompileCode(model.getLoggedUser())) {
+                ex.ExecuteCode(model.getLoggedUser());
+                String tmp = ex.gotStdExecutionRes(model.getLoggedUser());
                 //((ExerciceWithSourcesView)exv).getStdOutput().setText(tmp);
                 tmp = tmp.replaceAll("\n", "</br>");
                 ((ExerciceWithSourcesView)exv).setOutput("<div style='color:white; font-size:13px; font-family: \"Helvetica\";'><i style='font-size:14px;'>Sortie standard :</i></br><div style='padding-left:5px;'>"+tmp+"</div></div>");
                 
                 ((ExerciceWithSourcesView)exv).getCompilePane().setContent("Compilation OK !", "ok");
-                String tmp2 = ex.gotErrExecutionRes(0);
+                String tmp2 = ex.gotErrExecutionRes(0, model.getLoggedUser());
                 //((ExerciceWithSourcesView)exv).getErrOutput().setText(tmp2);
                 tmp2 = tmp2.replaceAll("\n", "</br>");
                 System.out.println("lololololol"+tmp);
@@ -546,7 +557,7 @@ public class MainController {
                 if(!ex.getExecuteLog().equals("")) ((ExerciceWithSourcesView)exv).getCompilePane().setContent(ex.getExecuteLog(), "warning");
                 
             }else{
-                String tmp = ex.gotErrExecutionRes(1);
+                String tmp = ex.gotErrExecutionRes(1, model.getLoggedUser());
                 //((ExerciceWithSourcesView)exv).getErrOutput().setText(tmp);
                 System.out.println("lololololol"+tmp);
                 tmp = tmp.replaceAll("\n", "</br>");
@@ -569,6 +580,9 @@ public class MainController {
         else cv = new CourseView(co.getReferingTheme().getName(), co.getTitle(), co.getSlides().get(sl).getContent(), (int) view.getTWidth());
             if(co.getCourseProgress().getState() < co.getCourseProgress().getCorrespondingCSS().size()-2){
                 co.getCourseProgress().nextStep();
+                for (Exercice ex : co.getExercices()) {
+                    ex.getProgress().nextStep();
+                }
                 model.updateCourse(co);
             }
             

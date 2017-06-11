@@ -36,10 +36,10 @@ public class MenuTop extends MenuBar {
     
     public void displayLoggedMenu(){
         this.getMenus().clear();
-        fileMenu.getItems().clear();
+        /*fileMenu.getItems().clear();
         fileMenu.getItems().add(coursesLink);
-        fileMenu.getItems().add(exerciceLink);
-        this.getMenus().add(fileMenu);
+        fileMenu.getItems().add(exerciceLink);*/
+        //this.getMenus().add(fileMenu);
         this.getMenus().add(logout);
     }
     

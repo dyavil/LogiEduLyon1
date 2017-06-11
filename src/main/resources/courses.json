@@ -1,4 +1,4 @@
-{
+  {
   "themes": [
     {
       "name": "Introduction",
@@ -18,20 +18,7 @@
           ],
           "imagePath": "",
           "exercices": [
-            {
-              "title": "exo 1",
-              "content": "Integer quis consequatapplications que tu utilises. En quelque sorte il s’agit d’un ordinateur dans ton ordinateur. Le deuxième est l’ensemble des bibliothèques dont Java a besoin pour pouvoir construire les applications que tuapplications que tu utilises. En quelque sorte il s’agit d’un ordinateur dans ton ordinateur. Le deuxième est l’ensemble des bibliothèques dont Java a besoin pour pouvoir construire les applications que tuapplications que tu utilises. En quelque sorte il s’agit d’un ordinateur dans ton ordinateur. Le deuxième est l’ensemble des bibliothèques dont Java a besoin pour pouvoir construire les applications que tuapplications que tu utilises. En quelque sorte il s’agit d’un ordinateur dans ton ordinateur. Le deuxième est l’ensemble des bibliothèques dont Java a besoin pour pouvoir construire les applications que tu dolor. Nam mollis fermentum eleifend. Donec et fringilla lectus. Ut sodales dui nec turpis ultricies sodales. Morbi at ipsum magna. Duis dui diam, vehicula at fermentum vitae, gravida vitae ex. Donec iaculis accumsan est in pharetra. Mauris bibendum in metus consequat pellentesque. Ut suscipit magna id leo vestibulum, ut vulputate nisl maximus. Fusce diam est, imperdiet ac risus nec, pellentesque pulvinar est. Etiam est lorem, faucibus a ante et, vehicula ultricies quam. Quisque quam augue, placerat sed lacinia quis, rutrum eu ligula.",
-              "difficulty": 0,
-              "mandatory":1,
-              "sourceFiles":1
-            },
-            {
-              "title": "exo 2",
-              "content": "content exo 2",
-              "difficulty": 0,
-              "mandatory":1,
-              "sourceFiles":0
-            }
+            
           ]
         },
         {
@@ -41,82 +28,85 @@
             {
               "content": "<div>Afin de pouvoir développer et exécuter des applications Java il te faudra la JVM (Java Virtual Machine) ainsi que le JDK (Java Development Kit).</br></br><i style='color:light-grey'>Mais qu’est ce que ça peut bien être que ces trucs ?</i></br></br>C’est très simple, le premier est une machine virtuelle, un environnement particulier qui a pour rôle de faire fonctionner les applications Java, comme windows fait tourner les applications que tu utilises. En quelque sorte il s’agit d’un ordinateur dans ton ordinateur. Le deuxième est l’ensemble des bibliothèques dont Java a besoin pour pouvoir construire les applications que tu auras codé.</br></br>Si tu peux lire ces lignes c’est que tu as déjà installé la JVM il ne te manque que le JDK, je te laisse aller sur ce lien : <a>http://www.oracle.com/technetwork/java/javase/downloads/index.html</a>, télécharger la version avec Netbeans et suivre les instructions d’installation.</br></div>",
               "imagePath": "/images/java.png"
+            },
+  {
+              "content": "<div>Bien maintenant que tout est installé, je dois te parler d’une dernière chose dont tu auras besoin. Il s’agit d’un environnement de développement (ou IDE). Tu peux faire sans mais c’est vraiment plus pratique avec, il en existe plusieurs par exemple: Eclipse, IntelliJ ou encore Netbeans. Or il se trouve que tu as déjà installé Netbeans, ce n’est pas forcément le “meilleur” IDE (si on peut dire qu’il en existe un meilleur qu’un autre), mais il est plus simple d’utiliser que Eclipse et IntelliJ est trop gros pour le genre d’applications que tu voudras faire.</br></div>",
+              "imagePath": "/images/java.png"
             }
           ],
           "imagePath": "/images/java.png",
           "exercices": [
             {
-              "title": "exo 1",
-              "content": "content exo 1",
+              "title": "Hello World",
+              "content": "Voici ton premier programme ! Je te vois trembler derrière ton clavier. Prépare toi tu n’auras jamais de TP aussi marquant que celui-ci, aussi difficile que celui-ci. Prépare toi à faire un Hello World ! Le Hello World est le premier programme que toute personne commence à copier coller pour tester si son installation fonctionne. Dans cette application nous l’avons déjà fait pour toi. Ça va pas trop déçu ? Donc on va profiter de ce TP pour faire un tour de l’interface. À gauche tu peux voir un écran avec du code, c’est l’interface dans laquelle tu vas coder, tu peux aussi copier coller ce code pour tester ton installation. À droite tu peux voir un terminal, c’est ici que les sorties d’erreur etc vont pour te permettre de voir tes erreurs et les corriger. Entre les deux tu peux voir un symbole “play”, si tu appuie dessus cela va lancer la compilation et l'exécution du code. Vas y essayes ! Sous le terminal si tu fais une erreur, tu verra apparaître une fenêtre avec des indices qui vont t’aider à voir quoi corriger. Profite bien de cette fonctionnalité pour te familiariser avec les différents types d’erreurs car cette aide n’existe pas dans un IDE classique.",
               "difficulty": 0,
               "mandatory":1,
-              "sourceFiles":1
-            },
-            {
-              "title": "exo 2",
-              "content": "content exo 2",
-              "difficulty": 0,
-              "mandatory":0,
-              "sourceFiles":0
+              "sourceFiles":1,
+              "result":"Hello World !"
             }
+            
           ]
         }
       ]
     },
     {
-      "name": "L'UML",
+      "name": "Base de programmation",
       "courses": [
         {
-          "title": "titre 1",
+          "title": "Les variables",
           "content": "contenu 1",
           "slides": [
             {
-              "content": "Aliquam egestas et ligula quis elementum. Duis ultrices fringilla auctor. Cras sodales, libero elementum dictum consectetur, enim ante volutpat enim, nec tincidunt sem nisl vitae metus. Ut finibus facilisis augue, at mattis massa consectetur vel. Cras ut turpis consectetur, pellentesque ligula et, elementum tortor. Pellentesque elit quam, ullamcorper id mattis quis, fringilla vel orci. Fusce sit amet mattis lectus. Nunc nec velit volutpat nunc malesuada viverra eget a augue. Phasellus viverra odio nec mollis hendrerit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam maximus ornare diam, a commodo magna aliquet nec. Sed at nulla hendrerit, pulvinar leo commodo, efficitur ipsum. Nunc elit sapien, euismod et lorem eget, viverra imperdiet massa. Proin et urna et arcu sollicitudin laoreet in a mauris. Vestibulum cursus nunc id nibh rutrum, ut tempor ipsum eleifend.",
+              "content": "<div>Prépares toi pour ta première notion de programmation qui est comme le titre l’indique <b>Les Variables</b>. Elles sont à la base de la programmation et tu vas passer ton temps à les manipuler, donc il est important que tu comprennes comment ça marche.</br></br> Donc une variable est une boîte, dans laquelle tu vas ranger des trucs. On peut distinguer deux caractéristiques d’une variable, son <b>Nom</b> et son <b>Type</b>.</br></br>Lorsque tu crées un variable on dit que tu la déclare, et lorsque tu déclare une variable tu l'écris comme ça:</br></br>Type Nom;</br></br>Une fois déclarée la tu peux lui affecter une valeur, c’est à dire ranger quelque chose dedans et ça tu l’écris comme ça:</br></br>Nom = truc;</br></div>",
+              "imagePath": ""
+            },
+    {
+              "content": "<div>Le nom d’une variable est ce qui permet de la distinguer d’une autre, il est aussi très important que ce nom ai un rapport avec ce que tu ranges dedans. Effectivement quand un petit programme tout vas bien si ta variable s’appelle “a” mais quand tu commence à avoir plus d’une centaine de variable ça devient nettement plus compliqué. Alors surtout n’hésites pas à mettre des nom un peu (pas trop) long qui veulent dire quelque chose.</br></br>Ah j’ai oublié de te parler des règles quand tu écris le nom d’une variable.</br><ul><li>Pas d’espace dans le nom sinon il ne sera pas reconnu</li><li>Pas de chiffre en premier caractère</li><li>En Java le format est la camelCase, donc une variable commence par une minuscule et chaque mot qui suit commence par une majuscule ex unPetitLapin</li></ul></div>",
+              "imagePath": ""
+            },
+      {
+              "content": "<div>Le type maintenant. C’est ce qui défini ce que tu peux mettre dans la boîte, et ça c’est très important, si tu as une variable de type pomme tu ne pourra jamais ranger une orange dedans. Il existe deux grandes catégorie de type, les types primitifs et les types complexes. Dans cette partie je vais te montrer que les types primitifs, les autres tu les verra plus tard dans la partie Objet.</br></br>Donc voici la liste des types primitifs :</br></br></br><b>int :</b>  Ce sont les valeurs dites entières, les nombres sans virgule.</br><b>double :</b> Ce sont les nombres à virgules.</br><b>float :</b> Ce sont aussi les nombres à virgules. Il existe une différence entre un double et un float, mais elle n’est pas très importante donc je te conseille de n’utiliser que les float pour commencer.</br><b>bool :</b> Ce sont des booléens, leur utilité sera détaillé dans la partie boucle et condition, mais en gros tu dois savoir qu’un booléen est une variable que ne peut valoir que Vrai ou Faux.</br><b>char :</b> Ce sont les les caractère, et pour être exact dans un char on peut mettre qu’un seul caractère.</br><b>String :</b> Ce sont les chaînes de caractères, et cette fois tu peux en mettre plusieurs.</br></div>",
               "imagePath": ""
             }
           ],
           "imagePath": "",
           "exercices": [
             {
-              "title": "exo 1",
-              "content": "Integer quis consequat dolor. Nam mollis fermentum eleifend. Donec et fringilla lectus. Ut sodales dui nec turpis ultricies sodales. Morbi at ipsum magna. Duis dui diam, vehicula at fermentum vitae, gravida vitae ex. Donec iaculis accumsan est in pharetra. Mauris bibendum in metus consequat pellentesque. Ut suscipit magna id leo vestibulum, ut vulputate nisl maximus. Fusce diam est, imperdiet ac risus nec, pellentesque pulvinar est. Etiam est lorem, faucibus a ante et, vehicula ultricies quam. Quisque quam augue, placerat sed lacinia quis, rutrum eu ligula.",
+              "title": "Variables",
+              "content": "Il est temps de te familiariser avec les variables. Dans cet exercice tu vas devoir créer trois variables: un entier, un nombre à virgule, un booléen. Une fois que ce sera fait, tu devras les donner en paramètre à la fonction printRes qui s’occupera de les afficher. Pour les besoin de l’exercice, je veux que l’entier ai une valeur de 186, le nombre à virgule une valeur de 1367.458 et que le booléen soit à Vrai.Fait bien attention aux consignes, si tu ne les respecte pas l’exercice ne sera pas validé.",
               "difficulty": 0,
               "mandatory":1,
-              "sourceFiles":1
-            },
-            {
-              "title": "exo 2",
-              "content": "content exo 2",
-              "difficulty": 0,
-              "mandatory":0,
-              "sourceFiles":1
+              "sourceFiles":1,
+              "result":"Entier : 186 Booléen : true Nombre à virgule : 1367.458"
             }
           ]
         },
         {
-          "title": "titre 2",
+          "title": "Les conditions et les boucles",
           "content": "contenu 2",
           "slides": [
             {
-              "content": "Proin nec dui et erat accumsan scelerisque varius quis lorem. Suspendisse potenti. Sed in purus lacus. Quisque ut nibh quis neque iaculis commodo. Proin et pretium libero, sed aliquam mauris. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec sed eleifend nunc. Cras vehicula libero in lacus egestas volutpat.",
+              "content": "<div>Les conditions sont un moyen de faire en sorte que ton programme ai des comportements différents en fonction de données. Ces conditions sont mises en place avec la structure:</br></br></div>",
               "imagePath": ""
             }
           ],
           "imagePath": "",
           "exercices": [
             {
-              "title": "exo 1",
-              "content": "content exo 1",
+              "title": "If...else",
+              "content": "Dans cet exercice tu vas te familiariser avec les conditions. Si tu as bien lu en cours, tu as compris qu’une condition permet d’isoler certains morceaux de code pour qu’ils ne soient utilisés qu'à certaines conditions. Donc dans cet exercice tu as un morceau de code qui est isolé par un if et tu vas devoir trouver la bonne valeur pour qu’il soit exécuté.",
               "difficulty": 0,
               "mandatory":0,
-              "sourceFiles":0
+              "sourceFiles":1,
+              "result":"Chaine : Bravo !"
             },
             {
-              "title": "exo 2",
-              "content": "content exo 2",
+              "title": "Boucles",
+              "content": "Maintenant que tu maîtrises les variables ainsi que les conditions, tu vas utiliser les boucles. Si tu te souviens bien ton cours, il y a deux piège lorsque tu fais une boucle, faire attention aux  boucles infinies et aux conditions de sorties. Donc l’exercice. Tu vas faire une boucle qui calcule la somme des entier de 1 à 10, puis qui en affiche le résultat. Mais je veux également que en cours de boucle, si la somme est paire tu affiches  Licorne et si elle est impaire tu affiches Lapin.Astuce : Pour vérifier si un nombre est paire ou non, on utilise l’opérateur modulo ou %. Cet opérateur va te retourner le reste d’une division euclidienne. Donc par exemple si tu fais 1%2 le résultat sera 1, si tu fais 2%2 le résultat sera de 0 et ainsi de suite.",
               "difficulty": 0,
               "mandatory":0,
-              "sourceFiles":0
+              "sourceFiles":1,
+              "result":"Chaine : Lapin Resultat : 55"
             }
           ]
         }
