@@ -42,6 +42,11 @@ public class Progress {
     }
     
     public boolean isFinal(){
+        if(this.getState() == this.correspondingNames.size()-1) return true;
+        else return false;
+    }
+    
+    public boolean isPreFinal(){
         if(this.getState() == this.correspondingNames.size()-2) return true;
         else return false;
     }

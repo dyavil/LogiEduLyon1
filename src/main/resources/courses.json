@@ -86,7 +86,15 @@
           "content": "contenu 2",
           "slides": [
             {
-              "content": "<div>Les conditions sont un moyen de faire en sorte que ton programme ai des comportements différents en fonction de données. Ces conditions sont mises en place avec la structure:</br></br></div>",
+              "content": "<div>Les conditions sont un moyen de faire en sorte que ton programme ai des comportements différents en fonction de données. Ces conditions sont mises en place avec la structure:</br>&nbsp;si:</br></t>&nbsp;&nbsp;un truc à faire</br>&nbsp;sinon si:</br>&nbsp;&nbsp;un autre truc à faire</br>&nbsp;sinon:</br>&nbsp;&nbsp;le truc à faire par défaut </br></br>En programmation le si se dit <b>if</b> et le sinon <b>else</b>. Dans la structure, seul le si est obligatoire, tu peux ne pas mettre ni le sinon si ni le sinon ou tu peux aussi n’en mettre qu’un des deux.</div>",
+              "imagePath": ""
+            },
+            {
+              "content": "<div>Une condition est composée de deux termes qui vont être évalué entre eux à l’aide d’un opérateur, par exemple 1 = 1. Les opérateurs sont les suivant : </br></br><b>==</b> pour tester l’égalité entre les deux termes</br><b>!=</b> pour tester l’inégalité entre les deux termes</br><b><</b> strictement inférieur</br><b><=</b> inférieur ou égal</br><b>></b> strictement supérieur</br><b>>=</b> supérieur ou égal</br><b>&&</b> l’opérateur ET logique</br><b>||</b> l’opérateur OU logique</br></br>Comme tu peux le voir ce sont les opérateurs mathématiques classique à l'exception des deux derniers qui sont des opérateur logiques. Pour les comprendre plus en détail je te laisse aller voir ce site qui explique très bien ce que c’est :</br><u style='color: blue;'>http://www.elektronique.fr/cours/porte-logique/portes-de-base.php</u>.</br>Et pour t’expliquer rapidement, c’est un opérateur qui ne peut être effectué que sur des booléens et qui dit si les deux termes sont vrai pour l’opérateur ET et si l’un des deux est vrai pour l’opérateur ou.</div>",
+              "imagePath": ""
+            },
+            {
+              "content": "<div>Un if n’est capable d’évaluer qu’un booléen c’est pourquoi tous les opérateur renvoient un booléen.</br>Revenons à la structure <b>if/else</b>.</br></br>En Java ça s'écrit de cette manière :</br></br>&nbsp;&nbsp;if(condition){</br>&nbsp;&nbsp;&nbsp;&nbsp;truc à faire</br>&nbsp;&nbsp;}</br>&nbsp;&nbsp;else{</br>&nbsp;&nbsp;&nbsp;&nbsp;truc à faire</br>&nbsp;&nbsp;}</br></br></br>Il est bien sur possible de rajouter des <b>else if</b> au milieu ou de ne pas mettre de else. Dans l’idée ici, la condition du <b>if</b> va être évaluée et si elle renvois Vrai la partie de code sous le if va être exécutée et si elle renvois Faux ce sera celle sous le else.</br></br>Dans le cas où il y a des <b>else if</b>  si la condition du if renvois Faux, la condition du du if else suivant sera évaluée et ainsi de suite jusqu’au else (s’il y en a un).</div>",
               "imagePath": ""
             }
           ],
@@ -107,6 +115,14 @@
               "mandatory":0,
               "sourceFiles":1,
               "result":"Chaine : Lapin Resultat : 55"
+            },
+            {
+              "title": "Lapins",
+              "content": "C’est bien joli tous ces exercices pour prendre en main les concepte mais il est temps que tu  fasses un exercice un peu plus compliqué. Enfin quand je dit compliqué, ça reste accessible à ton niveau hein. Voici le problème : \"Un homme met un couple de lapins dans un lieu isolé de tous les côtés par un mur. Combien de couples obtient-on en un an si chaque couple engendre tous les mois un nouveau couple à compter du troisième mois de son existence ?\" Dans ce problème les lapins ne peuvent pas mourrir, et un couple ne peut pas se reproduire le mois de sa naissance. Donc à un mois donné le nombre de couple de lapin est égal à la somme du nombre de couple des deux mois précédents. Ex: Au mois 3 il y 2 couples, au mois 4 il y en a 1 + 2 donc trois et ainsi de suite. Tu as toutes le clés en main pour pouvoir faire un programme (dans la fonction lapin) qui calcule le nombre cette suite. Pour l’exercice la solution finale attendue est le nombre de couple de lapin au 12ème mois, et je suis gentil donc je vais te donner le résultat que tu dois obtenir : 144.",
+              "difficulty": 0,
+              "mandatory":0,
+              "sourceFiles":1,
+              "result":"Fibonnacci de 12 : 144"
             }
           ]
         }

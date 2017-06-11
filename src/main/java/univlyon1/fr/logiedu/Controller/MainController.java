@@ -529,7 +529,7 @@ public class MainController {
         });
         
         if(ex.getGotSources()){
-            if(!ex.getProgress().isFinal()){
+            if(!ex.getProgress().isPreFinal()){
                 ex.getProgress().nextStep();
                 model.updateExercice(ex.getCorrespondingCourse(), ex);
             } 
